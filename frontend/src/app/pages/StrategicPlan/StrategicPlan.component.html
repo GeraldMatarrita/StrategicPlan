@@ -1,0 +1,204 @@
+<div class="StrategicPlanStyle">
+  <div *ngIf="!isFormVisible && !isEditMode">
+    <button (click)="createNewPlan()" class="buttonAdd m-3">Plan</button>
+
+    <div *ngIf="strategicPlanData.length > 0; else noData">
+      <div *ngFor="let item of strategicPlanData">
+        <button (click)="editPlan(item)" class="link-button m-3">
+          <strong>Plan:</strong> {{ item.name }} - <strong>StartDate:</strong>
+          {{ item.startDate | date : "dd/MM/yyyy" }}
+        </button>
+        <button (click)="deletePlan(item.id)" class="delete-button-icon">
+          <svg class="delete-svgIcon" viewBox="0 0 448 512">
+            <path
+              d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <ng-template #noData>
+      <p>No data available.</p>
+    </ng-template>
+  </div>
+
+  <!-- si no es visible el formulario y no es modo edicion se muestra el boton de crear nuevo plan 
+   y el form solo si es nuevo o se da click en editar -->
+  <div *ngIf="isEditMode || isFormVisible">
+    <button (click)="resetForm()" class="buttonBack m-3">Back to plans</button>
+
+    <div *ngIf="isFormVisible" class="form1-card">
+      <form [formGroup]="formStrategicPlan" (submit)="sendData()" class="form1">
+        <div>
+          <h2>Strategic Plan Form</h2>
+          <div>
+            <input
+              placeholder="Name"
+              type="text"
+              id="name"
+              formControlName="name"
+            />
+            <div
+              *ngIf="
+                formStrategicPlan.get('name')?.invalid &&
+                (formStrategicPlan.get('name')?.dirty ||
+                  formStrategicPlan.get('name')?.touched)
+              "
+              class="error"
+            >
+              <p *ngIf="formStrategicPlan.get('name')?.errors?.['required']">
+                Name is required.
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <textarea
+              placeholder="mission"
+              type="text"
+              id="mission"
+              formControlName="mission"
+            ></textarea>
+          </div>
+
+          <div>
+            <textarea
+              placeholder="vision"
+              type="text"
+              id="vision"
+              formControlName="vision"
+            ></textarea>
+          </div>
+
+          <div>
+            <textarea
+              placeholder="values"
+              type="text"
+              id="values"
+              formControlName="values"
+            ></textarea>
+          </div>
+
+          <div>
+            <div>
+              <label for="endDate"> End Date: </label>
+            </div>
+            <input
+              placeholder="endDate"
+              type="date"
+              [min]="minEndDate"
+              id="endDate"
+              formControlName="endDate"
+            />
+            <div
+              *ngIf="
+                formStrategicPlan.get('endDate')?.invalid &&
+                (formStrategicPlan.get('endDate')?.dirty ||
+                  formStrategicPlan.get('endDate')?.touched)
+              "
+              class="error"
+            >
+              <p *ngIf="formStrategicPlan.get('endDate')?.errors?.['required']">
+                endDate is required.
+              </p>
+            </div>
+          </div>
+
+          <!-- Show the error div if the form is invalid -->
+          <div class="badInfo" *ngIf="!formStrategicPlan.valid">
+            <p>Not ready to send</p>
+          </div>
+          <button type="submit" class="buttonCreate m-3">Submit</button>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="isEditMode">
+      <div *ngFor="let item of strategicPlanData">
+        <div
+          *ngIf="item.id === currentPlanId"
+          class="container-fluid"
+          id="containerStrateciPlan"
+        >
+          <div id="section1" class="row d-flex justify-content-center">
+            <div class="col-lg-7 col-12">
+              <div class="container-card1Varation">
+                <div class="card-perzonnalized1">
+                  <div class="shadowTopRight"></div>
+                  <div class="shadowButtomLeft"></div>
+
+                  <div class="p-3">
+                    <div>
+                      <span id="section1NameTitle">Name:</span>
+                      <span id="section1NameValue">
+                        {{ item.name }}
+                      </span>
+                    </div>
+
+                    <div>
+                      <span id="section1StartDateTitle"> Start Date </span
+                      ><span id="section1EndDateTitle"> End Date </span>
+                    </div>
+
+                    <div>
+                      <span id="section1startDateValue">
+                        {{ item.startDate | date : "dd/MM/yyyy" }}
+                      </span>
+                      <span id="section1EndDateValue">
+                        {{ item.endDate | date : "dd/MM/yyyy" }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5 col-12">
+              <button (click)="setFormVisibility(true)" class="buttonEdit m-4">
+                Edit
+              </button>
+              <button (click)="navigateToFodaMeca()" class="buttonAdd m-4">
+                Foda Meca
+              </button>
+            </div>
+          </div>
+
+          <span
+            id="section2"
+            class="row d-flex align-items-center justify-content-center"
+          >
+            <div id="section2Value" class="col-12 col-md-6 text-center">
+              {{ item.mission }}
+            </div>
+            <div class="col-12 col-md-6">
+              <span id="section2Title">Mission</span>
+            </div>
+          </span>
+
+          <span
+            id="section3"
+            class="row d-flex align-items-center justify-content-center"
+          >
+            <div class="col-12 col-md-6 text-end">
+              <span id="section3Title">Vision</span>
+            </div>
+            <div id="section3Value" class="col-12 col-md-6 text-center">
+              {{ item.vision }}
+            </div>
+          </span>
+
+          <span
+            id="section4"
+            class="row d-flex align-items-center justify-content-center"
+          >
+            <div id="section4Value" class="col-12 col-md-6 text-center">
+              {{ item.values }}
+            </div>
+            <div class="col-12 col-md-6">
+              <span id="section4Title">Values</span>
+            </div>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

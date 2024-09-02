@@ -1,0 +1,46 @@
+<div>
+  <div>
+    <h2>Select Plan To Invite</h2>
+    <div *ngIf="strategicPlanData.length > 0; else noData">
+      <span *ngIf="showPlan">
+        <div *ngFor="let item of strategicPlanData">
+          <button class="link-button m-3" (click)="setFalseShowPlan()">
+            <strong>Plan:</strong> {{ item.name }}
+          </button>
+        </div>
+      </span>
+    </div>
+    <ng-template #noData>
+      <p>No data available.</p>
+    </ng-template>
+  </div>
+
+  <div *ngIf="!showPlan">
+    <div>
+      <h3>Invite User</h3>
+      <div style="height: 50%; width: 50%;">
+        <form [formGroup]="invitationForm" (ngSubmit)="invite()">
+          <ng-select
+            [items]="usersToInvite"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            bindLabel="name"
+            bindValue="id"
+            placeholder="Select users"
+            formControlName="users"
+            class="ng-select"
+          >
+          </ng-select>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!invitationForm.valid"
+          >
+            Invite
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

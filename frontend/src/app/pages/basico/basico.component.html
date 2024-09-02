@@ -1,0 +1,90 @@
+<div class="basicoStyle">
+  <div *ngIf="basicaData.length > 0; else noData">
+    <ul>
+      <li *ngFor="let item of basicaData">
+        <strong>Name:</strong> {{ item.name }}, <strong>Years:</strong>
+        {{ item.years }}
+        <button (click)="deleteBasicaData(item.id)" class="btn btn-danger m-2">
+          Delete
+        </button>
+        <button (click)="updateBasicaData(item)" class="btn btn-success m-2">
+          Update
+        </button>
+      </li>
+    </ul>
+  </div>
+  <ng-template #noData>
+    <p>No data available.</p>
+  </ng-template>
+
+  <div class="form1-card">
+    <form [formGroup]="formBasico" (submit)="send()" class="form1">
+      <div>
+        <h2>Basic Form</h2>
+        <div>
+          <input
+            placeholder="Name"
+            type="text"
+            id="name"
+            formControlName="name"
+          />
+          <div
+            *ngIf="
+              formBasico.get('name')?.invalid &&
+              (formBasico.get('name')?.dirty || formBasico.get('name')?.touched)
+            "
+            class="error"
+          >
+            <p *ngIf="formBasico.get('name')?.errors?.['required']">
+              Name is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <input
+            placeholder="Years"
+            type="number"
+            id="years"
+            formControlName="years"
+          />
+          <div
+            *ngIf="
+              formBasico.get('years')?.invalid &&
+              (formBasico.get('years')?.dirty ||
+                formBasico.get('years')?.touched)
+            "
+            class="error"
+          >
+            <p *ngIf="formBasico.get('years')?.errors?.['required']">
+              Age is required.
+            </p>
+            <p *ngIf="formBasico.get('years')?.errors?.['min']">
+              Must be at least 18 years old.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <select>
+            <option>yes</option>
+            <option>no</option>
+          </select>
+        </div>
+
+        <div>
+          <!-- Show the error div if the form is invalid -->
+          <div class="badInfo" *ngIf="!formBasico.valid">
+            <p>Not ready to send</p>
+          </div>
+        </div>
+
+        <div>
+          <button [disabled]="formBasico.invalid" class="buttonCreate m-3">
+            Create
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

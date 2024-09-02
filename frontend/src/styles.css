@@ -1,0 +1,552 @@
+/* ----------------------------------------------------- */
+/* cosas basicas de toda la app */
+/* ----------------------------------------------------- */
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+button:active {
+  transform: scale(0.8); /* Aplica la escala cuando se presiona el botón */
+}
+
+:root {
+  --color2: #3700ff;
+  --color3: #9900ff;
+  --color4: #ff00ff;
+  --basicBackground: #171717;
+}
+
+/* ----------------------------------------------------- */
+/* card perzonalizada numero 1 */
+/* ----------------------------------------------------- */
+.container-card-perzonnalized1 {
+  position: relative;
+  width: 250px; /* 100% */
+  height: 125px; /* 100% */
+  margin: auto;
+  margin-top: 2em;
+  z-index: 1;
+}
+
+.card-perzonnalized1 {
+  position: absolute;
+  width: 100%; /* 100% del contenedor */
+  height: 100%; /* 100% del contenedor */
+  background-color: #1f1d1d;
+  border-radius: 20px;
+}
+
+.shadowTopRight {
+  position: absolute;
+  border-radius: 20px;
+  right: -7.5%; /* -15px de 200px */
+  bottom: 20%; /* 20px de 100px */
+  height: 100%; /* 100px de 100px, 100% del contenedor */
+  width: 75%; /* 150px de 200px */
+  background: linear-gradient(
+    to top right,
+    transparent 0%,
+    var(--color4) 50%,
+    var(--color4) 100%
+  );
+  z-index: -1;
+}
+
+.shadowButtomLeft {
+  position: absolute;
+  border-radius: 20px;
+  left: -7.5%; /* -15px de 200px */
+  top: 20%; /* 20px de 100px */
+  height: 100%; /* 100px de 100px, 100% del contenedor */
+  width: 75%; /* 150px de 200px */
+  background: linear-gradient(
+    to bottom left,
+    transparent 0%,
+    var(--color2) 70%,
+    var(--color2) 100%
+  );
+  z-index: -1;
+}
+
+/* ----------------------------------------------------- */
+/* para button*/
+/* ----------------------------------------------------- */
+/* --- buttonCreate */
+.buttonCreate {
+  max-width: 200px;
+  padding: 10px;
+  border-radius: 10px;
+  width: auto;
+  color: white;
+  background-color: rgb(19, 19, 243);
+}
+
+.buttonCreate:hover {
+  background-color: black;
+  color: white;
+}
+
+/* --- buttonDelete */
+.buttonDelete {
+  max-width: 200px;
+  padding: 10px;
+  border-radius: 10px;
+  width: auto;
+  color: white;
+  background-color: rgb(245, 45, 10);
+}
+
+.buttonDelete:hover {
+  background-color: black;
+  color: white;
+}
+
+/* --- buttonDelete con icono */
+.delete-button-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgb(245, 45, 10);
+  border: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+  cursor: pointer;
+  transition-duration: 0.3s;
+  overflow: hidden;
+  position: relative;
+}
+
+.delete-svgIcon {
+  width: 15px;
+  transition-duration: 0.3s;
+}
+
+.delete-svgIcon path {
+  fill: white;
+}
+
+.delete-button-icon:hover {
+  width: 90px;
+  border-radius: 50px;
+  transition-duration: 0.3s;
+  background-color: rgb(245, 45, 10);
+  align-items: center;
+}
+
+.delete-button-icon:hover .delete-svgIcon {
+  width: 20px;
+  transition-duration: 0.3s;
+  transform: translateY(60%);
+  -webkit-transform: rotate(360deg);
+  -moz-transform: rotate(360deg);
+  -o-transform: rotate(360deg);
+  -ms-transform: rotate(360deg);
+  transform: rotate(360deg);
+}
+
+.delete-button-icon::before {
+  display: none;
+  content: "Delete";
+  color: white;
+  transition-duration: 0.3s;
+  font-size: 2px;
+}
+
+.delete-button-icon:hover::before {
+  display: block;
+  padding-right: 10px;
+  font-size: 13px;
+  opacity: 1;
+  transform: translateY(0px);
+  transition-duration: 0.3s;
+}
+
+/* --- link-button */
+.link-button {
+  background: none;
+  border: none;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* --- buttonAdd */
+.buttonAdd {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 40px;
+  height: 40px;
+  border: none;
+  padding: 0px 8px;
+  background-color: #2f01d6;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 5px 5px 0px #2f01d6;
+  transition-duration: 0.3s;
+  padding-left: 30px; /* Asegura espacio para el ícono en el lado izquierdo */
+}
+
+.buttonAdd::before {
+  content: "";
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"></path><path fill="%23ffffff" d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"></path></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: 8px; /* Ajusta la posición a la izquierda */
+  top: 50%;
+  transform: translateY(-50%);
+  transition-duration: 0.3s;
+}
+
+.buttonAdd:hover {
+  color: transparent;
+}
+
+.buttonAdd:hover::before {
+  left: 43%;
+  transition-duration: 0.3s;
+}
+
+.buttonAdd:active {
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 0px rgb(5, 8, 1);
+}
+
+/* --- buttonEdit */
+.buttonEdit {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 40px;
+  height: 40px;
+  border: none;
+  padding: 0px 8px;
+  background-color: var(--color3);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 5px 5px 0px var(--color3);
+  transition-duration: 0.3s;
+  padding-right: 25px;
+}
+
+.buttonEdit::before {
+  content: "";
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="24" height="24"><path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z" fill="%23ffffff"></path></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  transition-duration: 0.3s;
+}
+
+.buttonEdit:hover {
+  color: transparent;
+}
+
+.buttonEdit:hover::before {
+  right: 43%;
+  transition-duration: 0.3s;
+}
+
+.buttonEdit:active {
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 0px rgb(140, 32, 212);
+}
+
+/* --- buttonBack */
+.buttonBack {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 40px;
+  height: 40px;
+  border: none;
+  padding: 0px 10px;
+  background-color: var(--color3);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 5px 5px 0px var(--color3);
+  transition-duration: 0.3s;
+  padding-left: 35px; /* Asegura espacio para el ícono en el lado izquierdo */
+}
+
+.buttonBack::before {
+  content: "";
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 1024 1024"><path d="M874.690416 495.52477c0 11.2973-9.168824 20.466124-20.466124 20.466124l-604.773963 0 188.083679 188.083679c7.992021 7.992021 7.992021 20.947078 0 28.939099-4.001127 3.990894-9.240455 5.996574-14.46955 5.996574-5.239328 0-10.478655-1.995447-14.479783-5.996574l-223.00912-223.00912c-3.837398-3.837398-5.996574-9.046027-5.996574-14.46955 0-5.433756 2.159176-10.632151 5.996574-14.46955l223.019353-223.029586c7.992021-7.992021 20.957311-7.992021 28.949332 0 7.992021 8.002254 7.992021 20.957311 0 28.949332l-188.073446 188.073446 604.753497 0C865.521592 475.058646 874.690416 484.217237 874.690416 495.52477z" fill="%23ffffff"></path></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: 8px; /* Ajusta la posición a la izquierda */
+  top: 50%;
+  transform: translateY(-50%);
+  transition-duration: 0.3s;
+}
+
+.buttonBack:hover {
+  color: transparent;
+}
+
+.buttonBack:hover::before {
+  left: 43%;
+  transition-duration: 0.3s;
+}
+
+.buttonBack:active {
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 0px rgb(140, 32, 212);
+}
+
+/* ----------------------------------------------------- */
+/* form perzonalizado numero 1  */
+/* ----------------------------------------------------- */
+.form1-card {
+  margin: 25px auto 35px auto;
+  padding: 0;
+  background-image: linear-gradient(
+    163deg,
+    var(--color4) 0%,
+    var(--color2) 100%
+  );
+  border-radius: 20px;
+}
+
+.form1 {
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+  background-color: #161616;
+  border-radius: 30px;
+  color: white;
+  margin: auto;
+  text-align: center;
+  padding: 0;
+}
+
+.form1 select {
+  background-color: transparent;
+  color: white;
+  border-radius: 25px;
+  padding: 10px;
+  margin-bottom: 1em;
+  width: 80%;
+  max-width: 400px;
+  box-shadow: inset 25px 15px 15px #131212;
+}
+.form1 select option {
+  color: black;
+}
+
+.form1 input {
+  background-color: transparent;
+  color: white;
+  border-radius: 25px;
+  padding: 10px;
+  margin-bottom: 1em;
+  width: 80%;
+  max-width: 400px;
+  /* box-shadow: inset 25px 15px 15px var(--inputform1Color); */
+  border: 1px solid black;
+}
+.form1 input:focus {
+  box-shadow: none;
+}
+
+.form1 input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(
+    1
+  ); /* Invertir el color del icono, pero puede no funcionar en todos los navegadores */
+}
+
+.form1 input::placeholder {
+  color: rgb(194, 170, 170);
+}
+
+.form1 input:focus::placeholder {
+  color: rgb(255, 255, 255);
+}
+
+.form1 textarea {
+  background-color: transparent;
+  color: white;
+  padding: 15px;
+  margin-bottom: 1em;
+  width: 80%;
+  max-width: 400px;
+  height: 100px;
+  border: 1px solid black;
+  border-radius: 25px;
+  overflow: auto; /* Asegura que el scrollbar aparezca */
+}
+
+/* Para navegadores basados en WebKit (Chrome, Safari, Edge) */
+.form1 textarea::-webkit-scrollbar {
+  width: 8px; /* Ancho del scroll */
+  border-radius: 25px;
+  background-color: var(--color2);
+}
+
+.form1 textarea::-webkit-scrollbar-thumb {
+  background-color: rgb(255, 255, 255); /* Color del scroll */
+  border-radius: 25px;
+}
+.form1 textarea::-webkit-scrollbar-track {
+  height: 80px;
+}
+
+.form1 h2 {
+  text-align: center;
+  margin: 2em;
+  color: rgb(255, 255, 255);
+  font-size: 1.2em;
+}
+
+@media (min-width: 600px) {
+  .form1 {
+    width: 500px;
+  }
+  .form1-card {
+    width: 502px;
+  }
+}
+
+@media (min-width: 300px) and (max-width: 600px) {
+  .form1 {
+    width: 80%; /* Ancho predeterminado para .form1 fuera de .form1-card */
+  }
+
+  .form1-card .form1 {
+    width: 100%; /* Ancho para .form1 dentro de .form1-card */
+  }
+
+  .form1-card {
+    width: 80%;
+  }
+}
+
+@media (max-width: 300px) {
+  .form1 {
+    width: 98%;
+  }
+  .form1-card {
+    width: 98%;
+  }
+}
+/* ----------------------------------------------------- */
+/* para alertas de info en los form */
+/* ----------------------------------------------------- */
+
+.error p {
+  display: inline-block;
+  background: #ef665b;
+  border-radius: 8px;
+  padding: 10px 12px;
+  max-width: 80%;
+}
+.error p::before {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+  width: 20px;
+  height: 20px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" height="24" fill="none"><path fill="%23ffffff" d="m13 13h-2v-6h2zm0 4h-2v-2h2zm-1-15c-1.3132 0-2.61358.25866-3.82683.7612-1.21326.50255-2.31565 1.23915-3.24424 2.16773-1.87536 1.87537-2.92893 4.41891-2.92893 7.07107 0 2.6522 1.05357 5.1957 2.92893 7.0711.92859.9286 2.03098 1.6651 3.24424 2.1677 1.21325.5025 2.51363.7612 3.82683.7612 2.6522 0 5.1957-1.0536 7.0711-2.9289 1.8753-1.8754 2.9289-4.4189 2.9289-7.0711 0-1.3132-.2587-2.61358-.7612-3.82683-.5026-1.21326-1.2391-2.31565-2.1677-3.24424-.9286-.92858-2.031-1.66518-3.2443-2.16773-1.2132-.50254-2.5136-.7612-3.8268-.7612z"></path></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  transform: translateY(-2px);
+}
+
+.succes p {
+  display: inline-block;
+  background: #84d65a;
+  border-radius: 8px;
+  padding: 10px 12px;
+  max-width: 80%;
+}
+.succes p::before {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+  width: 20px;
+  height: 20px;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="m12 1c-6.075 0-11 4.925-11 11s4.925 11 11 11 11-4.925 11-11-4.925-11-11-11zm4.768 9.14c.0878-.1004.1546-.21726.1966-.34383.0419-.12657.0581-.26026.0477-.39319-.0105-.13293-.0475-.26242-.1087-.38085-.0613-.11844-.1456-.22342-.2481-.30879-.1024-.08536-.2209-.14938-.3484-.18828s-.2616-.0519-.3942-.03823c-.1327.01366-.2612.05372-.3782.1178-.1169.06409-.2198.15091-.3027.25537l-4.3 5.159-2.225-2.226c-.1886-.1822-.4412-.283-.7034-.2807s-.51301.1075-.69842.2929-.29058.4362-.29285.6984c-.00228.2622.09851.5148.28067.7034l3 3c.0983.0982.2159.1748.3454.2251.1295.0502.2681.0729.4069.0665.1387-.0063.2747-.0414.3991-.1032.1244-.0617.2347-.1487.3236-.2554z" fill="%23ffffff" fill-rule="evenodd"></path></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  transform: translateY(-2px);
+}
+
+.badInfo p {
+  display: inline-block;
+  background: #212121;
+  border-radius: 50px;
+  padding: 10px 12px;
+  max-width: 80%;
+  font: inherit;
+  color: #e8e8e8;
+}
+.badInfo p::after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+  width: 25px;
+  height: 25px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-miterlimit="2" stroke-linejoin="round" fill-rule="evenodd" clip-rule="evenodd"><path fill="%23ff0000" fill-rule="nonzero" d="m12.002 2.005c5.518 0 9.998 4.48 9.998 9.997 0 5.518-4.48 9.998-9.998 9.998-5.517 0-9.997-4.48-9.997-9.998 0-5.517 4.48-9.997 9.997-9.997zm0 1.5c-4.69 0-8.497 3.807-8.497 8.497s3.807 8.498 8.497 8.498 8.498-3.808 8.498-8.498-3.808-8.497-8.498-8.497zm0 7.425 2.717-2.718c.146-.146.339-.219.531-.219.404 0 .75.325.75.75 0 .193-.073.384-.219.531l-2.717 2.717 2.727 2.728c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.384-.073-.53-.219l-2.729-2.728-2.728 2.728c-.146.146-.338.219-.53.219-.401 0-.751-.323-.751-.75 0-.192.073-.384.22-.531l2.728-2.728-2.722-2.722c-.146-.147-.219-.338-.219-.531 0-.425.346-.749.75-.749.192 0 .385.073.531.219z"></path></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  transform: translateY(-1px);
+  margin-left: 10px;
+}
+
+/* 
+paleta de colores por si se necesita
+#3700ff
+#140077
+#2803af
+#e5e4ff
+#f0f0ff
+
+#171717
+#3d3d3d
+#e7e7e7
+#f6f6f6 
+
+#450076
+#9900ff
+#ca6cff
+#eccdff
+
+#ff00ff
+#ff21f2
+
+#f52d0a
+*/
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

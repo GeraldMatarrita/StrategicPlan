@@ -1,0 +1,114 @@
+<div class="LoginStyle">
+  <button (click)="changeForm()" class="buttonEdit">Change Form</button>
+
+  <!-- --------------- para registrarse --------------- -->
+  <div *ngIf="regiterActive" class="form1-card">
+    <form [formGroup]="registerForm" (ngSubmit)="sendData()" class="form1">
+      <h1>Register</h1>
+      <div>
+        <input type="text" formControlName="name" placeholder="Name" />
+        <div
+          *ngIf="
+            registerForm?.get('name')?.invalid &&
+            registerForm?.get('name')?.touched
+          "
+          class="error"
+        >
+          <p *ngIf="registerForm?.get('name')?.errors?.['required']">
+            Name is required
+          </p>
+        </div>
+      </div>
+      <div>
+        <input type="email" formControlName="email" placeholder="Email" />
+        <div
+          *ngIf="
+            registerForm?.get('email')?.invalid &&
+            registerForm?.get('email')?.touched
+          "
+          class="error"
+        >
+          <p *ngIf="registerForm?.get('email')?.errors?.['required']">
+            Email is required
+          </p>
+          <p *ngIf="registerForm?.get('email')?.errors?.['email']">
+            Email is invalid
+          </p>
+        </div>
+      </div>
+      <div>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Password"
+        />
+        <div
+          *ngIf="
+            registerForm?.get('password')?.invalid &&
+            registerForm?.get('password')?.touched
+          "
+          class="error"
+        >
+          <p *ngIf="registerForm?.get('password')?.errors?.['required']">
+            Password is required
+          </p>
+          <p *ngIf="registerForm?.get('password')?.errors?.['minlength']">
+            Password must be at least 2 characters
+          </p>
+        </div>
+        <div>
+          <button class="buttonCreate">Register</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- --------------- para logearse --------------- -->
+  <div *ngIf="!regiterActive" class="form1-card">
+    <form [formGroup]="loginForm" (ngSubmit)="sendData()" class="form1">
+      <h1>Login</h1>
+      <div>
+        <input
+          type="text"
+          formControlName="usernameOrEmail"
+          placeholder="Username or Email"
+        />
+        <div
+          *ngIf="
+            loginForm?.get('usernameOrEmail')?.invalid &&
+            loginForm?.get('usernameOrEmail')?.touched
+          "
+          class="error"
+        >
+          <p *ngIf="loginForm?.get('usernameOrEmail')?.errors?.['required']">
+            Username or Email is required
+          </p>
+        </div>
+      </div>
+      <div>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Password"
+        />
+        <div
+          *ngIf="
+            loginForm?.get('password')?.invalid &&
+            loginForm?.get('password')?.touched
+          "
+          class="error"
+        >
+          <p *ngIf="loginForm?.get('password')?.errors?.['required']">
+            Password is required
+          </p>
+          <p *ngIf="loginForm?.get('password')?.errors?.['minlength']">
+            Password must be at least 2 characters
+          </p>
+        </div>
+      </div>
+      <div>
+        <button class="buttonCreate">Login</button>
+      </div>
+    </form>
+  </div>
+</div>
