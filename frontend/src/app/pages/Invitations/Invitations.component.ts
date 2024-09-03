@@ -81,8 +81,6 @@ export class InvitationsComponent implements OnInit {
   }
 
   async createInvitation(userId: string, planId: string): Promise<void> {
-    console.log('userId', userId);
-    console.log('planID', planId);
     try {
       this.responseMessage = await this.basicService.createData(
         { userId, planId },
@@ -107,7 +105,6 @@ export class InvitationsComponent implements OnInit {
   async sendInvitation(): Promise<void> {
     try {
       this.selectedUsers = this.invitationForm.get('users')?.value;
-      console.log(this.selectedUsers);
 
       // Usar Promise.all para ejecutar todas las promesas y manejar errores
       await Promise.all(

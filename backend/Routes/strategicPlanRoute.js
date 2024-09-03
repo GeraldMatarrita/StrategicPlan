@@ -106,7 +106,6 @@ router.put("/:id", async (req, res) => {
 router.post("/sendInvitation", async (req, res) => {
   const { userId, planId } = req.body;
 
-  console.log(userId, planId);
   if (!userId || !planId) {
     return res.status(400).json({
       message: "User ID and Plan ID are required.",
