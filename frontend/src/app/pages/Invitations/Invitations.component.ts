@@ -1,18 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { BasicService } from '../../service/basic.service';
 import {
   FormBuilder,
   FormGroup,
   Validators,
   FormControl,
 } from '@angular/forms';
-import { API_ROUTES } from '../../config/api.routes';
-import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
+import { InvitationsService } from './Invitations.service';
 
 @Component({
   selector: 'app-invitations',
@@ -26,13 +24,15 @@ export class InvitationsComponent implements OnInit {
   usersToInvite: any[] = [];
   selectedUsers: any[] = [];
   strategicPlanData: any[] = [];
-  showPlan: boolean = true;
+  showPlans: boolean = true;
   strategicPlanId: string = '';
   responseMessage: string = '';
+  invitationData: any[] = [];
+  activeUserID: string = '66d753b1a1514176bb2ffe08';
 
   constructor(
     private formBuilder: FormBuilder,
-    private basicService: BasicService,
+    private invitationsService: InvitationsService,
     private router: Router
   ) {}
 
@@ -44,48 +44,65 @@ export class InvitationsComponent implements OnInit {
   }
 
   loadData(): void {
-    this.basicService
-      .getData(`${API_ROUTES.BASE_URL}${API_ROUTES.GetAllUsers}`)
-      .subscribe(
-        (data: any[]) => {
-          this.usersToInvite = data.map((item: any) => ({
+    this.loadStrategicPlans();
+    this.getInvitations();
+    this.loadUserToInvite();
+  }
+
+  loadStrategicPlans(): void {
+    this.invitationsService.getStrategicPlans().subscribe(
+      (data: any[]) => {
+        this.strategicPlanData = data.map((item: any) => ({
+          id: item._id,
+          name: item.name,
+        }));
+      },
+      (error: any) => {
+        console.error('Error al obtener los datos:', error);
+      }
+    );
+  }
+
+  loadUserToInvite(): void {
+    this.invitationsService.getAllUsers().subscribe(
+      (data: any[]) => {
+        // Filtrar los usuarios para excluir al que coincide con activeUserID
+        this.usersToInvite = data
+          .filter((item: any) => item._id !== this.activeUserID)
+          .map((item: any) => ({
             id: item._id,
             name: item.name,
             email: item.email,
           }));
-        },
-        (error: any) => {
-          console.error('Error al obtener los datos:', error);
-        }
-      );
+      },
+      (error: any) => {
+        console.error('Error al obtener los datos:', error);
+      }
+    );
+  }
 
-    this.basicService
-      .getData(`${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}`)
-      .subscribe(
-        (data: any[]) => {
-          console.log(data);
-          this.strategicPlanData = data.map((item: any) => ({
-            id: item._id,
-            name: item.name,
-          }));
-        },
-        (error: any) => {
-          console.error('Error al obtener los datos:', error);
-        }
-      );
+  getInvitations(): void {
+    this.invitationsService.getInvitationsForUser(this.activeUserID).subscribe(
+      (data: any) => {
+        this.invitationData = data.invitations;
+      },
+      (error: any) => {
+        console.error('Error al obtener los datos:', error);
+      }
+    );
   }
 
   selectPlan(id: string): void {
-    this.showPlan = false;
+    this.showPlans = false;
     this.strategicPlanId = id;
   }
 
   async createInvitation(userId: string, planId: string): Promise<void> {
     try {
-      this.responseMessage = await this.basicService.createData(
-        { userId, planId },
-        `${API_ROUTES.BASE_URL}${API_ROUTES.SendInvitation}`
-      );
+      this.responseMessage = await this.invitationsService.createInvitation({
+        userId,
+        planId,
+      });
       Swal.fire({
         icon: 'success',
         title: 'Invitaciones enviadas',
@@ -102,7 +119,7 @@ export class InvitationsComponent implements OnInit {
     }
   }
 
-  async sendInvitation(): Promise<void> {
+  async sendInvitations(): Promise<void> {
     try {
       this.selectedUsers = this.invitationForm.get('users')?.value;
 
@@ -118,6 +135,30 @@ export class InvitationsComponent implements OnInit {
         icon: 'error',
         title: 'Error en el envío de invitaciones',
         text: 'Ocurrió un error al enviar las invitaciones.',
+      });
+    }
+  }
+
+  async responseInvitation(decision: boolean, planId: string): Promise<void> {
+    try {
+      const responseMessage = await this.invitationsService.responseInvitation({
+        decision: decision,
+        planId: planId,
+        userId: this.activeUserID,
+      });
+      Swal.fire({
+        icon: 'success',
+        title: 'Respuesta enviada',
+        text: responseMessage,
+      });
+      this.loadData();
+    } catch (error) {
+      this.responseMessage =
+        (error as any)?.error?.message || 'Error desconocido';
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: this.responseMessage,
       });
     }
   }

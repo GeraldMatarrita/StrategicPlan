@@ -6,7 +6,7 @@
   background-color: var(--basicBackground);
   color: white;
   min-height: calc(100vh - 52px);
-  padding: 10px 0px 50px 0px; /* top right bottom left */
+  padding: 10px 50px 50px 50px; /* top right bottom left */
   margin: auto;
 }
 
@@ -52,4 +52,16 @@
 .ng-select.custom ::ng-deep .ng-dropdown-panel {
   max-height: 300px; /* Altura máxima de 300px */
   overflow-y: auto; /* Habilita el scroll si la lista es más larga que 300px */
+}
+
+.invitation-info {
+  color: white;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+
+.invitation-value {
+  color: white;
+  font-size: 1.2rem;
+  margin-right: 1rem;
 }
