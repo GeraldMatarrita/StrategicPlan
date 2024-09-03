@@ -1,10 +1,10 @@
-<div>
+<div class="invitationStyle">
   <div>
     <h2>Select Plan To Invite</h2>
     <div *ngIf="strategicPlanData.length > 0; else noData">
       <span *ngIf="showPlan">
         <div *ngFor="let item of strategicPlanData">
-          <button class="link-button m-3" (click)="setFalseShowPlan()">
+          <button class="link-button m-3" (click)="selectPlan(item.id)">
             <strong>Plan:</strong> {{ item.name }}
           </button>
         </div>
@@ -18,8 +18,8 @@
   <div *ngIf="!showPlan">
     <div>
       <h3>Invite User</h3>
-      <div style="height: 50%; width: 50%;">
-        <form [formGroup]="invitationForm" (ngSubmit)="invite()">
+      <div class="container">
+        <form [formGroup]="invitationForm" (ngSubmit)="sendInvitation()">
           <ng-select
             [items]="usersToInvite"
             [multiple]="true"
@@ -28,13 +28,13 @@
             bindValue="id"
             placeholder="Select users"
             formControlName="users"
-            class="ng-select"
+            class="ng-select custom"
           >
           </ng-select>
 
           <button
             type="submit"
-            class="btn btn-primary"
+            class="buttonCreate m-3"
             [disabled]="!invitationForm.valid"
           >
             Invite

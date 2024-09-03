@@ -103,9 +103,10 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.post("/invite", async (req, res) => {
+router.post("/sendInvitation", async (req, res) => {
   const { userId, planId } = req.body;
 
+  console.log(userId, planId);
   if (!userId || !planId) {
     return res.status(400).json({
       message: "User ID and Plan ID are required.",
@@ -131,7 +132,9 @@ router.post("/invite", async (req, res) => {
 
     // Verificar si ya existe una invitación pendiente para este plan
     const existingInvitation = user.invitations.find(
-      (inv) => inv.planId.toString() === planId && inv.status === "pending"
+      (inv) =>
+        inv.planId.toString() === planId &&
+        (inv.status === "pending" || inv.status === "accepted")
     );
     if (existingInvitation) {
       return res.status(400).json({

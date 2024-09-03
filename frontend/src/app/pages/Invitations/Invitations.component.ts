@@ -12,17 +12,7 @@ import { API_ROUTES } from '../../config/api.routes';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
-
-interface StrategicPlan {
-  id: string;
-  name: string;
-}
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-invitations',
@@ -33,10 +23,12 @@ interface StrategicPlan {
 })
 export class InvitationsComponent implements OnInit {
   public invitationForm!: FormGroup;
-  usersToInvite: User[] = [];
-  selectedUsers: User[] = [];
-  strategicPlanData: StrategicPlan[] = [];
+  usersToInvite: any[] = [];
+  selectedUsers: any[] = [];
+  strategicPlanData: any[] = [];
   showPlan: boolean = true;
+  strategicPlanId: string = '';
+  responseMessage: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -83,13 +75,53 @@ export class InvitationsComponent implements OnInit {
       );
   }
 
-  setFalseShowPlan(): void {
+  selectPlan(id: string): void {
     this.showPlan = false;
+    this.strategicPlanId = id;
   }
 
-  invite(): void {
-    if (this.invitationForm.valid) {
-      console.log('Selected users:', this.invitationForm.get('users')?.value);
+  async createInvitation(userId: string, planId: string): Promise<void> {
+    console.log('userId', userId);
+    console.log('planID', planId);
+    try {
+      this.responseMessage = await this.basicService.createData(
+        { userId, planId },
+        `${API_ROUTES.BASE_URL}${API_ROUTES.SendInvitation}`
+      );
+      Swal.fire({
+        icon: 'success',
+        title: 'Invitaciones enviadas',
+        text: 'Todas las invitaciones se enviaron correctamente.',
+      });
+    } catch (error) {
+      this.responseMessage =
+        (error as any)?.error?.message || 'Error desconocido';
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: this.responseMessage,
+      });
+    }
+  }
+
+  async sendInvitation(): Promise<void> {
+    try {
+      this.selectedUsers = this.invitationForm.get('users')?.value;
+      console.log(this.selectedUsers);
+
+      // Usar Promise.all para ejecutar todas las promesas y manejar errores
+      await Promise.all(
+        this.selectedUsers.map((user) =>
+          this.createInvitation(user, this.strategicPlanId)
+        )
+      );
+    } catch (error) {
+      // Si ocurre un error inesperado fuera de `createInvitation`
+      Swal.fire({
+        icon: 'error',
+        title: 'Error en el envío de invitaciones',
+        text: 'Ocurrió un error al enviar las invitaciones.',
+      });
     }
   }
 }
