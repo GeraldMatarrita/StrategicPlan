@@ -8,7 +8,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Conexión a la base de datos (asumiendo que tienes un archivo `db.js` para la conexión)
+// Servir archivos estáticos desde la carpeta 'frontend/dist'
+app.use(express.static('frontend/dist'));
+
+// Conexión a la base de datos
 const connection = require("./db");
 connection();
 
