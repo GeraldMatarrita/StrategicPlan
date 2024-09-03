@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 // Servir archivos estáticos desde la carpeta 'frontend/dist'
-app.use(express.static('frontend/dist'));
+app.use(express.static('frontend/dist/frontend'));
 
 // Conexión a la base de datos
 const connection = require("./db");
