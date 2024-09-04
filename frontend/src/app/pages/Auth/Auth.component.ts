@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BasicService } from '../../service/basic.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { API_ROUTES } from '../../config/api.routes';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-
+import { AuthService } from './Auth.service';
 @Component({
   selector: 'app-auth',
   standalone: true,
@@ -23,7 +22,7 @@ export class AuthComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private basicService: BasicService,
+    private authService: AuthService,
     private router: Router
   ) {}
 
@@ -52,9 +51,8 @@ export class AuthComponent {
 
   async register(): Promise<void> {
     try {
-      this.responseMessage = await this.basicService.createData(
-        this.registerForm.value,
-        `${API_ROUTES.BASE_URL}${API_ROUTES.REGISTER}`
+      this.responseMessage = await this.authService.createAccount(
+        this.registerForm.value
       );
       Swal.fire({
         icon: 'success',

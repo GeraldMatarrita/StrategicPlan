@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BasicService } from '../../service/basic.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { API_ROUTES } from '../../config/api.routes';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { StrategicPlanService } from './StrategicPlan.service';
 
 @Component({
   selector: 'app-strategic-plan',
@@ -22,10 +21,11 @@ export class StrategicPlanComponent implements OnInit {
   public minEndDate: string = '';
   isEditMode: boolean = false; // Variable para indicar si es modo edición
   public currentPlanId: string = ''; // ID del plan actual a editar (si lo hay)
+  activeUserID: string = '66d753b1a1514176bb2ffe08';
 
   constructor(
     private formBuilder: FormBuilder,
-    private basicoService: BasicService,
+    private strategicPlanService: StrategicPlanService,
     private router: Router
   ) {}
 
@@ -46,24 +46,26 @@ export class StrategicPlanComponent implements OnInit {
   }
 
   loadData(): void {
-    this.basicoService
-      .getData(`${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}`)
-      .subscribe(
-        (data: any[]) => {
-          this.strategicPlanData = data.map((item) => ({
-            id: item._id,
-            mission: item.mission,
-            vision: item.vision,
-            values: item.values,
-            startDate: item.startDate,
-            endDate: item.endDate,
-            name: item.name,
-          }));
-        },
-        (error: any) => {
-          console.error('Error al obtener los datos:', error);
-        }
-      );
+    this.getStratecPlans();
+  }
+
+  getStratecPlans() {
+    this.strategicPlanService.getStrategicPlans().subscribe(
+      (data: any[]) => {
+        this.strategicPlanData = data.map((item) => ({
+          id: item._id,
+          mission: item.mission,
+          vision: item.vision,
+          values: item.values,
+          startDate: item.startDate,
+          endDate: item.endDate,
+          name: item.name,
+        }));
+      },
+      (error: any) => {
+        console.error('Error al obtener los datos:', error);
+      }
+    );
   }
 
   // Método para editar un plan existente
@@ -71,6 +73,8 @@ export class StrategicPlanComponent implements OnInit {
     this.isEditMode = true; // Activar el modo edición
     this.currentPlanId = plan.id.toString();
     this.formStrategicPlan.patchValue(plan); // Cargar los datos del plan en el formulario
+    // Hacer scroll al top de la página
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   // Método para crear un nuevo plan
@@ -103,10 +107,8 @@ export class StrategicPlanComponent implements OnInit {
     try {
       const cleanedData = this.cleanFormData();
 
-      this.responseMessage = await this.basicoService.createData(
-        cleanedData,
-        `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}`
-      );
+      this.responseMessage =
+        await this.strategicPlanService.createStrategicPlan(cleanedData);
       Swal.fire({
         icon: 'success',
         title: 'Creado',
@@ -128,13 +130,11 @@ export class StrategicPlanComponent implements OnInit {
   async updatePlan(): Promise<void> {
     try {
       const cleanedData = this.cleanFormData();
-      this.responseMessage = await this.basicoService
-        .updateData(
+      this.responseMessage =
+        await this.strategicPlanService.updateStrategicPlan(
           this.currentPlanId,
-          cleanedData,
-          `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}`
-        )
-        .toPromise();
+          cleanedData
+        );
       Swal.fire({
         icon: 'success',
         title: 'Actualizado',
@@ -169,10 +169,8 @@ export class StrategicPlanComponent implements OnInit {
         cancelButtonColor: '#f52d0a',
       });
       if (result.isConfirmed) {
-        this.responseMessage = await this.basicoService.deleteDataByID(
-          id,
-          `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}`
-        );
+        this.responseMessage =
+          await this.strategicPlanService.deleteStrategicPlanByID(id);
         Swal.fire({
           icon: 'success',
           title: 'Eliminado',

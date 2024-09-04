@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const { User: UserModel, validateUser } = require("../Models/UserModel"); // Importa el modelo User
-const { StrategicPlan } = require("../Models/StrategicPlanModel");
 
 router.get("/All-users", async (req, res) => {
   try {

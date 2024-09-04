@@ -2,4 +2,66 @@
   display: block;
 }
 /* Estilos generales para ng-select */
+.invitationStyle {
+  background-color: var(--basicBackground);
+  color: white;
+  min-height: calc(100vh - 52px);
+  padding: 10px 50px 50px 50px; /* top right bottom left */
+  margin: auto;
+}
 
+/* Estilo principal para el ng-select */
+.ng-select {
+  width: 100%;
+  max-width: 500px;
+  background-color: transparent;
+  color: white; /* Color de texto blanco */
+  border-radius: 25px;
+  padding: 10px 15px;
+  border: 1px solid #9900ff;
+}
+
+/* Estilo para el contenedor del ng-select */
+.ng-select.custom ::ng-deep .ng-select-container {
+  min-height: 0px;
+  border-radius: 25px;
+}
+
+/* Estilo para el input dentro del ng-select */
+.ng-select.custom ::ng-deep .ng-input > input {
+  color: white; /* Texto blanco cuando escribes en el select */
+}
+
+/* Estilo para los items del ng-select */
+.ng-select.custom ::ng-deep .ng-option {
+  background-color: var(--basicBackground);
+  width: 100%;
+  max-width: 500px;
+  padding: 10px 15px;
+  border: 1px solid #9900ff;
+  border-radius: 10px;
+}
+
+/* Estilo para el item seleccionado en ng-select */
+.ng-select.custom ::ng-deep .ng-option-selected {
+  background-color: #9900ff; /* Fondo morado para el item seleccionado */
+  color: white; /* Texto blanco para el item seleccionado */
+}
+
+/* Estilo para limitar la altura de la lista desplegable */
+.ng-select.custom ::ng-deep .ng-dropdown-panel {
+  max-height: 300px; /* Altura máxima de 300px */
+  overflow-y: auto; /* Habilita el scroll si la lista es más larga que 300px */
+}
+
+.invitation-info {
+  color: white;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+
+.invitation-value {
+  color: white;
+  font-size: 1.2rem;
+  margin-right: 1rem;
+}

@@ -25,6 +25,9 @@ app.use("/strategicPlan", StrategicPlanRoute);
 const AuthRoute = require("./Routes/UserRoute");
 app.use("/auth", AuthRoute);
 
+const Invitations = require("./Routes/invitationRoute");
+app.use("/invitations", Invitations);
+
 // ---------------------------------------------------------------------
 // borrar
 // ---------------------------------------------------------------------

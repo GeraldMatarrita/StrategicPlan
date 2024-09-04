@@ -1,10 +1,41 @@
-<div>
+<div class="invitationStyle">
+  <div *ngIf="showPlans" class="m-5">
+    <h2>Invitations</h2>
+    <div *ngIf="invitationData.length > 0; else noData">
+      <div *ngFor="let invitation of invitationData" class="m-4">
+        <div *ngIf="invitation.status === 'pending'">
+          <span class="invitation-info">Plan Name:</span>
+          <span class="invitation-value">{{ invitation.planName }}</span>
+          <span class="invitation-info">Invitation Status:</span>
+          <span class="invitation-value">{{ invitation.status }}</span>
+
+          <button
+            (click)="responseInvitation(false, invitation.planId)"
+            class="buttonDelete m-3"
+          >
+            Decline
+          </button>
+          <button
+            (click)="responseInvitation(true, invitation.planId)"
+            class="buttonCreate m-3"
+          >
+            Accept
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noData>
+      <p>No invitation sadasd.</p>
+    </ng-template>
+  </div>
+
   <div>
     <h2>Select Plan To Invite</h2>
     <div *ngIf="strategicPlanData.length > 0; else noData">
-      <span *ngIf="showPlan">
+      <span *ngIf="showPlans">
         <div *ngFor="let item of strategicPlanData">
-          <button class="link-button m-3" (click)="setFalseShowPlan()">
+          <button class="link-button m-3" (click)="selectPlan(item.id)">
             <strong>Plan:</strong> {{ item.name }}
           </button>
         </div>
@@ -15,11 +46,11 @@
     </ng-template>
   </div>
 
-  <div *ngIf="!showPlan">
+  <div *ngIf="!showPlans">
     <div>
       <h3>Invite User</h3>
-      <div style="height: 50%; width: 50%;">
-        <form [formGroup]="invitationForm" (ngSubmit)="invite()">
+      <div class="container">
+        <form [formGroup]="invitationForm" (ngSubmit)="sendInvitations()">
           <ng-select
             [items]="usersToInvite"
             [multiple]="true"
@@ -28,13 +59,13 @@
             bindValue="id"
             placeholder="Select users"
             formControlName="users"
-            class="ng-select"
+            class="ng-select custom"
           >
           </ng-select>
 
           <button
             type="submit"
-            class="btn btn-primary"
+            class="buttonCreate m-3"
             [disabled]="!invitationForm.valid"
           >
             Invite
