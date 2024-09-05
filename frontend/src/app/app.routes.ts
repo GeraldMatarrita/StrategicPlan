@@ -7,8 +7,8 @@ import { InvitationsComponent } from './pages/Invitations/Invitations.component'
 import { AuthComponent } from './pages/Auth/Auth.component';
 
 export const routes: Routes = [
-  { path: 'basico', component: BasicoComponent },
-  { path: 'notfound', component: NotFoundComponent },
+  { path: 'Basico', component: BasicoComponent },
+  { path: 'NotFound', component: NotFoundComponent },
   { path: 'StrategicPlan', component: StrategicPlanComponent },
   { path: 'FodaMeca/:id', component: FodaMecaComponent },
   { path: 'Invitations', component: InvitationsComponent },

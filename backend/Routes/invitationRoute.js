@@ -6,12 +6,13 @@ const {
 const { User, validateUser } = require("../Models/UserModel"); // Ajusta la ruta según la ubicación de tu archivo de modelo
 
 /**
- * función que obtiene las invitaciones de un usuario
+ * función que obtiene las invitaciones de un usuario por su ID
  * @param {String} userId - ID del usuario
+ * @returns {Object} - Lista de invitaciones
+ * @throws {Object} - Mensaje de error
  */
 router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
-
   if (!userId) {
     return res.status(400).json({
       message: "User ID is required.",
@@ -36,13 +37,15 @@ router.get("/:userId", async (req, res) => {
       const plan = await StrategicPlan.findById(user.invitations[i].planId);
 
       // Crear una nueva invitación con la propiedad planName agregada
-      const updatedInvitation = {
-        ...user.invitations[i]._doc, // Copia todas las propiedades existentes de la invitación
-        planName: plan.name, // Agrega la nueva propiedad planName
-      };
+      if (plan) {
+        const updatedInvitation = {
+          ...user.invitations[i]._doc, // Copia todas las propiedades existentes de la invitación
+          planName: plan.name, // Agrega la nueva propiedad planName
+        };
 
-      // Agregar la invitación actualizada al array de respuestas
-      response.push(updatedInvitation);
+        // Agregar la invitación actualizada al array de respuestas
+        response.push(updatedInvitation);
+      }
     }
 
     // Enviar la respuesta con las invitaciones actualizadas
@@ -58,7 +61,11 @@ router.get("/:userId", async (req, res) => {
 });
 
 /**
- * función que crea una nueva invitación
+ * función que crea una nueva invitación a un usuario por su ID la invitación se crea con el estado de pendiente al planId recibido
+ * @param {String} userId - ID del usuario al que se invita
+ * @param {String} planId - ID del plan estratégico al que se invita al usuario
+ * @returns {Object} - Mensaje de confirmación
+ * @throws {Object} - Mensaje de error
  */
 router.post("/", async (req, res) => {
   const { userId, planId } = req.body;
@@ -119,6 +126,11 @@ router.post("/", async (req, res) => {
 
 /**
  * función que responde a una invitación con el estado de aceptado o rechazado tomando el userId, planId y decision
+ * @param {String} userId - ID del usuario que responde a la invitación
+ * @param {String} planId - ID del plan estratégico al que se responde la invitación
+ * @param {Boolean} decision - Decisión del usuario, true para aceptar, false para rechazar
+ * @returns {Object} - Mensaje de confirmación
+ * @throws {Object} - Mensaje de error
  */
 router.post("/response", async (req, res) => {
   const { userId, planId, decision } = req.body;

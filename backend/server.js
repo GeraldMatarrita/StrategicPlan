@@ -19,6 +19,9 @@ connection();
 const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 
+// ---------------------------------------------------------------------
+// Rutas
+// ---------------------------------------------------------------------
 const StrategicPlanRoute = require("./Routes/strategicPlanRoute");
 app.use("/strategicPlan", StrategicPlanRoute);
 
@@ -29,7 +32,7 @@ const Invitations = require("./Routes/invitationRoute");
 app.use("/invitations", Invitations);
 
 // ---------------------------------------------------------------------
-// borrar
+// borrar de aqui para abajo al terminar el proyecto
 // ---------------------------------------------------------------------
 // Ejemplo de rutas
 const basicaRoutes = require("./Routes/basicaRoute");

@@ -4,9 +4,6 @@ const Joi = require("joi");
 /**
  * Modelo de planes estratégicos.
  */
-/**
- * Modelo de planes estratégicos.
- */
 const strategicPlanSchema = new mongoose.Schema(
   {
     mission: { type: String },
@@ -15,28 +12,16 @@ const strategicPlanSchema = new mongoose.Schema(
     startDate: { type: Date, default: Date.now, required: true },
     endDate: { type: Date, required: true },
     name: { type: String, required: true },
-    FODA_ID: { type: mongoose.Schema.Types.ObjectId, ref: "FODA" }, // Referencia a un esquema FODA
-    MECA_ID: { type: mongoose.Schema.Types.ObjectId, ref: "MECA" }, // Referencia a un esquema MECA
+    FODA_ID: { type: mongoose.Schema.Types.ObjectId, ref: "FODA" },
+    MECA_ID: { type: mongoose.Schema.Types.ObjectId, ref: "MECA" },
     members_ListIDS: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Referencia al esquema User
-      },
+      { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Referencia directa
     ],
     objective_ListIDS: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-
-        objectiveId: { type: mongoose.Schema.Types.ObjectId, ref: "Objective" }, // Referencia al esquema Objective
-      },
+      { type: mongoose.Schema.Types.ObjectId, ref: "Objective" }, // Referencia directa
     ],
     operationPlan_ListIDS: [
-      {
-        operationPlanId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "OperationPlan",
-        },
-      },
+      { type: mongoose.Schema.Types.ObjectId, ref: "OperationPlan" }, // Referencia directa
     ],
   },
   { strict: "throw" }
@@ -58,27 +43,15 @@ const validateStrategicPlan = (data) => {
     FODA_ID: Joi.string().optional().label("FODA ID"),
     MECA_ID: Joi.string().optional().label("MECA ID"),
     members_ListIDS: Joi.array()
-      .items(
-        Joi.object({
-          userId: Joi.string().required().label("User ID"),
-        })
-      )
+      .items(Joi.string().length(24).label("Member ID"))
       .optional()
       .label("Members List IDs"),
     objective_ListIDS: Joi.array()
-      .items(
-        Joi.object({
-          objectiveId: Joi.string().required().label("Objective ID"),
-        })
-      )
+      .items(Joi.string().length(24).label("Objective ID"))
       .optional()
       .label("Objective List IDs"),
     operationPlan_ListIDS: Joi.array()
-      .items(
-        Joi.object({
-          operationPlanId: Joi.string().required().label("Operation Plan ID"),
-        })
-      )
+      .items(Joi.string().length(24).label("Operation Plan ID"))
       .optional()
       .label("Operation Plan List IDs"),
   });

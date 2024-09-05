@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
 import { InvitationsService } from './Invitations.service';
+import { AuthService } from '../Auth/Auth.service';
 
 @Component({
   selector: 'app-invitations',
@@ -20,51 +21,91 @@ import { InvitationsService } from './Invitations.service';
   styleUrl: './Invitations.component.css',
 })
 export class InvitationsComponent implements OnInit {
+  // Variables para almacenar los form
   public invitationForm!: FormGroup;
+
+  // Variable para almacenar el mensaje de respuesta
+  responseMessage: string = '';
+
+  // Variables enviar las invitaciones
   usersToInvite: any[] = [];
   selectedUsers: any[] = [];
+  strategicPlanId: string = '';
+
+  // Variables para las invitaciones pendientes del usuario
+  invitationData: any[] = [];
+
+  // Variables para los planes estratégicos
   strategicPlanData: any[] = [];
   showPlans: boolean = true;
-  strategicPlanId: string = '';
-  responseMessage: string = '';
-  invitationData: any[] = [];
-  activeUserID: string = '66d753b1a1514176bb2ffe08';
+
+  // Variable para almacenar el usuario activo
+  activeUserID: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private invitationsService: InvitationsService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
+  /**
+   * Método que se ejecuta al iniciar el componente
+   * - Inicializar el formulario de invitaciones
+   * - Cargar los datos necesarios
+   */
   ngOnInit(): void {
+    // Inicializar el formulario de invitaciones
     this.invitationForm = this.formBuilder.group({
       users: [null, Validators.required],
     });
+
+    // Cargar los datos necesarios
     this.loadData();
   }
 
-  loadData(): void {
-    this.loadStrategicPlans();
-    this.getInvitations();
-    this.loadUserToInvite();
+  /**
+   * Método para cargar los datos
+   *  - usuario activo el ID
+   *  - planes estratégicos del usuario
+   *  - usuarios a invitar (excluyendo al usuario activo)
+   *  - invitaciones pendientes del usuario
+   */
+  async loadData(): Promise<void> {
+    try {
+      this.activeUserID = await this.authService.getActiveUserID();
+      this.loadStrategicPlansForActiveUser();
+      this.getPendingInvitations();
+      this.loadUserToInvite();
+    } catch (error) {
+      console.error('Error al cargar los datos:', error);
+    }
   }
 
-  loadStrategicPlans(): void {
-    this.invitationsService.getStrategicPlans().subscribe(
-      (data: any[]) => {
-        this.strategicPlanData = data.map((item: any) => ({
-          id: item._id,
-          name: item.name,
-        }));
-      },
-      (error: any) => {
-        console.error('Error al obtener los datos:', error);
-      }
-    );
+  /**
+   * Método para cargar los planes estratégicos del usuario activo
+   */
+  loadStrategicPlansForActiveUser(): void {
+    this.invitationsService
+      .getStrategicPlansForUser(this.activeUserID)
+      .subscribe(
+        (data: any[]) => {
+          this.strategicPlanData = data.map((item: any) => ({
+            id: item._id,
+            name: item.name,
+          }));
+        },
+        (error: any) => {
+          console.error('Error al obtener los datos:', error);
+        }
+      );
   }
 
+  /**
+   * Método para cargar los usuarios a invitar (excluyendo al usuario activo)
+   */
   loadUserToInvite(): void {
-    this.invitationsService.getAllUsers().subscribe(
+    this.authService.getAllUsers().subscribe(
       (data: any[]) => {
         // Filtrar los usuarios para excluir al que coincide con activeUserID
         this.usersToInvite = data
@@ -81,10 +122,15 @@ export class InvitationsComponent implements OnInit {
     );
   }
 
-  getInvitations(): void {
+  /**
+   * Método para obtener las invitaciones pendientes del usuario activo
+   */
+  getPendingInvitations(): void {
     this.invitationsService.getInvitationsForUser(this.activeUserID).subscribe(
       (data: any) => {
-        this.invitationData = data.invitations;
+        this.invitationData = data.invitations.filter(
+          (invitation: any) => invitation.status === 'pending'
+        );
       },
       (error: any) => {
         console.error('Error al obtener los datos:', error);
@@ -92,11 +138,20 @@ export class InvitationsComponent implements OnInit {
     );
   }
 
-  selectPlan(id: string): void {
+  /**
+   * Método para seleccionar un plan estratégico y cargarlo en la variable `strategicPlanId`
+   * @param id ID del plan estratégico seleccionado
+   */
+  onSelectPlan(id: string): void {
     this.showPlans = false;
     this.strategicPlanId = id;
   }
 
+  /**
+   * Método para enviar una invitación
+   * @param userId ID del usuario a invitar
+   * @param planId ID del plan estratégico al que se invita al usuario
+   */
   async createInvitation(userId: string, planId: string): Promise<void> {
     try {
       this.responseMessage = await this.invitationsService.createInvitation({
@@ -119,6 +174,10 @@ export class InvitationsComponent implements OnInit {
     }
   }
 
+  /**
+   * Método para enviar las invitaciones utiliza createInvitation para enviar
+   * las invitaciones a todos los usuarios seleccionados
+   */
   async sendInvitations(): Promise<void> {
     try {
       this.selectedUsers = this.invitationForm.get('users')?.value;
@@ -139,6 +198,11 @@ export class InvitationsComponent implements OnInit {
     }
   }
 
+  /**
+   * función para responder una invitación a un plan estratégico
+   * @param decision aceptar o rechazar la invitación
+   * @param planId id del plan estratégico al que se responde
+   */
   async responseInvitation(decision: boolean, planId: string): Promise<void> {
     try {
       const responseMessage = await this.invitationsService.responseInvitation({

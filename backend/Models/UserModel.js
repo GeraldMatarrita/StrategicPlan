@@ -9,7 +9,9 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    strategicPlans_ListIDS: { type: [String], required: false },
+    strategicPlans_ListIDS: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "StrategicPlan" },
+    ],
     invitations: [
       {
         planId: {
@@ -39,7 +41,7 @@ const validateUser = (data) => {
     email: Joi.string().email().required().label("Email"),
     password: Joi.string().min(2).required().label("Password"),
     strategicPlans_ListIDS: Joi.array()
-      .items(Joi.string())
+      .items(Joi.string().length(24))
       .optional()
       .label("Strategic Plans List IDs"),
     invitations: Joi.array()

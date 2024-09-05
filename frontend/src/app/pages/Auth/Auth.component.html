@@ -1,7 +1,7 @@
 <div class="LoginStyle">
   <button (click)="changeForm()" class="buttonEdit">Change Form</button>
 
-  <!-- --------------- para registrarse --------------- -->
+  <!-- --------------- Para registrarse --------------- -->
   <div *ngIf="regiterActive" class="form1-card">
     <form [formGroup]="registerForm" (ngSubmit)="sendData()" class="form1">
       <h1>Register</h1>
@@ -63,7 +63,7 @@
     </form>
   </div>
 
-  <!-- --------------- para logearse --------------- -->
+  <!-- --------------- Para logearse --------------- -->
   <div *ngIf="!regiterActive" class="form1-card">
     <form [formGroup]="loginForm" (ngSubmit)="sendData()" class="form1">
       <h1>Login</h1>
