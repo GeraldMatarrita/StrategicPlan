@@ -186,26 +186,18 @@
 /* ------------------------------ */
 
 @media (max-width: 992px) {
-  .container-card1-view,
-  .container-card1-preview {
-    width: 200px;
-    height: 115px;
-  }
-
-  #section1NameTitle,
-  #section1NameValue,
-  #section1StartDateTitle,
-  #section1EndDateTitle,
-  #section1startDateValue,
-  #section1EndDateValue {
-    font-size: 0.75rem; /* Reducir el tamaño de la fuente a la mitad */
-    padding-bottom: 4px;
-    margin-bottom: 0px;
-  }
+  #section1,
   #section0 {
-    min-height: 180px;
+    scale: 0.8;
   }
-  #section1 {
-    height: 300px;
+}
+
+/* ------------------------------ */
+/* Media Query for screens smaller than 576px */
+/* ------------------------------ */
+@media (max-width: 576px) {
+  #section1,
+  #section0 {
+    scale: 0.9;
   }
 }

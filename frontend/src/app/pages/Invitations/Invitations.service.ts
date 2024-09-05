@@ -7,15 +7,9 @@ import { API_ROUTES } from '../../config/api.routes';
   providedIn: 'root',
 })
 export class InvitationsService {
-  /**
-   *
-   * @param http servicio de HttpClient
-   *
-   */
   constructor(private http: HttpClient) {}
 
   /**
-   *
    * @param url to post data
    * @param data data to post
    * @returns
@@ -57,6 +51,31 @@ export class InvitationsService {
   // --------------------------------------------
 
   /**
+   * función para obtener todas las invitaciones de un usuario
+   * @param id del usuario
+   * @returns promesa con los datos
+   */
+  getInvitationsForUser(id: string): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.INVITATION}/${id}`
+    );
+  }
+
+  /**
+   * funcion para obtener los planes estrategicos de un usuario
+   * @param id del usuario
+   * @returns promesa con los datos
+   */
+  getStrategicPlansForUser(id: string): Observable<any[]> {
+    console.log(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN_FOR_USER}/${id}`
+    );
+    return this.http.get<any[]>(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN_FOR_USER}/${id}`
+    );
+  }
+
+  /**
    * función para craer los datos de invitación
    * @param data datos a enviar
    * @returns promesa con el mensaje de respuesta
@@ -79,90 +98,9 @@ export class InvitationsService {
   }
 
   /**
-   * función para eliminar los datos de basico
-   * @param id del dato a eliminar
-   * @returns promesa con el mensaje de respuesta
-   */
-  deleteBasicoDataByID(id: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.deleteById(
-        `${API_ROUTES.BASE_URL}${API_ROUTES.INVITATION}`,
-        id
-      ).subscribe(
-        (response: any) => {
-          resolve(response.message);
-        },
-        (error: any) => {
-          console.error('Error al eliminar los datos:', error);
-          reject(error);
-        }
-      );
-    });
-  }
-
-  /**
-   * función para actualizar los datos de basico
-   * @param id del dato a actualizar
-   * @param data datos a enviar
-   * @returns promesa con el mensaje de respuesta
-   */
-  updateBasicoData(id: string, data: any): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.updateData(
-        `${API_ROUTES.BASE_URL}${API_ROUTES.INVITATION}`,
-        id,
-        data
-      ).subscribe(
-        (response: any) => {
-          resolve(response.message);
-        },
-        (error: any) => {
-          console.error('Error al actualizar los datos:', error);
-          reject(error);
-        }
-      );
-    });
-  }
-
-  /**
-   * función para obtener todas las invitaciones de un usuario
-   * @param id del usuario
-   * @returns promesa con los datos
-   */
-  getInvitationsForUser(id: string): Observable<any[]> {
-    return this.http.get<any[]>(
-      `${API_ROUTES.BASE_URL}${API_ROUTES.INVITATION}/${id}`
-    );
-  }
-
-  /**
-   * funcion para obtener los usuaios para invitar al plan
-   * @returns promesa con los datos
-   */
-  getAllUsers(): Observable<any[]> {
-    return this.http.get<any[]>(
-      `${API_ROUTES.BASE_URL}${API_ROUTES.GetAllUsers}`
-    );
-  }
-
-  /**
-   * funcion para obtener los planes estrategicos de un usuario
-   * @param id del usuario
-   * @returns promesa con los datos
-   */
-  getStrategicPlansForUser(id: string): Observable<any[]> {
-    console.log(
-      `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN_FOR_USER}/${id}`
-    );
-    return this.http.get<any[]>(
-      `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN_FOR_USER}/${id}`
-    );
-  }
-
-  /**
-     funcion para responder una invitación
-   * @param data a quien se le responde la invitación 
-   * @returns 
+   * funcion para responder una invitación
+   * @param data aceptar o rechazar la invitación, a cual plan estratégico y el usuario que responde
+   * @returns
    */
   responseInvitation(data: any): Promise<string> {
     return new Promise((resolve, reject) => {

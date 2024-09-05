@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { NAVIGATIONS_ROUTES } from '../navigations.routes';
 
 @Component({
   selector: 'app-nav-bar',
@@ -14,21 +15,21 @@ export class NavBarComponent {
   constructor(private router: Router) {}
 
   navigateToNotFound() {
-    this.router.navigate(['/notfound']);
+    this.router.navigate([NAVIGATIONS_ROUTES.NOT_FOUND]);
   }
   navigateToHome() {
-    this.router.navigate(['/']);
+    this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
   }
   navigateToBasico() {
-    this.router.navigate(['/basico']);
+    this.router.navigate([NAVIGATIONS_ROUTES.BASICO]);
   }
   navigateToStrategicPlan() {
-    this.router.navigate(['/StrategicPlan']);
+    this.router.navigate([NAVIGATIONS_ROUTES.STRATEGIC_PLAN]);
   }
   navigateToInvitations() {
-    this.router.navigate(['/Invitations']);
+    this.router.navigate([NAVIGATIONS_ROUTES.INVITATIONS]);
   }
   navigateToAuth() {
-    this.router.navigate(['/Auth']);
+    this.router.navigate([NAVIGATIONS_ROUTES.AUTH]);
   }
 }

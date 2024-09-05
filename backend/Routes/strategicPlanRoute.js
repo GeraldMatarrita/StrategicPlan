@@ -5,6 +5,11 @@ const {
 } = require("../Models/StrategicPlanModel"); // Importa el modelo StrategicPlanModel
 const { User, validateUser } = require("../Models/UserModel"); // Ajusta la ruta según la ubicación de tu archivo de modelo
 
+/**
+ * función que obtiene todos los planes estratégicos
+ * @returns {Object} - Lista de planes estratégicos
+ * @throws {Object} - Mensaje de error
+ */
 router.get("/", async (req, res) => {
   try {
     const strategicPlans = await StrategicPlan.find();
@@ -20,6 +25,12 @@ router.get("/", async (req, res) => {
   }
 });
 
+/**
+ * función que obtiene un plan estratégico por su ID
+ * @param {String} id - ID del plan estratégico
+ * @returns {Object} - Plan estratégico
+ * @throws {Object} - Mensaje de error
+ */
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params; // Obtener el ID del parámetro de la URL
@@ -41,15 +52,34 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+/**
+ * función que obtiene los planes estratégicos de un usuario por medio del ID del usuario
+ * @param {String} userId - ID del usuario a consultar sus planes estratégicos
+ * @returns {Object} - Lista de planes estratégicos del usuario
+ * @throws {Object} - Mensaje de error
+ */
 router.get("/plans-to-user/:userId", async (req, res) => {
-  const { userId } = req.params;
-  const user = await User.findById(userId).populate("strategicPlans_ListIDS");
-  if (!user) {
-    return res.status(404).json({ message: "Usuario no encontrado" });
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId).populate("strategicPlans_ListIDS");
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    res.json(user.strategicPlans_ListIDS);
+  } catch (error) {
+    console.error("Error al consultar los planes del usuario:", error);
+    res
+      .status(500)
+      .json({ message: "Error al consultar los planes del usuario" });
   }
-  res.json(user.strategicPlans_ListIDS);
 });
 
+/**
+ * función que crea un nuevo plan estratégico
+ * @param req.body plan estratégico a crear
+ * @returns {Object} - Mensaje de confirmación
+ * @throws {Object} - Mensaje de error
+ */
 router.post("/", async (req, res) => {
   try {
     const { error } = validateStrategicPlan(req.body);
@@ -75,48 +105,65 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+/**
+ * función que sacar un usuario de un plan estratégico lo saca de la lista de miembros del plan, elimina las invitaciones a ese plan
+ * y elimina el plan de la lista de planes del usuario
+ * @param {String} userId - ID del usuario a eliminar del plan
+ * @param {String} planId - ID del plan estratégico
+ * @returns {Object} - Mensaje de confirmación
+ * @throws {Object} - Mensaje de error
+ */
+router.post("/out", async (req, res) => {
   try {
-    const { id } = req.params; // Obtener el ID del parámetro de la URL
+    const { userId, planId } = req.body; // Obtener el ID del usuario y del plan
 
     // Verificar si el plan existe antes de eliminar
-    const plan = await StrategicPlan.findById(id);
+    const plan = await StrategicPlan.findById(planId);
     if (!plan) {
       return res
         .status(404)
         .json({ message: "StrategicPlanModel no encontrado" });
     }
 
-    // Eliminar el plan
-    await StrategicPlan.findByIdAndDelete(id);
+    // Verificar si el usuario existe
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
 
-    // Actualizar los usuarios eliminando las invitaciones y el plan de sus listas
-    await User.updateMany(
-      { "invitations.planId": id },
-      {
-        $pull: {
-          invitations: { planId: id },
-          strategicPlanList: id, // Si `strategicPlanList` contiene el ID del plan
-        },
-      }
+    // Eliminar el plan de la lista de planes del usuario
+    await User.findByIdAndUpdate(userId, {
+      $pull: { strategicPlans_ListIDS: planId },
+    });
+
+    // Eliminar el usuario de la lista de miembros del plan
+    await StrategicPlan.findByIdAndUpdate(planId, {
+      $pull: { members_ListIDS: { userId: userId } },
+    });
+
+    // Eliminar las invitaciones del usuario para el plan
+    await User.updateOne(
+      { _id: userId },
+      { $pull: { invitations: { planId: planId } } }
     );
 
-    res.json({
-      message:
-        "StrategicPlanModel eliminado correctamente y usuarios actualizados",
-    });
+    // Confirmar la eliminación
+    res
+      .status(200)
+      .json({ message: "Usuario eliminado del plan exitosamente" });
   } catch (error) {
-    console.error(
-      "Error al eliminar la entrada en la colección StrategicPlanModel en MongoDB:",
-      error
-    );
-    res.status(500).json({
-      message:
-        "Error al eliminar la entrada en la colección StrategicPlanModel en MongoDB",
-    });
+    console.error("Error al eliminar el usuario del plan:", error);
+    res.status(500).json({ message: "Error al eliminar el usuario del plan" });
   }
 });
 
+/**
+ * función que actualiza un plan estratégico por su ID
+ * @param {String} id - ID del plan estratégico
+ * @param req.body) datos a actualizar del plan estratégico
+ * @returns {Object} - Mensaje de confirmación
+ * @throws {Object} - Mensaje de error
+ * */
 router.put("/:id", async (req, res) => {
   try {
     const { error } = validateStrategicPlan(req.body);

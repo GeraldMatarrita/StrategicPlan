@@ -1,13 +1,13 @@
 <div class="StrategicPlanStyle">
-  <!-- se muestran los planes estrategicos si no esta en modo edicion ni visible el formulario -->
-  <div *ngIf="!isFormVisible && !isEditMode">
-    <button (click)="createNewPlan()" class="buttonAdd m-3">Plan</button>
+  <!-- se muestran los planes estrategicos del usuario activo si no esta en modo edicion ni visible el formulario -->
+  <div *ngIf="!isFormVisible && !planSelected">
+    <button (click)="onClickCreateNewPlan()" class="buttonAdd m-3">Plan</button>
 
     <div *ngIf="strategicPlanData.length > 0; else noData">
       <div *ngFor="let item of strategicPlanData" class="container">
         <div id="section0" class="row d-flex justify-content-center">
-          <div class="container-card1-preview ">
-            <div class="card-perzonnalized1" (click)="editPlan(item)">
+          <div class="container-card1-preview">
+            <div class="card-perzonnalized1" (click)="onClickPlan(item)">
               <div class="shadowButtomLeft"></div>
 
               <div class="p-3">
@@ -42,10 +42,11 @@
     </ng-template>
   </div>
 
-  <!-- para cuando esta en modo edicion o creando un plan -->
-  <div *ngIf="isEditMode || isFormVisible">
+  <!-- Para cuando esta en modo edicion o creando un plan -->
+  <div *ngIf="planSelected || isFormVisible">
     <button (click)="resetForm()" class="buttonBack m-3">Back to plans</button>
 
+    <!-- Formulario esta visible porque se esta creando un plan o se edita uno -->
     <div *ngIf="isFormVisible" class="form1-card">
       <form [formGroup]="formStrategicPlan" (submit)="sendData()" class="form1">
         <div>
@@ -123,7 +124,6 @@
             </div>
           </div>
 
-          <!-- Show the error div if the form is invalid -->
           <div class="badInfo" *ngIf="!formStrategicPlan.valid">
             <p>Not ready to send</p>
           </div>
@@ -132,7 +132,8 @@
       </form>
     </div>
 
-    <div *ngIf="isEditMode">
+    <!-- solo se vera si selecciono un plan para ver o editar -->
+    <div *ngIf="planSelected">
       <div *ngFor="let item of strategicPlanData">
         <div
           *ngIf="item.id === currentPlanId"
@@ -174,7 +175,7 @@
             <div class="col-lg-5 col-12">
               <div>
                 <button
-                  (click)="setFormVisibility(true)"
+                  (click)="setFormVisibility()"
                   class="buttonEdit m-4"
                 >
                   Edit
@@ -184,8 +185,8 @@
                 </button>
               </div>
               <div>
-                <button (click)="deletePlan(item.id)" class="buttonDelete m-4">
-                  Delete Plan
+                <button (click)="outPlan(item.id)" class="buttonDelete m-4">
+                  Out Plan
                 </button>
               </div>
             </div>

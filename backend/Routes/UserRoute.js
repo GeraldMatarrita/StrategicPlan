@@ -1,6 +1,11 @@
 const router = require("express").Router();
 const { User: UserModel, validateUser } = require("../Models/UserModel"); // Importa el modelo User
 
+/**
+ * función que obtiene todos los usuarios
+ * @returns {Object} - Lista de usuarios
+ * @throws {Object} - Mensaje de error
+ */
 router.get("/All-users", async (req, res) => {
   try {
     const users = await UserModel.find();
@@ -13,6 +18,12 @@ router.get("/All-users", async (req, res) => {
   }
 });
 
+/**
+ * función que crea un nuevo usuario
+ * @param req.body - Datos del usuario
+ * @returns {Object} - Mensaje de confirmación
+ * @throws {Object} - Mensaje de error
+ */
 router.post("/", async (req, res) => {
   try {
     // Validar datos del usuario
@@ -56,6 +67,12 @@ router.post("/", async (req, res) => {
   }
 });
 
+/**
+ * función que inicia sesión en la aplicación
+ * @param req.body - Datos de inicio de sesión
+ * @returns {Object} - Mensaje de confirmación
+ * @throws {Object} - Mensaje de error
+ */
 router.post("/login", async (req, res) => {
   try {
     const { name, email, password } = req.body;

@@ -2,37 +2,65 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { API_ROUTES } from '../../config/api.routes';
 import { Observable, catchError, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  /**
-   *
-   * @param http servicio de HttpClient
-   *
-   */
-  constructor(private http: HttpClient) {}
+  // Variables para almacenar el usuario activo
+  private activeUserID: string = '';
+  private activeUser: any = {};
+
+  constructor(private http: HttpClient, private router: Router) {}
 
   /**
-   * @param url to get data
-   * @returns
+   * Función que se usará para obtener el token del usuario activo.
+   * @returns Promesa que se resuelve cuando el token es procesado.
    */
-  getAllData(url: string): Observable<any[]> {
-    return this.http.get<any[]>(url);
+  private getUserToken(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const tokenString = localStorage.getItem('token');
+
+      if (tokenString) {
+        try {
+          const token = JSON.parse(tokenString);
+          this.activeUserID = token._id;
+          this.activeUser = token;
+          resolve();
+        } catch (error) {
+          this.router.navigate(['/Auth']);
+          reject(error);
+        }
+      } else {
+        this.router.navigate(['/Auth']);
+        reject(new Error('No token found'));
+      }
+    });
   }
 
   /**
-   * @param url to get data
-   * @param id data id
-   * @returns
+   * Función que se usará de manera global para obtener el ID del usuario activo.
+   * @returns ID del usuario activo.
    */
-  getDataByID(url: string, id: string): Observable<any> {
-    return this.http.get<any>(`${url}/${id}`);
+  async getActiveUserID(): Promise<string> {
+    await this.getUserToken();
+    return this.activeUserID;
   }
 
   /**
-   *
+   * Función que se usará de manera global para obtener el usuario activo.
+   * @returns Usuario activo.
+   */
+  async getActiveUser(): Promise<any> {
+    await this.getUserToken();
+    return this.activeUser;
+  }
+
+  // --------------------------------------------
+  // Métodos generales
+  // --------------------------------------------
+  /**
    * @param url to post data
    * @param data data to post
    * @returns
@@ -44,7 +72,6 @@ export class AuthService {
   }
 
   /**
-   *
    * @param url to delete data
    * @param id id data to delete
    * @returns
@@ -56,7 +83,6 @@ export class AuthService {
   }
 
   /**
-   *
    * @param url to update data
    * @param id id data to update
    * @param data data to update
@@ -73,8 +99,18 @@ export class AuthService {
   // Métodos para la API
   // --------------------------------------------
   /**
+   * funcion to get all users
+   * @returns
+   */
+  getAllUsers(): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.GetAllUsers}`
+    );
+  }
+
+  /**
    * función para craer un usuario
-   * @param data datos a enviar
+   * @param data datos del usuario
    * @returns promesa con el mensaje de respuesta
    */
   createAccount(data: any): Promise<string> {
@@ -93,7 +129,7 @@ export class AuthService {
 
   /**
    * Función para hacer login
-   * @param data Datos a enviar
+   * @param data Datos a enviar para verificar el login
    * @returns Promesa con el mensaje de respuesta y el estado del usuario
    */
   login(data: any): Promise<{ message: string; userActive: any }> {

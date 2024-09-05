@@ -85,16 +85,16 @@
   scale: 1.1;
 }
 
-#containerStrateciPlan {
-  overflow-wrap: break-word;
-  word-break: break-all; /* Forzará el corte de palabras largas */
-  white-space: normal; /* Asegura que el texto se ajuste en varias líneas */
-}
 /* ------------------------------ */
 /* SECTION 1: General Styling */
 /* ------------------------------ */
-#section1 {
+#section0 {
   min-height: 400px;
+  background-color: #171717;
+}
+
+#section1 {
+  min-height: 500px;
   background-color: #171717;
 }
 
@@ -151,21 +151,18 @@
 /* ------------------------------ */
 
 @media (max-width: 992px) {
-  .container-card1-preview {
-    width: 200px;
-    height: 115px;
+  #section1,
+  #section0 {
+    scale: 0.95;
   }
-  #section1 {
-    min-height: 180px;
-  }
-  #section1NameTitle,
-  #section1NameValue,
-  #section1StartDateTitle,
-  #section1EndDateTitle,
-  #section1startDateValue,
-  #section1EndDateValue {
-    font-size: 0.75rem; /* Reducir el tamaño de la fuente a la mitad */
-    padding-bottom: 4px;
-    margin-bottom: 0px;
+}
+
+/* ------------------------------ */
+/* Media Query for screens smaller than 576px */
+/* ------------------------------ */
+@media (max-width: 576px) {
+  #section1,
+  #section0 {
+    scale: 0.9;
   }
 }
