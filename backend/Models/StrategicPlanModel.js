@@ -4,9 +4,6 @@ const Joi = require("joi");
 /**
  * Modelo de planes estratégicos.
  */
-/**
- * Modelo de planes estratégicos.
- */
 const strategicPlanSchema = new mongoose.Schema(
   {
     mission: { type: String },

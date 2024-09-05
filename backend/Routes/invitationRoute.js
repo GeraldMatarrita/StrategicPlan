@@ -13,7 +13,6 @@ const { User, validateUser } = require("../Models/UserModel"); // Ajusta la ruta
  */
 router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
-
   if (!userId) {
     return res.status(400).json({
       message: "User ID is required.",
