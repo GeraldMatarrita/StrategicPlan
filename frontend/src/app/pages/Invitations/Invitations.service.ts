@@ -15,23 +15,6 @@ export class InvitationsService {
   constructor(private http: HttpClient) {}
 
   /**
-   * @param url to get data
-   * @returns
-   */
-  getAllData(url: string): Observable<any[]> {
-    return this.http.get<any[]>(url);
-  }
-
-  /**
-   * @param url to get data
-   * @param id data id
-   * @returns
-   */
-  getDataByID(url: string, id: string): Observable<any> {
-    return this.http.get<any>(`${url}/${id}`);
-  }
-
-  /**
    *
    * @param url to post data
    * @param data data to post
@@ -143,6 +126,7 @@ export class InvitationsService {
 
   /**
    * función para obtener todas las invitaciones de un usuario
+   * @param id del usuario
    * @returns promesa con los datos
    */
   getInvitationsForUser(id: string): Observable<any[]> {
@@ -162,12 +146,16 @@ export class InvitationsService {
   }
 
   /**
-   * funcion para obtener los planes estrategicos
+   * funcion para obtener los planes estrategicos de un usuario
+   * @param id del usuario
    * @returns promesa con los datos
    */
-  getStrategicPlans(): Observable<any[]> {
+  getStrategicPlansForUser(id: string): Observable<any[]> {
+    console.log(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN_FOR_USER}/${id}`
+    );
     return this.http.get<any[]>(
-      `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}`
+      `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN_FOR_USER}/${id}`
     );
   }
 

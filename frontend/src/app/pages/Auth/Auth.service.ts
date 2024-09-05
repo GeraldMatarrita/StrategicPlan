@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { API_ROUTES } from '../../config/api.routes';
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,8 +13,6 @@ export class AuthService {
    *
    */
   constructor(private http: HttpClient) {}
-
-  baseURL = `${API_ROUTES.BASE_URL}${API_ROUTES.AUTH}`;
 
   /**
    * @param url to get data
@@ -81,9 +79,31 @@ export class AuthService {
    */
   createAccount(data: any): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.postData(this.baseURL, data).subscribe(
+      this.postData(`${API_ROUTES.BASE_URL}${API_ROUTES.AUTH}`, data).subscribe(
         (response: any) => {
           resolve(response.message);
+        },
+        (error: any) => {
+          console.error('Error al enviar los datos:', error);
+          reject(error);
+        }
+      );
+    });
+  }
+
+  /**
+   * Función para hacer login
+   * @param data Datos a enviar
+   * @returns Promesa con el mensaje de respuesta y el estado del usuario
+   */
+  login(data: any): Promise<{ message: string; userActive: any }> {
+    return new Promise((resolve, reject) => {
+      this.postData(
+        `${API_ROUTES.BASE_URL}${API_ROUTES.LOGIN}`,
+        data
+      ).subscribe(
+        (response: { message: string; userActive: any }) => {
+          resolve(response);
         },
         (error: any) => {
           console.error('Error al enviar los datos:', error);

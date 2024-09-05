@@ -14,8 +14,6 @@ export class StrategicPlanService {
    */
   constructor(private http: HttpClient) {}
 
-  baseURL = `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}`;
-
   /**
    * @param url to get data
    * @returns
@@ -82,7 +80,7 @@ export class StrategicPlanService {
    */
   createStrategicPlan(data: any): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.postData(this.baseURL, data).subscribe(
+      this.postData(`${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}`, data).subscribe(
         (response: any) => {
           resolve(response.message);
         },
@@ -101,7 +99,7 @@ export class StrategicPlanService {
    */
   deleteStrategicPlanByID(id: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.deleteById(this.baseURL, id).subscribe(
+      this.deleteById(`${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}`, id).subscribe(
         (response: any) => {
           resolve(response.message);
         },
@@ -121,7 +119,7 @@ export class StrategicPlanService {
    */
   updateStrategicPlan(id: string, data: any): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.updateData(this.baseURL, id, data).subscribe(
+      this.updateData(`${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}`, id, data).subscribe(
         (response: any) => {
           resolve(response.message);
         },
@@ -138,6 +136,6 @@ export class StrategicPlanService {
    * @returns promesa con los datos
    */
   getStrategicPlans(): Observable<any[]> {
-    return this.http.get<any[]>(this.baseURL);
+    return this.http.get<any[]>(`${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}`);
   }
 }

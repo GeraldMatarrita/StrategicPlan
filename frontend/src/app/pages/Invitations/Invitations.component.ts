@@ -28,7 +28,7 @@ export class InvitationsComponent implements OnInit {
   strategicPlanId: string = '';
   responseMessage: string = '';
   invitationData: any[] = [];
-  activeUserID: string = '66d753b1a1514176bb2ffe08';
+  activeUserID: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,31 +36,56 @@ export class InvitationsComponent implements OnInit {
     private router: Router
   ) {}
 
+  getUserActive(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const tokenString = localStorage.getItem('token');
+
+      if (tokenString) {
+        try {
+          const token = JSON.parse(tokenString);
+          this.activeUserID = token._id;
+          resolve();
+        } catch (error) {
+          this.router.navigate(['/Auth']);
+          reject();
+        }
+      } else {
+        this.router.navigate(['/Auth']);
+        reject();
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.invitationForm = this.formBuilder.group({
       users: [null, Validators.required],
     });
+
     this.loadData();
   }
 
   loadData(): void {
-    this.loadStrategicPlans();
-    this.getInvitations();
-    this.loadUserToInvite();
+    this.getUserActive().then(() => {
+      this.loadStrategicPlans();
+      this.getInvitations();
+      this.loadUserToInvite();
+    });
   }
 
   loadStrategicPlans(): void {
-    this.invitationsService.getStrategicPlans().subscribe(
-      (data: any[]) => {
-        this.strategicPlanData = data.map((item: any) => ({
-          id: item._id,
-          name: item.name,
-        }));
-      },
-      (error: any) => {
-        console.error('Error al obtener los datos:', error);
-      }
-    );
+    this.invitationsService
+      .getStrategicPlansForUser(this.activeUserID)
+      .subscribe(
+        (data: any[]) => {
+          this.strategicPlanData = data.map((item: any) => ({
+            id: item._id,
+            name: item.name,
+          }));
+        },
+        (error: any) => {
+          console.error('Error al obtener los datos:', error);
+        }
+      );
   }
 
   loadUserToInvite(): void {

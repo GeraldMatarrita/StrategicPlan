@@ -6,33 +6,30 @@
     <div *ngIf="strategicPlanData.length > 0; else noData">
       <div *ngFor="let item of strategicPlanData" class="container">
         <div id="section0" class="row d-flex justify-content-center">
-          <div class="col-12">
-            <div class="container-card1Varation">
-              <div class="card-perzonnalized1" (click)="editPlan(item)">
-                <div class="shadowTopRight"></div>
-                <div class="shadowButtomLeft"></div>
+          <div class="container-card1-preview ">
+            <div class="card-perzonnalized1" (click)="editPlan(item)">
+              <div class="shadowButtomLeft"></div>
 
-                <div class="p-3">
-                  <div>
-                    <span id="section1NameTitle">Name:</span>
-                    <span id="section1NameValue">
-                      {{ item.name }}
-                    </span>
-                  </div>
+              <div class="p-3">
+                <div>
+                  <span id="section1NameTitle">Name:</span>
+                  <span id="section1NameValue">
+                    {{ item.name }}
+                  </span>
+                </div>
 
-                  <div>
-                    <span id="section1StartDateTitle"> Start Date </span
-                    ><span id="section1EndDateTitle"> End Date </span>
-                  </div>
+                <div>
+                  <span id="section1StartDateTitle"> Start Date </span
+                  ><span id="section1EndDateTitle"> End Date </span>
+                </div>
 
-                  <div>
-                    <span id="section1startDateValue">
-                      {{ item.startDate | date : "dd/MM/yyyy" }}
-                    </span>
-                    <span id="section1EndDateValue">
-                      {{ item.endDate | date : "dd/MM/yyyy" }}
-                    </span>
-                  </div>
+                <div>
+                  <span id="section1startDateValue">
+                    {{ item.startDate | date : "dd/MM/yyyy" }}
+                  </span>
+                  <span id="section1EndDateValue">
+                    {{ item.endDate | date : "dd/MM/yyyy" }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -144,7 +141,7 @@
         >
           <div id="section1" class="row d-flex justify-content-center">
             <div class="col-lg-7 col-12">
-              <div class="container-card1Varation">
+              <div class="container-card1-view">
                 <div class="card-perzonnalized1">
                   <div class="shadowTopRight"></div>
                   <div class="shadowButtomLeft"></div>
@@ -175,15 +172,22 @@
               </div>
             </div>
             <div class="col-lg-5 col-12">
-              <button (click)="setFormVisibility(true)" class="buttonEdit m-4">
-                Edit
-              </button>
-              <button (click)="navigateToFodaMeca()" class="buttonAdd m-4">
-                Foda Meca
-              </button>
-              <button (click)="deletePlan(item.id)" class="buttonDelete m-4">
-                Delete Plan
-              </button>
+              <div>
+                <button
+                  (click)="setFormVisibility(true)"
+                  class="buttonEdit m-4"
+                >
+                  Edit
+                </button>
+                <button (click)="navigateToFodaMeca()" class="buttonAdd m-4">
+                  Foda Meca
+                </button>
+              </div>
+              <div>
+                <button (click)="deletePlan(item.id)" class="buttonDelete m-4">
+                  Delete Plan
+                </button>
+              </div>
             </div>
           </div>
 
