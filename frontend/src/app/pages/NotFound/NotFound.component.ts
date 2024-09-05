@@ -5,8 +5,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   selector: 'app-charging',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: `./charging.component.html`,
-  styleUrl: './charging.component.css',
+  templateUrl: `./NotFound.component.html`,
+  styleUrl: './NotFound.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChargingComponent {}
+export class NotFoundComponent {}

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { BasicService } from '../../service/basic.service';
-import { CommonModule } from '@angular/common';
+import { BasicoService } from './basico.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms'; // Asegúrate de importar esto
-import { API_ROUTES } from '../../config/api.routes';
+import { CommonModule } from '@angular/common';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -20,7 +20,7 @@ export class BasicoComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private basicoService: BasicService
+    private basicoService: BasicoService
   ) {}
 
   /**
@@ -29,20 +29,18 @@ export class BasicoComponent implements OnInit {
    * @returns void
    */
   loadData(): void {
-    this.basicoService
-      .getData(`${API_ROUTES.BASE_URL}${API_ROUTES.BASICA}`)
-      .subscribe(
-        (data: any[]) => {
-          this.basicaData = data.map((item) => ({
-            id: item._id,
-            name: item.name,
-            years: item.years,
-          }));
-        },
-        (error: any) => {
-          console.error('Error al obtener los datos:', error);
-        }
-      );
+    this.basicoService.getBasicoData().subscribe(
+      (data: any[]) => {
+        this.basicaData = data.map((item) => ({
+          id: item._id,
+          name: item.name,
+          years: item.years,
+        }));
+      },
+      (error: any) => {
+        console.error('Error al obtener los datos:', error);
+      }
+    );
   }
 
   /**
@@ -67,9 +65,8 @@ export class BasicoComponent implements OnInit {
 
       // Si el usuario confirma la eliminación
       if (result.isConfirmed) {
-        this.responseMessage = await this.basicoService.deleteDataByID(
-          id,
-          `${API_ROUTES.BASE_URL}${API_ROUTES.BASICA}`
+        this.responseMessage = await this.basicoService.deleteBasicoDataByID(
+          id
         );
 
         // Mostrar mensaje de éxito
@@ -113,9 +110,8 @@ export class BasicoComponent implements OnInit {
    */
   async send(): Promise<void> {
     try {
-      this.responseMessage = await this.basicoService.createData(
-        this.formBasico.value,
-        `${API_ROUTES.BASE_URL}${API_ROUTES.BASICA}`
+      this.responseMessage = await this.basicoService.createBasico(
+        this.formBasico.value
       );
       Swal.fire({
         icon: 'success',
@@ -169,13 +165,10 @@ export class BasicoComponent implements OnInit {
 
     if (formValues) {
       try {
-        this.responseMessage = await this.basicoService
-          .updateData(
-            item.id,
-            formValues,
-            `${API_ROUTES.BASE_URL}${API_ROUTES.BASICA}`
-          )
-          .toPromise();
+        this.responseMessage = await this.basicoService.updateBasicoData(
+          item.id,
+          formValues
+        );
         Swal.fire({
           icon: 'success',
           title: 'Actualizado',

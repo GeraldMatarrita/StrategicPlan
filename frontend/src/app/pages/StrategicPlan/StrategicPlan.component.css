@@ -23,59 +23,30 @@
   margin-bottom: 20px;
 }
 
-.rowStrategicPlan {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 10px;
-  min-height: 10rem;
-}
-
-.title,
-.value {
-  width: 50%;
-  margin: 0;
-  padding: 0 5%;
-  box-sizing: border-box;
-}
-
-.title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  /* background: linear-gradient(190deg, var(--color2), var(--color3)); */
-  /* background-color: var(--color2); */
-  text-align: center; /* Centra el texto en la columna de título */
-  overflow-wrap: break-word;
-  border-radius: 22px;
-}
-
-.value {
-  font-size: 1rem;
-  color: rgb(241, 241, 241);
-  text-align: center; /* Centra el texto en la columna de valor */
-  overflow-wrap: break-word;
-}
-
-.cuadro1 {
-  width: 100%;
-  background-color: rgb(29, 25, 25);
-}
-
-.cuadro2 {
-  width: 100%;
-  background-color: rgb(11, 12, 11);
-}
-
 /* ----------------------------------------------------- */
 /* card perzonalizada numero 1 Varation */
 /* ----------------------------------------------------- */
 
-.container-card1Varation {
+.container-card1-view {
   position: relative;
   width: 450px; /* 100% */
   height: 205px; /* 100% */
-  padding: 8%; /* Reducir padding si es necesario */
+  margin: 8%; /* Reducir padding si es necesario */
   z-index: 1;
+}
+.container-card1-preview {
+  position: relative;
+  width: 450px; /* 100% */
+  height: 205px; /* 100% */
+  margin: 8%; /* Reducir padding si es necesario */
+  z-index: 1;
+  padding: 0;
+}
+.container-card1-preview:hover {
+  border-radius: 22px;
+  box-shadow: 0 0 10px #fff;
+  transition: 0.5s;
+  scale: 1.1;
 }
 
 #containerStrateciPlan {
@@ -83,33 +54,12 @@
   word-break: break-all; /* Forzará el corte de palabras largas */
   white-space: normal; /* Asegura que el texto se ajuste en varias líneas */
 }
-
-#section1StartDateTitle,
-#section1EndDateTitle,
-#section1startDateValue,
-#section1EndDateValue {
-  width: 50%;
-  padding: 10px;
-  display: inline-block; /* Asegura que se alineen en la misma línea */
-}
-
-#section1NameTitle,
-#section1StartDateTitle,
-#section1EndDateTitle {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: white;
-}
-
-#section1startDateValue,
-#section1EndDateValue {
-  font-size: 1rem;
-  color: rgb(214, 208, 208);
-}
-
-#section1NameValue {
-  font-size: 1.5rem;
-  color: white;
+/* ------------------------------ */
+/* SECTION 1: General Styling */
+/* ------------------------------ */
+#section0 {
+  min-height: 400px;
+  background-color: #171717;
 }
 
 #section1 {
@@ -117,18 +67,59 @@
   background-color: #171717;
 }
 
+#section1NameTitle {
+  padding: 10px;
+  display: inline-block; /* Asegura que se alineen en la misma línea */
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: white;
+}
+
+#section1StartDateTitle {
+  width: 50%;
+  padding: 10px;
+  display: inline-block; /* Asegura que se alineen en la misma línea */
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: white;
+}
+
+#section1EndDateTitle {
+  width: 50%;
+  padding: 10px;
+  display: inline-block; /* Asegura que se alineen en la misma línea */
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: white;
+}
+
+#section1startDateValue {
+  width: 50%;
+  padding: 10px;
+  display: inline-block; /* Asegura que se alineen en la misma línea */
+  font-size: 1rem;
+  color: rgb(214, 208, 208);
+}
+
+#section1EndDateValue {
+  width: 50%;
+  padding: 10px;
+  display: inline-block; /* Asegura que se alineen en la misma línea */
+  font-size: 1rem;
+  color: rgb(214, 208, 208);
+}
+
+#section1NameValue {
+  display: inline-block; /* Asegura que se alineen en la misma línea */
+  font-size: 1.2rem;
+  color: white;
+}
+
+/* ------------------------------ */
+/* SECTION 2: Background and Title */
+/* ------------------------------ */
+
 #section2 {
-  min-height: 600px;
-  background-color: #111010;
-}
-
-#section3 {
-  min-height: 600px;
-  /* background-color: #171717; */
-  background: linear-gradient(190deg, var(--color2), var(--color3));
-}
-
-#section4 {
   min-height: 600px;
   background-color: #111010;
 }
@@ -141,8 +132,18 @@
   font-weight: bold;
   margin-left: 10%;
 }
+
 #section2Value {
   padding: 0 10%;
+}
+
+/* ------------------------------ */
+/* SECTION 3: Gradient Background and Title */
+/* ------------------------------ */
+
+#section3 {
+  min-height: 600px;
+  background: linear-gradient(190deg, var(--color2), var(--color3));
 }
 
 #section3Title {
@@ -153,8 +154,18 @@
   font-weight: bold;
   margin-left: 10%;
 }
+
 #section3Value {
   padding: 0 10%;
+}
+
+/* ------------------------------ */
+/* SECTION 4: Background and Title */
+/* ------------------------------ */
+
+#section4 {
+  min-height: 600px;
+  background-color: #111010;
 }
 
 #section4Title {
@@ -165,35 +176,28 @@
   font-weight: bold;
   margin-left: 10%;
 }
+
 #section4Value {
   padding: 0 10%;
 }
 
-/* Media Query para pantallas menores a 1100px */
-@media (max-width: 992px) {
-  .container-card1Varation {
-    width: 200px; /* 100% */
-    height: 115px; /* 100% */
-    padding: 50px 8%;
-  }
+/* ------------------------------ */
+/* Media Query for screens smaller than 992px */
+/* ------------------------------ */
 
-  #section1NameTitle,
-  #section1NameValue,
-  #section1StartDateTitle,
-  #section1EndDateTitle,
-  #section1startDateValue,
-  #section1EndDateValue {
-    font-size: 0.75rem; /* Reducir el tamaño de la fuente a la mitad */
+@media (max-width: 992px) {
+  #section1,
+  #section0 {
+    scale: 0.8;
   }
-  #section1startDateValue,
-  #section1EndDateValue {
-    font-size: 0.6rem;
-    color: rgb(214, 208, 208);
-  }
-  #section1NameValue {
-    font-size: 0.75rem; /* Reducir el tamaño de la fuente a la mitad */
-  }
-  #section1 {
-    height: 300px;
+}
+
+/* ------------------------------ */
+/* Media Query for screens smaller than 576px */
+/* ------------------------------ */
+@media (max-width: 576px) {
+  #section1,
+  #section0 {
+    scale: 0.9;
   }
 }

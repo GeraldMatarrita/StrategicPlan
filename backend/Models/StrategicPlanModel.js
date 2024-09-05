@@ -12,11 +12,17 @@ const strategicPlanSchema = new mongoose.Schema(
     startDate: { type: Date, default: Date.now, required: true },
     endDate: { type: Date, required: true },
     name: { type: String, required: true },
-    FODA_ID: { type: String },
-    MECA_ID: { type: String },
-    members_ListIDS: { type: [String] },
-    objective_ListIDS: { type: [String] },
-    operationPlan_ListIDS: { type: [String] },
+    FODA_ID: { type: mongoose.Schema.Types.ObjectId, ref: "FODA" },
+    MECA_ID: { type: mongoose.Schema.Types.ObjectId, ref: "MECA" },
+    members_ListIDS: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Referencia directa
+    ],
+    objective_ListIDS: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Objective" }, // Referencia directa
+    ],
+    operationPlan_ListIDS: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "OperationPlan" }, // Referencia directa
+    ],
   },
   { strict: "throw" }
 );
@@ -37,15 +43,15 @@ const validateStrategicPlan = (data) => {
     FODA_ID: Joi.string().optional().label("FODA ID"),
     MECA_ID: Joi.string().optional().label("MECA ID"),
     members_ListIDS: Joi.array()
-      .items(Joi.string())
+      .items(Joi.string().length(24).label("Member ID"))
       .optional()
       .label("Members List IDs"),
     objective_ListIDS: Joi.array()
-      .items(Joi.string())
+      .items(Joi.string().length(24).label("Objective ID"))
       .optional()
       .label("Objective List IDs"),
     operationPlan_ListIDS: Joi.array()
-      .items(Joi.string())
+      .items(Joi.string().length(24).label("Operation Plan ID"))
       .optional()
       .label("Operation Plan List IDs"),
   });
