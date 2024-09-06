@@ -132,7 +132,7 @@ if (process.env.TARGET === "DEV") {
     console.log("Target is PROD");
 
     // Definir el archivo raíz para servir los archivos
-    const root = path.join(__dirname, 'frontend/dist/frontend');
+    const root = path.join(__dirname, '/dist/frontend/browser');
 
     // Servir los archivos estáticos
     app.use(express.static(root));
