@@ -19,7 +19,7 @@ if (process.env.TARGET === "DEV") {
             const allowedOrigins = [
                 'http://localhost:3000',
                 'http://localhost:4200',
-                'http://149.130.176.112'
+                'http://140.84.171.60'
             ];
             if (allowedOrigins.indexOf(origin) !== -1) {
                 callback(null, true);
