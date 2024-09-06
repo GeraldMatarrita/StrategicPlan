@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { StrategicPlanService } from './StrategicPlan.service';
 import { AuthService } from '../Auth/Auth.service';
 import { NAVIGATIONS_ROUTES } from '../../navigation/navigations.routes';
+import { API_ROUTES } from '../../config/api.routes';
 
 @Component({
   selector: 'app-strategic-plan',
@@ -69,6 +70,7 @@ export class StrategicPlanComponent implements OnInit {
   async loadData(): Promise<void> {
     try {
       this.activeUserID = await this.authService.getActiveUserID();
+      console.log('API Base URL:', API_ROUTES.BASE_URL);
       this.getStratecPlans();
     } catch (error) {
       console.error('Error al cargar los datos:', error);

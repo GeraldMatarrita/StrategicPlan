@@ -1,5 +1,6 @@
+import { environment } from '../../environments/environment';
 export const API_ROUTES = {
-  BASE_URL: 'http://localhost:8080',
+  BASE_URL: environment.API_BASE_URL,
   BASICA: '/basica',
   STRATEGIC_PLAN: '/strategicPlan',
   STRATEGIC_PLAN_FOR_USER: '/strategicPlan/plans-to-user',
