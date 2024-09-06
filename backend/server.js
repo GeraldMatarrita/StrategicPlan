@@ -20,9 +20,11 @@ if (process.env.TARGET === "DEV") {
             const allowedOrigins = [
                 'http://localhost:3000',
                 'http://localhost:4200',
+                'http://140.84.171.60',
                 'http://140.84.171.60'
             ];
             if (allowedOrigins.indexOf(origin) !== -1) {
+                console.log("Allowed by CORS");
                 callback(null, true);
             } else {
                 callback(new Error('Not allowed by CORS'));
