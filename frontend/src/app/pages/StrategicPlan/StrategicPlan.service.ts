@@ -53,10 +53,10 @@ export class StrategicPlanService {
    * @param data datos a enviar
    * @returns promesa con el mensaje de respuesta
    */
-  createStrategicPlan(data: any): Promise<string> {
+  createStrategicPlan(data: any, userId: string): Promise<string> {
     return new Promise((resolve, reject) => {
       this.postData(
-        `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}`,
+        `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}/${userId}`,
         data
       ).subscribe(
         (response: any) => {
