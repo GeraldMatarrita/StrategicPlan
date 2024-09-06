@@ -8,6 +8,19 @@ const app = express();
 
 // Middlewares
 app.use(express.json());
+
+// ---------------------------------------------------------------------
+// Rutas
+// ---------------------------------------------------------------------
+const StrategicPlanRoute = require("./Routes/strategicPlanRoute");
+app.use("/strategicPlan", StrategicPlanRoute);
+
+const AuthRoute = require("./Routes/UserRoute");
+app.use("/auth", AuthRoute);
+
+const Invitations = require("./Routes/invitationRoute");
+app.use("/invitations", Invitations);
+
 // Configuración de CORS y archivos estáticos basados en el entorno
 if (process.env.TARGET === "DEV") {
   console.log("Target is DEV");
@@ -40,15 +53,6 @@ if (process.env.TARGET === "DEV") {
   // Definir el archivo raíz para servir los archivos
   const root = path.join(__dirname, "/dist/frontend/browser");
 
-  const StrategicPlanRoute = require("./Routes/strategicPlanRoute");
-  app.use("/strategicPlan", StrategicPlanRoute);
-
-  const AuthRoute = require("./Routes/UserRoute");
-  app.use("/auth", AuthRoute);
-
-  const Invitations = require("./Routes/invitationRoute");
-  app.use("/invitations", Invitations);
-
   // Servir los archivos estáticos
   app.use(express.static(root));
 
@@ -72,17 +76,6 @@ connection();
 const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 
-// ---------------------------------------------------------------------
-// Rutas
-// ---------------------------------------------------------------------
-const StrategicPlanRoute = require("./Routes/strategicPlanRoute");
-app.use("/strategicPlan", StrategicPlanRoute);
-
-const AuthRoute = require("./Routes/UserRoute");
-app.use("/auth", AuthRoute);
-
-const Invitations = require("./Routes/invitationRoute");
-app.use("/invitations", Invitations);
 
 // ---------------------------------------------------------------------
 // borrar de aqui para abajo al terminar el proyecto
