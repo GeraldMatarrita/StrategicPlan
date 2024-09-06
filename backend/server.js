@@ -90,53 +90,22 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const path = require('path'); // Asegúrate de tener el módulo path
-const fs = require('fs'); // Asegúrate de tener el módulo fs
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 
 // Middlewares
 app.use(express.json());
 
-// Configuración de CORS y archivos estáticos basados en el entorno
+// Permitir CORS desde cualquier origen
+app.use(cors()); // Esto permitirá todas las solicitudes CORS sin restricciones
+
 if (process.env.TARGET === "DEV") {
     console.log("Target is DEV");
-
-    // Configuración de CORS para desarrollo
-    const corsOptions = {
-        origin: function (origin, callback) {
-            if (!origin) return callback(null, true);
-
-            const allowedOrigins = [
-                'http://localhost:3000',
-                'http://localhost:4200',
-                'http://140.84.171.60:8080' // Permitir también este origen en desarrollo
-            ];
-            if (allowedOrigins.indexOf(origin) !== -1) {
-                callback(null, true);
-            } else {
-                callback(new Error('Not allowed by CORS'));
-            }
-        },
-        optionsSuccessStatus: 204,
-        methods: "GET, POST, PUT, DELETE",
-        credentials: true,
-    };
-
-    app.use(cors(corsOptions));
-
+    // En desarrollo no cambia nada más.
 } else if (process.env.TARGET === "PROD") {
     console.log("Target is PROD");
-
-    // Configuración de CORS para producción
-    const corsOptions = {
-        origin: 'http://140.84.171.60', // Permitir el origen del frontend
-        optionsSuccessStatus: 204,
-        methods: "GET, POST, PUT, DELETE",
-        credentials: true,
-    };
-
-    app.use(cors(corsOptions)); // Usar el middleware CORS en producción
 
     // Definir el archivo raíz para servir los archivos
     const root = path.join(__dirname, '/dist/frontend/browser');
@@ -181,3 +150,4 @@ app.use("/invitations", Invitations);
 // ---------------------------------------------------------------------
 const basicaRoutes = require("./Routes/basicaRoute");
 app.use("/basica", basicaRoutes);
+
