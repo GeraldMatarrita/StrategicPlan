@@ -49,7 +49,7 @@ if (process.env.TARGET === "DEV") {
                 'http://localhost:3000',
                 'http://localhost:4200',
                 'http://140.84.171.60',
-                'http://140.84.171.60'
+                'http://140.84.171.60:8080'
             ];
             if (allowedOrigins.indexOf(origin) !== -1) {
                 console.log("Allowed by CORS");
