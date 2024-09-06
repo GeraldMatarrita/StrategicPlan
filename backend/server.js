@@ -38,32 +38,6 @@ if (process.env.TARGET === "DEV") {
     app.use(cors(corsOptions)); // Usar el middleware CORS
 
 } else if (process.env.TARGET === "PROD") {
-    // console.log("Target is PROD");
-
-    // // Configuración de CORS - Permite solicitudes desde un origen específico
-    // const corsOptions = {
-    //     origin: function (origin, callback) {
-    //         if (!origin) return callback(null, true);
-
-    //         const allowedOrigins = [
-    //             'http://localhost:3000',
-    //             'http://localhost:4200',
-    //             'http://140.84.171.60',
-    //             'http://140.84.171.60:8080'
-    //         ];
-    //         if (allowedOrigins.indexOf(origin) !== -1) {
-    //             console.log("Allowed by CORS");
-    //             callback(null, true);
-    //         } else {
-    //             callback(new Error('Not allowed by CORS'));
-    //         }
-    //     },
-    //     optionsSuccessStatus: 204, // Devolver un código de éxito 204
-    //     methods: "GET, POST, PUT, DELETE", // Permitir estos métodos HTTP
-    //     credentials: true, // Permite enviar cookies de forma segura
-    // };
-
-    // app.use(cors(corsOptions)); // Usar el middleware CORS
 
     // Definir el archivo raíz para servir los archivos
     const root = path.join(__dirname, '/dist/frontend/browser');
