@@ -70,7 +70,6 @@ export class StrategicPlanComponent implements OnInit {
   async loadData(): Promise<void> {
     try {
       this.activeUserID = await this.authService.getActiveUserID();
-      console.log('API Base URL:', API_ROUTES.BASE_URL);
       this.getStratecPlans();
     } catch (error) {
       console.error('Error al cargar los datos:', error);
