@@ -98,37 +98,46 @@ const app = express();
 // Middlewares
 app.use(express.json());
 
-// Configuración de CORS basada en el entorno
-const allowedOrigins = process.env.TARGET === "DEV" ? [
-    'http://localhost:3000',
-    'http://localhost:4200',
-] : [
-    'http://140.84.171.60' 
-];
-
+// Configuración de CORS general
 const corsOptions = {
     origin: function (origin, callback) {
-        if (!origin) return callback(null, true); // Permitir peticiones sin origen (postman, curl)
+        if (!origin) return callback(null, true);
+
+        const allowedOrigins = [
+            'http://localhost:3000',
+            'http://localhost:4200',
+            'http://140.84.171.60:8080', // Incluye el puerto si es necesario
+            'http://140.84.171.60' // También incluye la IP sin puerto
+        ];
         if (allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
         }
     },
-    optionsSuccessStatus: 204,
-    methods: "GET, POST, PUT, DELETE",
-    credentials: true,
+    optionsSuccessStatus: 204, // Devolver un código de éxito 204
+    methods: "GET, POST, PUT, DELETE", // Métodos HTTP permitidos
+    credentials: true, // Permite enviar cookies de forma segura
 };
 
-app.use(cors(corsOptions)); // Usar el middleware CORS en ambos entornos
+// Usar CORS en todos los entornos
+app.use(cors(corsOptions));
 
-// Configuración de archivos estáticos y manejo de rutas
-if (process.env.TARGET === "PROD") {
+// Configuración específica para entornos
+if (process.env.TARGET === "DEV") {
+    console.log("Target is DEV");
+    // Aquí podrías añadir configuraciones adicionales para DEV si es necesario
+
+} else if (process.env.TARGET === "PROD") {
     console.log("Target is PROD");
 
+    // Definir el archivo raíz para servir los archivos
     const root = path.join(__dirname, 'frontend/dist/frontend');
+
+    // Servir los archivos estáticos
     app.use(express.static(root));
 
+    // Manejar todas las rutas
     app.get('*', function (req, res) {
         fs.stat(path.join(root, req.path), function (err) {
             if (err) {
@@ -163,7 +172,9 @@ app.use("/invitations", Invitations);
 // ---------------------------------------------------------------------
 // borrar de aquí para abajo al terminar el proyecto
 // ---------------------------------------------------------------------
+// Ejemplo de rutas
 const basicaRoutes = require("./Routes/basicaRoute");
+// Ruta básica
 app.use("/basica", basicaRoutes);
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
