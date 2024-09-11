@@ -77,6 +77,58 @@ router.get("/plans-to-user/:userId", async (req, res) => {
 });
 
 /**
+ * función que sacar un usuario de un plan estratégico lo saca de la lista de miembros del plan, elimina las invitaciones a ese plan
+ * y elimina el plan de la lista de planes del usuario
+ * @param {String} userId - ID del usuario a eliminar del plan
+ * @param {String} planId - ID del plan estratégico
+ * @returns {Object} - Mensaje de confirmación
+ * @throws {Object} - Mensaje de error
+ */
+router.post("/out", async (req, res) => {
+  try {
+    const { userId, planId } = req.body; // Obtener el ID del usuario y del plan
+
+    // Verificar si el plan existe antes de eliminar
+    const plan = await StrategicPlan.findById(planId);
+    if (!plan) {
+      return res
+        .status(404)
+        .json({ message: "StrategicPlanModel no encontrado" });
+    }
+
+    // Verificar si el usuario existe
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Eliminar el plan de la lista de planes del usuario
+    await User.findByIdAndUpdate(userId, {
+      $pull: { strategicPlans_ListIDS: planId },
+    });
+
+    // Eliminar el usuario de la lista de miembros del plan
+    await StrategicPlan.findByIdAndUpdate(planId, {
+      $pull: { members_ListIDS: { userId: userId } },
+    });
+
+    // Eliminar las invitaciones del usuario para el plan
+    await User.updateOne(
+      { _id: userId },
+      { $pull: { invitations: { planId: planId } } }
+    );
+
+    // Confirmar la eliminación
+    res
+      .status(200)
+      .json({ message: "Usuario eliminado del plan exitosamente" });
+  } catch (error) {
+    console.error("Error al eliminar el usuario del plan:", error);
+    res.status(500).json({ message: "Error al eliminar el usuario del plan" });
+  }
+});
+
+/**
  * Función que crea un nuevo plan estratégico y lo asocia a un usuario.
  * @param {Object} req.body - Plan estratégico a crear.
  * @param {Object} req.params.userId - ID del usuario al que se asociará el plan.
@@ -131,58 +183,6 @@ router.post("/:userId", async (req, res) => {
       message:
         "Error al guardar la entrada en la colección StrategicPlanModel en MongoDB.",
     });
-  }
-});
-
-/**
- * función que sacar un usuario de un plan estratégico lo saca de la lista de miembros del plan, elimina las invitaciones a ese plan
- * y elimina el plan de la lista de planes del usuario
- * @param {String} userId - ID del usuario a eliminar del plan
- * @param {String} planId - ID del plan estratégico
- * @returns {Object} - Mensaje de confirmación
- * @throws {Object} - Mensaje de error
- */
-router.post("/out", async (req, res) => {
-  try {
-    const { userId, planId } = req.body; // Obtener el ID del usuario y del plan
-
-    // Verificar si el plan existe antes de eliminar
-    const plan = await StrategicPlan.findById(planId);
-    if (!plan) {
-      return res
-        .status(404)
-        .json({ message: "StrategicPlanModel no encontrado" });
-    }
-
-    // Verificar si el usuario existe
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
-    }
-
-    // Eliminar el plan de la lista de planes del usuario
-    await User.findByIdAndUpdate(userId, {
-      $pull: { strategicPlans_ListIDS: planId },
-    });
-
-    // Eliminar el usuario de la lista de miembros del plan
-    await StrategicPlan.findByIdAndUpdate(planId, {
-      $pull: { members_ListIDS: { userId: userId } },
-    });
-
-    // Eliminar las invitaciones del usuario para el plan
-    await User.updateOne(
-      { _id: userId },
-      { $pull: { invitations: { planId: planId } } }
-    );
-
-    // Confirmar la eliminación
-    res
-      .status(200)
-      .json({ message: "Usuario eliminado del plan exitosamente" });
-  } catch (error) {
-    console.error("Error al eliminar el usuario del plan:", error);
-    res.status(500).json({ message: "Error al eliminar el usuario del plan" });
   }
 });
 

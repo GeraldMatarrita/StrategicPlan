@@ -146,7 +146,10 @@ export class StrategicPlanComponent implements OnInit {
       const cleanedData = this.cleanFormData();
 
       this.responseMessage =
-        await this.strategicPlanService.createStrategicPlan(cleanedData, this.activeUserID);
+        await this.strategicPlanService.createStrategicPlan(
+          cleanedData,
+          this.activeUserID
+        );
       Swal.fire({
         icon: 'success',
         title: 'Creado',
@@ -210,7 +213,6 @@ export class StrategicPlanComponent implements OnInit {
         confirmButtonText: 'Sí, eliminar',
         cancelButtonColor: '#f52d0a',
       });
-      console.log(this.activeUserID);
       if (result.isConfirmed) {
         this.responseMessage = await this.strategicPlanService.outStrategicPlan(
           planID,
