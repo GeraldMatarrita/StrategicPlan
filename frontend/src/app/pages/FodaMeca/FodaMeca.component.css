@@ -16,10 +16,10 @@
   color: white;
   padding: 15px;
   width: 100%;
-  border: 1px solid rgb(65, 55, 55);
   border-radius: 25px;
   overflow: auto; /* Asegura que el scrollbar aparezca */
   min-height: 190px;
+  border: none;
 }
 
 .foda-meca-style textarea::-webkit-scrollbar {
@@ -43,7 +43,6 @@
 .Meca-container {
   min-height: 500px;
   padding: 20px 0;
-  background-color: #111010;
 }
 
 .row-personalized {
@@ -54,11 +53,33 @@
   background: linear-gradient(190deg, var(--color2), var(--color3));
 }
 
-h3 {
+h2 {
   border: 1px solid var(--color2);
   border-radius: 22px;
   padding: 25px 20px;
   font-size: 2.5rem;
   font-weight: bold;
+  width: 150px;
   margin: 20px 0;
+}
+
+.title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+span {
+  font-size: 1.5rem;
+}
+
+h3 {
+  padding: 25px 20px;
+}
+
+label {
+  padding: 25px 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
 }

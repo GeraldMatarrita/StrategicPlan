@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NAVIGATIONS_ROUTES } from '../navigations.routes';
+import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 
 @Component({
   selector: 'app-nav-bar',

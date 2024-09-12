@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 import { AuthService } from './Auth.service';
-import { NAVIGATIONS_ROUTES } from '../../navigation/navigations.routes';
+import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-auth',

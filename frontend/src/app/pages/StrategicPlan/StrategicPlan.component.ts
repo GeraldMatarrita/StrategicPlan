@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { StrategicPlanService } from './StrategicPlan.service';
 import { AuthService } from '../Auth/Auth.service';
-import { NAVIGATIONS_ROUTES } from '../../navigation/navigations.routes';
+import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 import { API_ROUTES } from '../../config/api.routes';
 
 @Component({

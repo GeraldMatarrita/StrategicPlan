@@ -9,6 +9,12 @@ import { API_ROUTES } from '../../config/api.routes';
 export class FodaMecaService {
   constructor(private http: HttpClient) {}
 
+  getFodaMecaData(planId: string): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}/${planId}`
+    );
+  }
+
   /**
    * @param url to update data
    * @param id id data to update

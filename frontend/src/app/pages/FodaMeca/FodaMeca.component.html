@@ -1,71 +1,143 @@
 <div class="foda-meca-style">
   <div class="container-fluid">
-    <form [formGroup]="fodaMecaForm" (ngSubmit)="updateFodaMecaForPlan()">
-      <!-- Contenedor FODA -->
+    <!-- Si hay datos de FODA/MECA o no está en modo edición, muestra los datos -->
+    <!-- <div *ngIf="fodaMecaData && fodaMecaData.strengths && !editMode"> -->
+    <div *ngIf="!editMode">
       <div class="Foda-container">
-        <h3>FODA</h3>
+        <div class="title-container">
+          <h2>FODA</h2>
+        </div>
         <div class="row-personalized row">
           <div class="gradient col-12 col-md-6">
-            <label for="strengthsText">Fortalezas:</label>
-            <textarea id="strengthsText" formControlName="strengths"></textarea>
+            <h3>Fortalezas</h3>
+            <span>{{ fodaMecaData.strengths }}</span>
           </div>
           <div class="col-12 col-md-6">
-            <label for="weaknessesText">Debilidades:</label>
-            <textarea
-              id="weaknessesText"
-              formControlName="weaknesses"
-            ></textarea>
+            <h3>Debilidades</h3>
+            <span>{{ fodaMecaData.weaknesses }}</span>
           </div>
         </div>
         <div class="row-personalized row">
           <div class="col-12 col-md-6">
-            <label for="opportunitiesText">Oportunidades:</label>
-            <textarea
-              id="opportunitiesText"
-              formControlName="opportunities"
-            ></textarea>
+            <h3>Oportunidades</h3>
+            <span>{{ fodaMecaData.opportunities }}</span>
           </div>
           <div class="gradient col-12 col-md-6">
-            <label for="threatsText">Amenazas:</label>
-            <textarea id="threatsText" formControlName="threats"></textarea>
+            <h3>Amenazas</h3>
+            <span>{{ fodaMecaData.threats }}</span>
           </div>
         </div>
       </div>
 
       <div class="Meca-container">
-        <h3>MECA</h3>
-        <!-- Contenedor MECA -->
+        <div class="title-container">
+          <h2>MECA</h2>
+        </div>
         <div class="row-personalized row">
           <div class="gradient col-12 col-md-6">
-            <label for="improvementsText">Correcciones:</label>
-            <textarea
-              id="improvementsText"
-              formControlName="correct"
-            ></textarea>
+            <h3>Correcciones</h3>
+            <span>{{ fodaMecaData.correct }}</span>
           </div>
           <div class="col-12 col-md-6">
-            <label for="strategiesText">Adaptar:</label>
-            <textarea id="strategiesText" formControlName="adapt"></textarea>
+            <h3>Adaptar</h3>
+            <span>{{ fodaMecaData.adapt }}</span>
           </div>
         </div>
         <div class="row-personalized row">
           <div class="col-12 col-md-6">
-            <label for="correctionsText">Mantener:</label>
-            <textarea
-              id="correctionsText"
-              formControlName="maintain"
-            ></textarea>
+            <h3>Mantener</h3>
+            <span>{{ fodaMecaData.maintain }}</span>
           </div>
           <div class="gradient col-12 col-md-6">
-            <label for="mecaThreatsText">Explorar:</label>
-            <textarea id="mecaThreatsText" formControlName="explore"></textarea>
+            <h3>Explorar</h3>
+            <span>{{ fodaMecaData.explore }}</span>
           </div>
         </div>
       </div>
+      <button class="buttonEdit m-4" (click)="toggleEditMode()">Editar</button>
+    </div>
 
-      <button type="submit">Save</button>
-      <button type="button" (click)="goBack()">Go Back</button>
-      <!-- Botón para volver -->
-    </form>
+    <!-- Template para editar FODA/MECA -->
+    <!-- <div *ngIf="!fodaMecaData.strengths || editMode"> -->
+    <div *ngIf="editMode">
+      <form [formGroup]="fodaMecaForm" (ngSubmit)="updateFodaMecaForPlan()">
+        <!-- Contenedor FODA -->
+        <div class="Foda-container">
+          <div class="title-container">
+            <h2>FODA</h2>
+          </div>
+          <div class="row-personalized row">
+            <div class="gradient col-12 col-md-6">
+              <label for="strengthsText">Fortalezas</label>
+              <textarea
+                id="strengthsText"
+                formControlName="strengths"
+              ></textarea>
+            </div>
+            <div class="col-12 col-md-6">
+              <label for="weaknessesText">Debilidades</label>
+              <textarea
+                id="weaknessesText"
+                formControlName="weaknesses"
+              ></textarea>
+            </div>
+          </div>
+          <div class="row-personalized row">
+            <div class="col-12 col-md-6">
+              <label for="opportunitiesText">Oportunidades</label>
+              <textarea
+                id="opportunitiesText"
+                formControlName="opportunities"
+              ></textarea>
+            </div>
+            <div class="gradient col-12 col-md-6">
+              <label for="threatsText">Amenazas</label>
+              <textarea id="threatsText" formControlName="threats"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="Meca-container">
+          <div class="title-container">
+            <h2>MECA</h2>
+          </div>
+          <!-- Contenedor MECA -->
+          <div class="row-personalized row">
+            <div class="gradient col-12 col-md-6">
+              <label for="improvementsText">Correcciones</label>
+              <textarea
+                id="improvementsText"
+                formControlName="correct"
+              ></textarea>
+            </div>
+            <div class="col-12 col-md-6">
+              <label for="strategiesText">Adaptar</label>
+              <textarea id="strategiesText" formControlName="adapt"></textarea>
+            </div>
+          </div>
+          <div class="row-personalized row">
+            <div class="col-12 col-md-6">
+              <label for="correctionsText">Mantener</label>
+              <textarea
+                id="correctionsText"
+                formControlName="maintain"
+              ></textarea>
+            </div>
+            <div class="gradient col-12 col-md-6">
+              <label for="mecaThreatsText">Explorar</label>
+              <textarea
+                id="mecaThreatsText"
+                formControlName="explore"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <button class="buttonCreate m-4">Save</button>
+        <button class="buttonBack m-4" type="button" (click)="toggleEditMode()">
+          Go Back
+        </button>
+      </form>
+    </div>
   </div>
 </div>
