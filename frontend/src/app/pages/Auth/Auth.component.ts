@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 import { AuthService } from './Auth.service';
+import { NAVIGATIONS_ROUTES } from '../../navigation/navigations.routes';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-auth',
   standalone: true,
@@ -28,7 +30,8 @@ export class AuthComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   /**
@@ -73,6 +76,10 @@ export class AuthComponent {
     }
   }
 
+  navigateToStrategicPlan(): void {
+    this.router.navigate([NAVIGATIONS_ROUTES.STRATEGIC_PLAN]);
+  }
+
   /**
    * Método para hacer login
    * @returns Promesa y un mensaje de respuesta de SweetAlert
@@ -102,6 +109,7 @@ export class AuthComponent {
         title: 'Login',
         text: this.responseMessage,
       });
+      this.navigateToStrategicPlan();
     } catch (error) {
       this.responseMessage =
         (error as any).error?.message || 'Error desconocido';

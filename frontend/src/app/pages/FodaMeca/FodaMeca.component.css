@@ -1,102 +1,64 @@
-
 :host {
   display: block;
 }
-:root {
-  --color2: #3700ff;
-  --color3: #9900ff;
-  --color4: #ff00ff;
-  --basicBackground: #171717;
-}
+
 .foda-meca-style {
-  background-color: #121212; /* Fondo oscuro */
+  background-color: var(--basicBackground);
   color: white;
-  font-family: Arial, sans-serif;
-  padding: 20px;
-  max-width: 600px; /* Ancho máximo */
-  margin: 40px auto; /* Centrado automático */
+  min-height: calc(100vh - 52px);
+  padding: 10px 0px 50px 0px; /* top right bottom left */
+  margin: auto;
+  text-align: center;
 }
 
-.foda-meca-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Dos columnas */
-  grid-template-rows: auto auto auto; /* Tres filas */
-  gap: 10px; /* Espacio entre los elementos de la grid */
-  align-items: start; /* Alineación vertical */
-}
-
-/* Estilos para las cajas de texto */
-.foda-meca-box {
-  background-color: #333; /* Fondo para cada caja de texto */
-  border: none;
-  padding: 10px;
+.foda-meca-style textarea {
+  background-color: transparent;
+  color: white;
+  padding: 15px;
   width: 100%;
-  color: white;
-  border-radius: 5px; /* Bordes redondeados */
+  border: 1px solid rgb(65, 55, 55);
+  border-radius: 25px;
+  overflow: auto; /* Asegura que el scrollbar aparezca */
+  min-height: 190px;
 }
 
-/* Colocación específica para cada área en forma de cruz */
-#strengths, #opportunities { /* Fortalezas y Oportunidades a la izquierda */
-  grid-column: 1;
+.foda-meca-style textarea::-webkit-scrollbar {
+  width: 8px; /* Ancho del scroll */
+  border-radius: 25px;
+  background-color: var(--color2);
 }
 
-#weaknesses, #threats { /* Debilidades y Amenazas a la derecha */
-  grid-column: 2;
+.foda-meca-style textarea::-webkit-scrollbar-thumb {
+  background-color: rgb(255, 255, 255); /* Color del scroll */
+  border-radius: 25px;
+}
+.foda-meca-style textarea::-webkit-scrollbar-track {
+  height: 80px;
 }
 
-/* Textarea para cada campo */
-textarea {
-  width: 100%;
-  height: 80px; /* Altura fija para cada textarea */
-  background-color: #1E1E2F; /* Fondo de textarea */
-  color: white;
-  border: 1px solid #555; /* Bordes para textarea */
-  padding: 8px;
+.Foda-container {
+  min-height: 500px;
+  padding: 20px 0;
+}
+.Meca-container {
+  min-height: 500px;
+  padding: 20px 0;
+  background-color: #111010;
 }
 
-label {
-  display: block;
-  margin-bottom: 5px;
+.row-personalized {
+  min-height: 250px;
 }
 
-button {
-  padding: 10px 20px;
-  background-color: #4CAF50; /* Botón verde */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  width: 100%;
-  margin-top: 20px; /* Espacio antes del botón */
+.gradient {
+  background: linear-gradient(190deg, var(--color2), var(--color3));
 }
 
-/* Ajuste responsivo */
-@media (max-width: 768px) {
-  .foda-meca-container {
-    grid-template-columns: 1fr; /* Una sola columna para móviles */
-    grid-template-rows: repeat(4, auto); /* Cuatro filas */
-  }
-  
-  #weaknesses, #threats {
-    grid-column: 1; /* Todos los campos en una columna para móviles */
-  }
-}
-button {
-  padding: 10px 20px;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  width: 100%;
-  margin-top: 10px;
-}
-
-.goBack-button {
-  background-color: #666;  /* Color de fondo para el botón Go Back */
-}
-
-.goBack-button:hover {
-  background-color: #555; /* Cambio de color al pasar el ratón */
+h3 {
+  border: 1px solid var(--color2);
+  border-radius: 22px;
+  padding: 25px 20px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 20px 0;
 }

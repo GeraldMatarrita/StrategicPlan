@@ -1,27 +1,23 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
-
 // Esquema FODA
 const fodaSchema = new mongoose.Schema({
-  strengths: { type: [String], required: true },
-  opportunities: { type: [String], required: true },
-  weaknesses: { type: [String], required: true },
-  threats: { type: [String], required: true }
+  strengths: { type: String, required: true },
+  opportunities: { type: String, required: true },
+  weaknesses: { type: String, required: true },
+  threats: { type: String, required: true },
 });
 
 // Esquema MECA
 const mecaSchema = new mongoose.Schema({
-  correct: { type: [String], required: true },
-  adapt: { type: [String], required: true },
-  maintain: { type: [String], required: true },
-  explore: { type: [String], required: true }
+  correct: { type: String, required: true },
+  adapt: { type: String, required: true },
+  maintain: { type: String, required: true },
+  explore: { type: String, required: true },
 });
 
-
-/**
- * Modelo de planes estratégicos.
- */
+// Esquema del plan estratégico
 const strategicPlanSchema = new mongoose.Schema(
   {
     mission: { type: String },
@@ -45,27 +41,23 @@ const strategicPlanSchema = new mongoose.Schema(
   { strict: "throw" }
 );
 
-
-// Esquemas de validación Joi para FODA y MECA
+// Esquema de validación Joi para FODA
 const fodaValidationSchema = Joi.object({
-  strengths: Joi.array().items(Joi.string()).optional(),
-  opportunities: Joi.array().items(Joi.string()).optional(),
-  weaknesses: Joi.array().items(Joi.string()).optional(),
-  threats: Joi.array().items(Joi.string()).optional()
-}).optional(); // El esquema completo es opcional
+  strengths: Joi.string().required(),
+  opportunities: Joi.string().required(),
+  weaknesses: Joi.string().required(),
+  threats: Joi.string().required(),
+}).required();
 
+// Esquema de validación Joi para MECA
 const mecaValidationSchema = Joi.object({
-  correct: Joi.array().items(Joi.string()).optional(),
-  adapt: Joi.array().items(Joi.string()).optional(),
-  maintain: Joi.array().items(Joi.string()).optional(),
-  explore: Joi.array().items(Joi.string()).optional()
-}).optional(); 
+  correct: Joi.string().required(),
+  adapt: Joi.string().required(),
+  maintain: Joi.string().required(),
+  explore: Joi.string().required(),
+}).required();
 
-/**
- * Función de validación de datos de planes estratégicos.
- * @param {Object} data - Datos a validar.
- * @returns {Object} - Objeto con los errores y el valor.
- */
+// Función de validación de datos de planes estratégicos
 const validateStrategicPlan = (data) => {
   const schema = Joi.object({
     mission: Joi.string().min(10).max(1000).optional().label("Mission"),
@@ -89,6 +81,7 @@ const validateStrategicPlan = (data) => {
       .optional()
       .label("Operation Plan List IDs"),
   });
+
   return schema.validate(data);
 };
 

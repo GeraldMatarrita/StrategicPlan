@@ -86,20 +86,20 @@ router.get("/active/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
     const currentDate = new Date();
-    
+
     // Encuentra al usuario y obtén los IDs de sus planes estratégicos
     const user = await User.findById(userId).populate("strategicPlans_ListIDS");
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
-    
+
     // Filtra los planes activos basados en la fecha actual
     const activePlans = await StrategicPlan.find({
       _id: { $in: user.strategicPlans_ListIDS },
       startDate: { $lte: currentDate },
       endDate: { $gte: currentDate },
     });
-    
+
     res.json(activePlans);
   } catch (error) {
     console.error("Error al consultar los planes activos del usuario:", error);
@@ -119,22 +119,25 @@ router.get("/finished/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
     const currentDate = new Date();
-    
+
     // Encuentra al usuario y obtén los IDs de sus planes estratégicos
     const user = await User.findById(userId).populate("strategicPlans_ListIDS");
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
-    
+
     // Filtra los planes finalizados basados en la fecha actual
     const finishedPlans = await StrategicPlan.find({
       _id: { $in: user.strategicPlans_ListIDS },
       endDate: { $lt: currentDate },
     });
-    
+
     res.json(finishedPlans);
   } catch (error) {
-    console.error("Error al consultar los planes finalizados del usuario:", error);
+    console.error(
+      "Error al consultar los planes finalizados del usuario:",
+      error
+    );
     res.status(500).json({
       message: "Error al consultar los planes finalizados del usuario",
     });
@@ -248,6 +251,76 @@ router.post("/:userId", async (req, res) => {
       message:
         "Error al guardar la entrada en la colección StrategicPlanModel en MongoDB.",
     });
+  }
+});
+
+/**
+ * función que actualiza Foda y Meca de un plan estratégico por su ID
+ * @param {String} id - ID del plan estratégico
+ * @param req.body datos a actualizar del Foda Meca del plan estratégico
+ * @returns {Object} - Mensaje de confirmación
+ * @throws {Object} - Mensaje de error
+ */
+router.put("/FodaMeca/:id", async (req, res) => {
+  // Mapeo de los datos recibidos en el cuerpo de la solicitud
+  const {
+    strengths,
+    opportunities,
+    weaknesses,
+    threats,
+    maintain,
+    adapt,
+    correct,
+    explore,
+  } = req.body;
+
+  const fodaData = {
+    strengths: strengths || [],
+    opportunities: opportunities || [],
+    weaknesses: weaknesses || [],
+    threats: threats || [],
+  };
+
+  const mecaData = {
+    maintain: maintain || [],
+    adapt: adapt || [],
+    correct: correct || [],
+    explore: explore || [],
+  };
+
+  // Crear el objeto que será validado y enviado a la base de datos
+  const updatedData = {
+    FODA: fodaData,
+    MECA: mecaData,
+  };
+
+  // Validar los datos mapeados
+  // const { error } = validateStrategicPlan(updatedData);
+  // if (error) return res.status(400).send(error.details[0].message);
+
+  try {
+    // Buscar el documento por ID y actualizarlo
+    const updatedPlan = await StrategicPlan.findByIdAndUpdate(
+      req.params.id,
+      { $set: updatedData },
+      { new: true, runValidators: true }
+    );
+
+    // Si el documento no existe, enviar un error
+    if (!updatedPlan)
+      return res
+        .status(404)
+        .json({ message: "Plan estratégico no encontrado" });
+
+    res.json({
+      message: "Plan estratégico actualizado correctamente",
+      data: updatedPlan,
+    });
+  } catch (err) {
+    // Manejo de errores en caso de una excepción
+    res
+      .status(500)
+      .sjon({ message: "Error al actualizar el plan estratégico" });
   }
 });
 

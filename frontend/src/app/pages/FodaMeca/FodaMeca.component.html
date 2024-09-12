@@ -1,50 +1,71 @@
 <div class="foda-meca-style">
-    <form [formGroup]="fodaMecaForm" (ngSubmit)="onSubmit()">
+  <div class="container-fluid">
+    <form [formGroup]="fodaMecaForm" (ngSubmit)="updateFodaMecaForPlan()">
       <!-- Contenedor FODA -->
-      <div class="foda-meca-container" id="fodaContainer">
+      <div class="Foda-container">
         <h3>FODA</h3>
-        <div class="foda-meca-box blue" id="strengths">
-          <label for="strengthsText">Fortalezas:</label>
-          <textarea id="strengthsText" formControlName="strengths"></textarea>
+        <div class="row-personalized row">
+          <div class="gradient col-12 col-md-6">
+            <label for="strengthsText">Fortalezas:</label>
+            <textarea id="strengthsText" formControlName="strengths"></textarea>
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="weaknessesText">Debilidades:</label>
+            <textarea
+              id="weaknessesText"
+              formControlName="weaknesses"
+            ></textarea>
+          </div>
         </div>
-        <div class="foda-meca-box red" id="weaknesses">
-          <label for="weaknessesText">Debilidades:</label>
-          <textarea id="weaknessesText" formControlName="weaknesses"></textarea>
-        </div>
-        <div class="foda-meca-box green" id="opportunities">
-          <label for="opportunitiesText">Oportunidades:</label>
-          <textarea id="opportunitiesText" formControlName="opportunities"></textarea>
-        </div>
-        <div class="foda-meca-box yellow" id="threats">
-          <label for="threatsText">Amenazas:</label>
-          <textarea id="threatsText" formControlName="threats"></textarea>
-        </div>
-      </div>
-      <h3>MECA</h3>
-      <!-- Contenedor MECA -->
-      <div class="foda-meca-container" id="mecaContainer">
-        
-        <div class="foda-meca-box blue" id="improvements">
-          <label for="improvementsText">Correcciones:</label>
-          <textarea id="improvementsText" formControlName="correct"></textarea>
-        </div>
-        <div class="foda-meca-box red" id="strategies">
-          <label for="strategiesText">Adaptar:</label>
-          <textarea id="strategiesText" formControlName="adapt"></textarea>
-        </div>
-        <div class="foda-meca-box green" id="corrections">
-          <label for="correctionsText">Mantener:</label>
-          <textarea id="correctionsText" formControlName="maintain"></textarea>
-        </div>
-        <div class="foda-meca-box yellow" id="mecaThreats">
-          <label for="mecaThreatsText">Explorar:</label>
-          <textarea id="mecaThreatsText" formControlName="explore"></textarea>
+        <div class="row-personalized row">
+          <div class="col-12 col-md-6">
+            <label for="opportunitiesText">Oportunidades:</label>
+            <textarea
+              id="opportunitiesText"
+              formControlName="opportunities"
+            ></textarea>
+          </div>
+          <div class="gradient col-12 col-md-6">
+            <label for="threatsText">Amenazas:</label>
+            <textarea id="threatsText" formControlName="threats"></textarea>
+          </div>
         </div>
       </div>
-  
-      <button type="submit">Save</button>
-      <button type="button" (click)="goBack()">Go Back</button> <!-- Botón para volver -->
 
+      <div class="Meca-container">
+        <h3>MECA</h3>
+        <!-- Contenedor MECA -->
+        <div class="row-personalized row">
+          <div class="gradient col-12 col-md-6">
+            <label for="improvementsText">Correcciones:</label>
+            <textarea
+              id="improvementsText"
+              formControlName="correct"
+            ></textarea>
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="strategiesText">Adaptar:</label>
+            <textarea id="strategiesText" formControlName="adapt"></textarea>
+          </div>
+        </div>
+        <div class="row-personalized row">
+          <div class="col-12 col-md-6">
+            <label for="correctionsText">Mantener:</label>
+            <textarea
+              id="correctionsText"
+              formControlName="maintain"
+            ></textarea>
+          </div>
+          <div class="gradient col-12 col-md-6">
+            <label for="mecaThreatsText">Explorar:</label>
+            <textarea id="mecaThreatsText" formControlName="explore"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit">Save</button>
+      <button type="button" (click)="goBack()">Go Back</button>
+      <!-- Botón para volver -->
     </form>
   </div>
-  
+</div>
