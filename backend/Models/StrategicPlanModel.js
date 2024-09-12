@@ -3,18 +3,18 @@ const Joi = require("joi");
 
 // Esquema FODA
 const fodaSchema = new mongoose.Schema({
-  strengths: { type: String, required: true },
-  opportunities: { type: String, required: true },
-  weaknesses: { type: String, required: true },
-  threats: { type: String, required: true },
+  strengths: { type: String },
+  opportunities: { type: String },
+  weaknesses: { type: String },
+  threats: { type: String },
 });
 
 // Esquema MECA
 const mecaSchema = new mongoose.Schema({
-  correct: { type: String, required: true },
-  adapt: { type: String, required: true },
-  maintain: { type: String, required: true },
-  explore: { type: String, required: true },
+  correct: { type: String },
+  adapt: { type: String },
+  maintain: { type: String },
+  explore: { type: String },
 });
 
 // Esquema del plan estratégico
@@ -43,19 +43,19 @@ const strategicPlanSchema = new mongoose.Schema(
 
 // Esquema de validación Joi para FODA
 const fodaValidationSchema = Joi.object({
-  strengths: Joi.string().required(),
-  opportunities: Joi.string().required(),
-  weaknesses: Joi.string().required(),
-  threats: Joi.string().required(),
-}).required();
+  strengths: Joi.string().optional(),
+  opportunities: Joi.string().optional(),
+  weaknesses: Joi.string().optional(),
+  threats: Joi.string().optional(),
+}).optional();
 
 // Esquema de validación Joi para MECA
 const mecaValidationSchema = Joi.object({
-  correct: Joi.string().required(),
-  adapt: Joi.string().required(),
-  maintain: Joi.string().required(),
-  explore: Joi.string().required(),
-}).required();
+  correct: Joi.string().optional(),
+  adapt: Joi.string().optional(),
+  maintain: Joi.string().optional(),
+  explore: Joi.string().optional(),
+}).optional();
 
 // Función de validación de datos de planes estratégicos
 const validateStrategicPlan = (data) => {
