@@ -6,6 +6,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
@@ -35,20 +36,23 @@ export class FodaMecaComponent {
   editMode = false;
 
   ngOnInit() {
-    this.fodaMecaForm = this.formBuilder.group({
-      strengths: [''],
-      opportunities: [''],
-      weaknesses: [''],
-      threats: [''],
-      maintain: [''],
-      adapt: [''],
-      correct: [''],
-      explore: [''],
-    });
+    this.createForm();
     this.currentPlanId = String(localStorage.getItem('PlanID'));
     this.getFodaMecaForPlan();
   }
 
+  createForm() {
+    this.fodaMecaForm = this.formBuilder.group({
+      strengths: ['', [Validators.required]],
+      opportunities: ['', [Validators.required]],
+      weaknesses: ['', [Validators.required]],
+      threats: ['', [Validators.required]],
+      maintain: ['', [Validators.required]],
+      adapt: ['', [Validators.required]],
+      correct: ['', [Validators.required]],
+      explore: ['', [Validators.required]],
+    });
+  }
   /**
    * funcion para enviar los datos a actualizar de fodaMeca
    * @returns
