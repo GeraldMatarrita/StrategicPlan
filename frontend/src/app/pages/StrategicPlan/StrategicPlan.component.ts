@@ -45,14 +45,19 @@ export class StrategicPlanComponent implements OnInit {
 
   /**
    * Método que se ejecuta al iniciar el componente
-   * - Cargar los datos (Obtener el ID del usuario activo)
    * - Inicializar el formulario
-   * - Obtener la fecha actual y sumar para el mínimo de la fecha de fin
+   * - Cargar los datos de los planes activos
    */
   ngOnInit(): void {
     this.initializeForm();
     this.loadData();
   }
+
+  /**
+   * Método para inicializar el formulario
+   * - Inicializar los campos del formulario
+   * - Obtener la fecha actual y sumar para el mínimo de la fecha de fin
+   */
 
   initializeForm() {
     this.formStrategicPlan = this.formBuilder.group({
@@ -68,6 +73,11 @@ export class StrategicPlanComponent implements OnInit {
     this.minEndDate = nextMonth.toISOString().split('T')[0];
   }
 
+  /**
+   * Método para cargar los datos de los planes estratégicos
+   * - Obtener el ID del usuario activo
+   * - Cargar los planes activos del usuario
+   */
   async loadData(): Promise<void> {
     try {
       this.activeUserID = await this.authService.getActiveUserID();
@@ -77,6 +87,9 @@ export class StrategicPlanComponent implements OnInit {
     }
   }
 
+  /**
+   * Método para cargar los planes activos del usuario
+   */
   loadActivePlans() {
     this.strategicPlanService.getActivePlans(this.activeUserID).subscribe(
       (data: any[]) => {
@@ -97,6 +110,9 @@ export class StrategicPlanComponent implements OnInit {
     );
   }
 
+  /**
+   * Método para cargar los planes finalizados del usuario
+   */
   loadFinishedPlans() {
     this.strategicPlanService.getFinishedPlans(this.activeUserID).subscribe(
       (data: any[]) => {
@@ -126,55 +142,6 @@ export class StrategicPlanComponent implements OnInit {
     const currentDate = new Date();
     return new Date(endDate) < currentDate;
   }
-
-  //   this.formStrategicPlan = this.formBuilder.group({
-  //     mission: [''],
-  //     vision: [''],
-  //     values: [''],
-  //     endDate: ['', Validators.required],
-  //     name: ['', Validators.required],
-  //   });
-  //   // Obtener la fecha actual y sumar un mes para el mínimo de la fecha de fin del plan estratégico
-  //   const today = new Date();
-  //   const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
-  //   this.minEndDate = nextMonth.toISOString().split('T')[0];
-  // }
-
-  // /**
-  //  * Método para cargar los datos
-  //  * - usuario activo
-  //  * - planes estratégicos del usuario activo
-  //  */
-  // async loadData(): Promise<void> {
-  //   try {
-  //     this.activeUserID = await this.authService.getActiveUserID();
-  //     this.getStratecPlans();
-  //   } catch (error) {
-  //     console.error('Error al cargar los datos:', error);
-  //   }
-  // }
-
-  // /**
-  //  * Método para obtener los planes estratégicos del usuario activo                      --- esto aun no esta bien porque trae todos los planes no solo los del usuario el bueno esta en invitations
-  //  */
-  // getStratecPlans() {
-  //   this.strategicPlanService.getStrategicPlans().subscribe(
-  //     (data: any[]) => {
-  //       this.strategicPlanData = data.map((item) => ({
-  //         id: item._id,
-  //         mission: item.mission,
-  //         vision: item.vision,
-  //         values: item.values,
-  //         startDate: item.startDate,
-  //         endDate: item.endDate,
-  //         name: item.name,
-  //       }));
-  //     },
-  //     (error: any) => {
-  //       console.error('Error al obtener los datos:', error);
-  //     }
-  //   );
-  // }
 
   /**
    * función para seleccionar un plan y cargar los datos en el formulario
