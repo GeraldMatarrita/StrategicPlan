@@ -1,7 +1,16 @@
 <div class="StrategicPlanStyle">
   <!-- se muestran los planes estrategicos del usuario activo si no esta en modo edicion ni visible el formulario -->
   <div *ngIf="!isFormVisible && !planSelected">
-    <button (click)="onClickCreateNewPlan()" class="buttonAdd m-3">Plan</button>
+    <button (click)="onClickCreateNewPlan()" class="buttonAdd m-3" *ngIf="!isFinishedPlansView">Plan</button>
+    <button
+      (click)="isFinishedPlansView ? showActivePlans() : showFinishedPlans()"
+      [ngClass]="{
+        'buttonBack m-3': isFinishedPlansView,
+        'buttonHistory m-3': !isFinishedPlansView
+      }"
+    >
+      {{ isFinishedPlansView ? "Back to Plans" : "History" }}
+    </button>
 
     <div *ngIf="strategicPlanData.length > 0; else noData">
       <div *ngFor="let item of strategicPlanData" class="container">
@@ -175,6 +184,7 @@
             <div class="col-lg-5 col-12">
               <div>
                 <button
+                  *ngIf="!isPlanExpired(item.endDate)"
                   (click)="setFormVisibility()"
                   class="buttonEdit m-4"
                 >

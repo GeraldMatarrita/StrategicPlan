@@ -126,4 +126,26 @@ export class StrategicPlanService {
       `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}`
     );
   }
+
+  /**
+   * Método para obtener planes activos de un usuario
+   * @param userId ID del usuario
+   * @returns Observable con los datos de los planes activos
+   */
+  getActivePlans(userId: string): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN_ACTIVE}/${userId}`
+    );
+  }
+
+  /**
+   * Método para obtener planes finalizados de un usuario
+   * @param userId ID del usuario
+   * @returns Observable con los datos de los planes finalizados
+   */
+  getFinishedPlans(userId: string): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN_FINISHED}/${userId}`
+    );
+  }
 }

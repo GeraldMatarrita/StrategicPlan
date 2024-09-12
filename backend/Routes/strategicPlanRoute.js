@@ -75,6 +75,71 @@ router.get("/plans-to-user/:userId", async (req, res) => {
 });
 
 /**
+ * función que obtiene los planes estratégicos activos de un usuario
+ * @param {String} userId - ID del usuario a consultar sus planes activos
+ * @returns {Object} - Lista de planes estratégicos activos del usuario
+ * @throws {Object} - Mensaje de error
+ */
+router.get("/active/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const currentDate = new Date();
+    
+    // Encuentra al usuario y obtén los IDs de sus planes estratégicos
+    const user = await User.findById(userId).populate("strategicPlans_ListIDS");
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    
+    // Filtra los planes activos basados en la fecha actual
+    const activePlans = await StrategicPlan.find({
+      _id: { $in: user.strategicPlans_ListIDS },
+      startDate: { $lte: currentDate },
+      endDate: { $gte: currentDate },
+    });
+    
+    res.json(activePlans);
+  } catch (error) {
+    console.error("Error al consultar los planes activos del usuario:", error);
+    res.status(500).json({
+      message: "Error al consultar los planes activos del usuario",
+    });
+  }
+});
+
+/**
+ * función que obtiene los planes estratégicos finalizados de un usuario
+ * @param {String} userId - ID del usuario a consultar sus planes finalizados
+ * @returns {Object} - Lista de planes estratégicos finalizados del usuario
+ * @throws {Object} - Mensaje de error
+ */
+router.get("/finished/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const currentDate = new Date();
+    
+    // Encuentra al usuario y obtén los IDs de sus planes estratégicos
+    const user = await User.findById(userId).populate("strategicPlans_ListIDS");
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    
+    // Filtra los planes finalizados basados en la fecha actual
+    const finishedPlans = await StrategicPlan.find({
+      _id: { $in: user.strategicPlans_ListIDS },
+      endDate: { $lt: currentDate },
+    });
+    
+    res.json(finishedPlans);
+  } catch (error) {
+    console.error("Error al consultar los planes finalizados del usuario:", error);
+    res.status(500).json({
+      message: "Error al consultar los planes finalizados del usuario",
+    });
+  }
+});
+
+/**
  * función que crea un nuevo plan estratégico
  * @param req.body plan estratégico a crear
  * @returns {Object} - Mensaje de confirmación

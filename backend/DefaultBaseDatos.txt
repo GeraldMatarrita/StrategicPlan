@@ -39,11 +39,11 @@ db.strategicplans.insertMany([
     mission: "La misión del Plan 3 es optimizar nuestras operaciones internas para mejorar la eficiencia y reducir costos, mientras mantenemos altos estándares de calidad en todos nuestros productos y servicios. Se priorizará la implementación de tecnologías avanzadas y mejores prácticas en el ámbito de la gestión empresarial.",
     vision: "El Plan 3 tiene la visión de ser una empresa reconocida por su capacidad para adaptarse rápidamente a los cambios del mercado y su enfoque proactivo hacia la mejora continua. Queremos ser un referente en el sector por nuestra habilidad para innovar y ofrecer valor agregado a nuestros clientes.",
     values: "Nuestros valores para el Plan 3 son la adaptabilidad, la eficiencia y la orientación al cliente. Estos principios guiarán nuestras estrategias y tácticas para asegurar que nuestras operaciones sean tanto efectivas como alineadas con las expectativas de nuestros clientes.",
-    endDate: ISODate("2025-08-31T00:00:00.000+00:00"),
+    endDate: ISODate("2023-08-31T00:00:00.000+00:00"),
     name: "plan3",
     members_ListIDS: [ObjectId("66d940156d9429de5f8b88d0")],
     objective_ListIDS: [],
-    startDate: ISODate("2024-09-03T18:19:31.433+00:00"),
+    startDate: ISODate("2022-09-03T18:19:31.433+00:00"),
     operationPlan_ListIDS: []
   },
   {

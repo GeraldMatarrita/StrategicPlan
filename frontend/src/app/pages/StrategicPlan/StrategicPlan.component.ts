@@ -33,6 +33,9 @@ export class StrategicPlanComponent implements OnInit {
   // Variable para almacenar el ID del usuario activo
   activeUserID: string = 'nada';
 
+  // Variable para indicar si se está viendo la vista de planes finalizados
+  isFinishedPlansView: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private strategicPlanService: StrategicPlanService,
@@ -47,8 +50,11 @@ export class StrategicPlanComponent implements OnInit {
    * - Obtener la fecha actual y sumar para el mínimo de la fecha de fin
    */
   ngOnInit(): void {
+    this.initializeForm();
     this.loadData();
+  }
 
+  initializeForm() {
     this.formStrategicPlan = this.formBuilder.group({
       mission: [''],
       vision: [''],
@@ -56,31 +62,23 @@ export class StrategicPlanComponent implements OnInit {
       endDate: ['', Validators.required],
       name: ['', Validators.required],
     });
-    // Obtener la fecha actual y sumar un mes para el mínimo de la fecha de fin del plan estratégico
+
     const today = new Date();
     const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
     this.minEndDate = nextMonth.toISOString().split('T')[0];
   }
 
-  /**
-   * Método para cargar los datos
-   * - usuario activo
-   * - planes estratégicos del usuario activo
-   */
   async loadData(): Promise<void> {
     try {
       this.activeUserID = await this.authService.getActiveUserID();
-      this.getStratecPlans();
+      this.loadActivePlans();
     } catch (error) {
       console.error('Error al cargar los datos:', error);
     }
   }
 
-  /**
-   * Método para obtener los planes estratégicos del usuario activo                      --- esto aun no esta bien porque trae todos los planes no solo los del usuario el bueno esta en invitations
-   */
-  getStratecPlans() {
-    this.strategicPlanService.getStrategicPlans().subscribe(
+  loadActivePlans() {
+    this.strategicPlanService.getActivePlans(this.activeUserID).subscribe(
       (data: any[]) => {
         this.strategicPlanData = data.map((item) => ({
           id: item._id,
@@ -91,12 +89,92 @@ export class StrategicPlanComponent implements OnInit {
           endDate: item.endDate,
           name: item.name,
         }));
+        this.isFinishedPlansView = false;
       },
       (error: any) => {
-        console.error('Error al obtener los datos:', error);
+        console.error('Error al obtener los planes activos:', error);
       }
     );
   }
+
+  loadFinishedPlans() {
+    this.strategicPlanService.getFinishedPlans(this.activeUserID).subscribe(
+      (data: any[]) => {
+        this.strategicPlanData = data.map((item) => ({
+          id: item._id,
+          mission: item.mission,
+          vision: item.vision,
+          values: item.values,
+          startDate: item.startDate,
+          endDate: item.endDate,
+          name: item.name,
+        }));
+        this.isFinishedPlansView = true;
+      },
+      (error: any) => {
+        console.error('Error al obtener los planes finalizados:', error);
+      }
+    );
+  }
+
+  /**
+   * Método para verificar si el plan ha expirado
+   * @param endDate La fecha de finalización del plan
+   * @returns true si el plan ha expirado, false en caso contrario
+   */
+  isPlanExpired(endDate: Date): boolean {
+    const currentDate = new Date();
+    return new Date(endDate) < currentDate;
+  }
+
+  //   this.formStrategicPlan = this.formBuilder.group({
+  //     mission: [''],
+  //     vision: [''],
+  //     values: [''],
+  //     endDate: ['', Validators.required],
+  //     name: ['', Validators.required],
+  //   });
+  //   // Obtener la fecha actual y sumar un mes para el mínimo de la fecha de fin del plan estratégico
+  //   const today = new Date();
+  //   const nextMonth = new Date(today.setMonth(today.getMonth() + 1));
+  //   this.minEndDate = nextMonth.toISOString().split('T')[0];
+  // }
+
+  // /**
+  //  * Método para cargar los datos
+  //  * - usuario activo
+  //  * - planes estratégicos del usuario activo
+  //  */
+  // async loadData(): Promise<void> {
+  //   try {
+  //     this.activeUserID = await this.authService.getActiveUserID();
+  //     this.getStratecPlans();
+  //   } catch (error) {
+  //     console.error('Error al cargar los datos:', error);
+  //   }
+  // }
+
+  // /**
+  //  * Método para obtener los planes estratégicos del usuario activo                      --- esto aun no esta bien porque trae todos los planes no solo los del usuario el bueno esta en invitations
+  //  */
+  // getStratecPlans() {
+  //   this.strategicPlanService.getStrategicPlans().subscribe(
+  //     (data: any[]) => {
+  //       this.strategicPlanData = data.map((item) => ({
+  //         id: item._id,
+  //         mission: item.mission,
+  //         vision: item.vision,
+  //         values: item.values,
+  //         startDate: item.startDate,
+  //         endDate: item.endDate,
+  //         name: item.name,
+  //       }));
+  //     },
+  //     (error: any) => {
+  //       console.error('Error al obtener los datos:', error);
+  //     }
+  //   );
+  // }
 
   /**
    * función para seleccionar un plan y cargar los datos en el formulario
@@ -147,7 +225,10 @@ export class StrategicPlanComponent implements OnInit {
       const cleanedData = this.cleanFormData();
 
       this.responseMessage =
-        await this.strategicPlanService.createStrategicPlan(cleanedData);
+      await this.strategicPlanService.createStrategicPlan({
+        ...cleanedData,
+        userId: this.activeUserID, // Asegúrate de incluir el ID del usuario
+      });
       Swal.fire({
         icon: 'success',
         title: 'Creado',
@@ -211,7 +292,6 @@ export class StrategicPlanComponent implements OnInit {
         confirmButtonText: 'Sí, eliminar',
         cancelButtonColor: '#f52d0a',
       });
-      console.log(this.activeUserID);
       if (result.isConfirmed) {
         this.responseMessage = await this.strategicPlanService.outStrategicPlan(
           planID,
@@ -270,5 +350,15 @@ export class StrategicPlanComponent implements OnInit {
     const FODAMECA: string = `${NAVIGATIONS_ROUTES.FODAMECA}/${this.currentPlanId}`;
     console.log('FODAMECA', FODAMECA);
     this.router.navigate([FODAMECA]);
+  }
+
+  showFinishedPlans(): void {
+    this.isFinishedPlansView = true;
+    this.loadFinishedPlans();
+  }
+
+  showActivePlans(): void {
+    this.isFinishedPlansView = false;
+    this.loadActivePlans();
   }
 }

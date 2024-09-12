@@ -5,6 +5,8 @@ export const API_ROUTES = {
   STRATEGIC_PLAN: '/strategicPlan',
   STRATEGIC_PLAN_FOR_USER: '/strategicPlan/plans-to-user',
   STRATEGIC_PLAN_OUT: '/strategicPlan/out',
+  STRATEGIC_PLAN_ACTIVE: '/strategicPlan/active',
+  STRATEGIC_PLAN_FINISHED: '/strategicPlan/finished',
   AUTH: '/auth',
   LOGIN: '/auth/login',
   GetAllUsers: '/auth/All-users',
