@@ -105,6 +105,7 @@ export class StrategicPlanComponent implements OnInit {
   onClickPlan(plan: any): void {
     this.planSelected = true;
     this.currentPlanId = plan.id.toString();
+
     this.formStrategicPlan.patchValue(plan); // Cargar los datos del plan en el formulario
     window.scrollTo({ top: 0, behavior: 'smooth' }); // Hacer scroll al top de la página
   }
@@ -267,6 +268,7 @@ export class StrategicPlanComponent implements OnInit {
    * función para navegar a la página de FODAMECA
    */
   navigateToFodaMeca(): void {
+    localStorage.setItem('PlanID', this.currentPlanId);
     const FODAMECA: string = `${NAVIGATIONS_ROUTES.FODAMECA}/${this.currentPlanId}`;
     console.log('FODAMECA', FODAMECA);
     this.router.navigate([FODAMECA]);

@@ -5,6 +5,7 @@ export const API_ROUTES = {
   STRATEGIC_PLAN: '/strategicPlan',
   STRATEGIC_PLAN_FOR_USER: '/strategicPlan/plans-to-user',
   STRATEGIC_PLAN_OUT: '/strategicPlan/out',
+  FODAMECA_UPDATE: '/strategicPlan/FodaMeca',
   AUTH: '/auth',
   LOGIN: '/auth/login',
   GetAllUsers: '/auth/All-users',
