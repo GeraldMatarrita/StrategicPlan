@@ -93,6 +93,8 @@ export class InvitationsComponent implements OnInit {
           this.strategicPlanData = data.map((item: any) => ({
             id: item._id,
             name: item.name,
+            startDate: item.startDate,
+            endDate: item.endDate,
           }));
         },
         (error: any) => {
@@ -145,6 +147,14 @@ export class InvitationsComponent implements OnInit {
   onSelectPlan(id: string): void {
     this.showPlans = false;
     this.strategicPlanId = id;
+  }
+
+  /**
+   * Método para cancelar la selección de un plan estratégico
+   */
+  cancelSelection(): void {
+    this.showPlans = true;
+    this.strategicPlanId = '';
   }
 
   /**

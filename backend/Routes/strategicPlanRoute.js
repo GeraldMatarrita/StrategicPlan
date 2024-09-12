@@ -1,4 +1,6 @@
 const router = require("express").Router();
+const mongoose = require("mongoose");
+
 const {
   StrategicPlan,
   validateStrategicPlan,
@@ -140,37 +142,6 @@ router.get("/finished/:userId", async (req, res) => {
 });
 
 /**
- * función que crea un nuevo plan estratégico
- * @param req.body plan estratégico a crear
- * @returns {Object} - Mensaje de confirmación
- * @throws {Object} - Mensaje de error
- */
-router.post("/", async (req, res) => {
-  try {
-    const { error } = validateStrategicPlan(req.body);
-    if (error)
-      return res
-        .status(400)
-        .json({ message: error.details[0].message || "Datos inválidos" });
-
-    const newStrategicPlan = new StrategicPlan(req.body);
-    await newStrategicPlan.save();
-    res
-      .status(201)
-      .json({ message: "Se creo StrategicPlanModel from correctamente" });
-  } catch (error) {
-    console.error(
-      "Error al guardar la entrada en la colección StrategicPlanModel en MongoDB:",
-      error
-    );
-    res.status(500).json({
-      message:
-        "Error al guardar la entrada en la colección StrategicPlanModel en MongoDB",
-    });
-  }
-});
-
-/**
  * función que sacar un usuario de un plan estratégico lo saca de la lista de miembros del plan, elimina las invitaciones a ese plan
  * y elimina el plan de la lista de planes del usuario
  * @param {String} userId - ID del usuario a eliminar del plan
@@ -219,6 +190,64 @@ router.post("/out", async (req, res) => {
   } catch (error) {
     console.error("Error al eliminar el usuario del plan:", error);
     res.status(500).json({ message: "Error al eliminar el usuario del plan" });
+  }
+});
+
+/**
+ * Función que crea un nuevo plan estratégico y lo asocia a un usuario.
+ * @param {Object} req.body - Plan estratégico a crear.
+ * @param {Object} req.params.userId - ID del usuario al que se asociará el plan.
+ * @returns {Object} - Mensaje de confirmación.
+ * @throws {Object} - Mensaje de error.
+ */
+router.post("/:userId", async (req, res) => {
+  try {
+    console.log("req.body", req.body);
+    // Validar los datos de entrada
+    const { error } = validateStrategicPlan(req.body);
+    if (error) {
+      return res
+        .status(400)
+        .json({ message: error.details[0].message || "Datos inválidos" });
+    }
+
+    // Verificar si el usuario existe
+    const { userId } = req.params;
+    console.log("userId", userId);
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Crear un nuevo plan estratégico
+    const newStrategicPlan = new StrategicPlan(req.body);
+    await newStrategicPlan.save();
+
+    // Asociar el plan al usuario
+    await User.updateOne(
+      { _id: userId },
+      { $push: { strategicPlans_ListIDS: newStrategicPlan._id } }
+    );
+
+    // Asociar el usuario al plan
+    await StrategicPlan.updateOne(
+      { _id: newStrategicPlan._id },
+      { $push: { members_ListIDS: new mongoose.Types.ObjectId(userId) } }
+    );
+
+    // Responder con un mensaje de éxito
+    res.status(201).json({
+      message: `Se creó correctamente el plan estratégico y se asoció al usuario ${user.name}.`,
+    });
+  } catch (error) {
+    console.error(
+      "Error al guardar la entrada en la colección StrategicPlanModel en MongoDB:",
+      error
+    );
+    res.status(500).json({
+      message:
+        "Error al guardar la entrada en la colección StrategicPlanModel en MongoDB.",
+    });
   }
 });
 

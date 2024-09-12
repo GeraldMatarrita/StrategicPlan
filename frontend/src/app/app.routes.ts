@@ -13,6 +13,6 @@ export const routes: Routes = [
   { path: 'FodaMeca/:id', component: FodaMecaComponent },
   { path: 'Invitations', component: InvitationsComponent },
   { path: 'Auth', component: AuthComponent },
-  { path: '', component: StrategicPlanComponent }, // Redirige la ruta si no hay nada
+  { path: '', component: AuthComponent }, // Redirige la ruta si no hay nada
   { path: '**', component: NotFoundComponent }, // Redirige cualquier otra ruta a /notfound
 ];

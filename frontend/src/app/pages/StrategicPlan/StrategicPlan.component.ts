@@ -212,23 +212,23 @@ export class StrategicPlanComponent implements OnInit {
       // Si estamos en modo edición, actualizamos el plan
       this.updatePlan();
     } else {
-      this.createData();
+      this.createPlan();
     }
   }
 
   /**
-   * función para crear un plan
+   * función para crear un plan estratégico
    * @returns promesa con el mensaje de respuesta
    */
-  async createData(): Promise<void> {
+  async createPlan(): Promise<void> {
     try {
       const cleanedData = this.cleanFormData();
 
       this.responseMessage =
-      await this.strategicPlanService.createStrategicPlan({
-        ...cleanedData,
-        userId: this.activeUserID, // Asegúrate de incluir el ID del usuario
-      });
+        await this.strategicPlanService.createStrategicPlan(
+          cleanedData,
+          this.activeUserID
+        );
       Swal.fire({
         icon: 'success',
         title: 'Creado',
@@ -348,7 +348,6 @@ export class StrategicPlanComponent implements OnInit {
    */
   navigateToFodaMeca(): void {
     const FODAMECA: string = `${NAVIGATIONS_ROUTES.FODAMECA}/${this.currentPlanId}`;
-    console.log('FODAMECA', FODAMECA);
     this.router.navigate([FODAMECA]);
   }
 

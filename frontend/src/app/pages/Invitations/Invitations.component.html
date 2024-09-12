@@ -47,13 +47,14 @@
 
   <div>
     <!-- muestra solo los planes para invitar a un usuario segun el usuario logueado -->
-    <h2>Select Plan To Invite</h2>
     <div *ngIf="strategicPlanData.length > 0; else noData">
       <span *ngIf="showPlans">
+        <h2>Select Plan To Invite</h2>
+
         <div *ngFor="let item of strategicPlanData" class="container">
           <div id="section0" class="row d-flex justify-content-center">
             <div class="container-card1-preview">
-              <div class="card-perzonnalized1" (click)="onSelectPlan(item)">
+              <div class="card-perzonnalized1" (click)="onSelectPlan(item.id)">
                 <div class="shadowButtomLeft"></div>
 
                 <div class="p-3">
@@ -92,7 +93,14 @@
   <div *ngIf="!showPlans">
     <!-- muestra un formulario para invitar a un usuario a un plan que selecciono -->
     <div>
+      <div class="mb-4">
+        <button (click)="cancelSelection()" class="buttonBack">
+          Select other plan
+        </button>
+      </div>
+
       <h3>Invite User</h3>
+
       <div class="container">
         <form [formGroup]="invitationForm" (ngSubmit)="sendInvitations()">
           <ng-select
