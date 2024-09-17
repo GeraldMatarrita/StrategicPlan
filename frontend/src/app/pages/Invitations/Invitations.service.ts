@@ -20,32 +20,6 @@ export class InvitationsService {
     return this.http.post<any>(url, data);
   }
 
-  /**
-   *
-   * @param url to delete data
-   * @param id id data to delete
-   * @returns
-   */
-  deleteById(url: string, id: string): Observable<any> {
-    console.log('delete url', url);
-    console.log('delete id', id);
-    return this.http.delete<any>(`${url}/${id}`);
-  }
-
-  /**
-   *
-   * @param url to update data
-   * @param id id data to update
-   * @param data data to update
-   * @returns
-   */
-  updateData(url: string, id: string, data: any): Observable<any> {
-    console.log('update id', id);
-    console.log('update data', data);
-    console.log('update url', url);
-    return this.http.put<any>(`${url}/${id}`, data);
-  }
-
   // --------------------------------------------
   // Métodos para la API
   // --------------------------------------------
@@ -69,6 +43,17 @@ export class InvitationsService {
   getStrategicPlansForUser(userId: string): Observable<any[]> {
     return this.http.get<any[]>(
       `${API_ROUTES.BASE_URL}${API_ROUTES.Get_ByUSerID_StrategicPlan}/${userId}`
+    );
+  }
+
+  /**
+   * función para obtener los usuarios a invitar que no sean el usuario activo ni estén ya invitados
+   * @param planId del plan estratégico
+   * @returns promesa con los datos
+   */
+  getUserToInvite(planId: String): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_UsersToInvite_Invitations}/${planId}`
     );
   }
 

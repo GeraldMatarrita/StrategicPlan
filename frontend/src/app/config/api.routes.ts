@@ -4,7 +4,8 @@ export const API_ROUTES = {
   // -------------------------------------------------------------
   // Para las invitaciones
   // -------------------------------------------------------------
-  Get_ByUserID_Invitations: '/invitations/UserInvitations', // GET + "/id"
+  Get_ByUserID_Invitations: '/invitations/UserInvitations', // GET + "/userId"
+  Get_UsersToInvite_Invitations: '/invitations/getUsersNotInPlan', // GET + "/StrategicPlanId"
   Create_Invitation: '/invitations/create', // POST
   Response_Invitation: '/invitations/response', // POST
 

@@ -31,9 +31,6 @@ export class StrategicPlanComponent implements OnInit {
   // Variable para almacenar el ID del usuario activo
   activeUserID: string = '';
 
-  // Variable para indicar si se está viendo la vista de planes finalizados
-  isFinishedPlansView: boolean = false;
-
   constructor(
     private formBuilder: FormBuilder,
     private strategicPlanService: StrategicPlanService,

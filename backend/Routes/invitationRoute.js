@@ -61,6 +61,65 @@ router.get("/UserInvitations/:userId", async (req, res) => {
 });
 
 /**
+ * funcion para obtener los usuarios que no esten en la lista de miembros de un plan estratégico
+ * @param {String} planId - ID del plan estratégico
+ * @returns {Object} - Lista de usuarios que no están en el plan
+ * @throws {Object} - Mensaje de error
+ */
+router.get("/getUsersNotInPlan/:planId", async (req, res) => {
+  // Extraer planId de los parámetros de la solicitud
+  const { planId } = req.params;
+
+  // Verificar que el planId esté presente
+  if (!planId) {
+    return res.status(400).json({
+      message: "Plan ID is required.",
+    });
+  }
+
+  try {
+    // Buscar si el plan estratégico existe
+    const plan = await StrategicPlan.findById(planId);
+    if (!plan) {
+      return res.status(404).json({
+        message: "Strategic plan not found.",
+      });
+    }
+
+    // Obtener todos los usuarios
+    const users = await User.find();
+
+    // Filtrar los usuarios que no están en la lista de miembros del plan
+    // y que no tienen una invitación pendiente o aceptada para el plan
+    const response = users.filter((user) => {
+      const isMember = plan.members_ListIDS.some(
+        (member) => member._id.toString() === user._id.toString()
+      );
+
+      const hasInvitation = user.invitations.some(
+        (invitation) =>
+          invitation.planId.toString() === planId &&
+          (invitation.status === "pending" || invitation.status === "accepted")
+      );
+
+      return !isMember && !hasInvitation;
+    });
+
+    // Devolver la lista de usuarios que no están en el plan
+    return res.status(200).json({
+      users: response,
+      message: "OK.",
+    });
+  } catch (error) {
+    // Manejo de errores
+    console.error("Error getting users:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+});
+
+/**
  * función que crea una nueva invitación a un usuario por su ID la invitación se crea con el estado de pendiente al planId recibido
  * @param {String} userId - ID del usuario al que se invita
  * @param {String} planId - ID del plan estratégico al que se invita al usuario
