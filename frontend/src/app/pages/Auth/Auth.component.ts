@@ -59,7 +59,6 @@ export class AuthComponent {
   async loadData(): Promise<void> {
     try {
       this.activeUser = await this.authService.getActiveUser();
-      console.log('el usuario activo es: ', this.activeUser);
     } catch (error) {
       console.error('Error al cargar los datos:', error);
     }
