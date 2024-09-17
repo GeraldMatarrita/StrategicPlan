@@ -186,11 +186,11 @@
       </div>
     </div>
   </div>
-  <div *ngIf="members" class="container">
-    <h2>Members</h2>
 
-    <div *ngFor="let item of members">
-      {{ item.name }}
-    </div>
+  <div *ngIf="members" class="members">
+    <span id="memberTitle">Members</span>
+    <ul>
+      <li *ngFor="let item of members">{{ item.name }}</li>
+    </ul>
   </div>
 </div>
