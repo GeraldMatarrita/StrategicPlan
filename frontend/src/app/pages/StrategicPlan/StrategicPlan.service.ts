@@ -21,17 +21,6 @@ export class StrategicPlanService {
   }
 
   /**
-   * @param url to delete data
-   * @param id id data to delete
-   * @returns
-   */
-  deleteById(url: string, id: string): Observable<any> {
-    console.log('delete url', url);
-    console.log('delete id', id);
-    return this.http.delete<any>(`${url}/${id}`);
-  }
-
-  /**
    * @param url to update data
    * @param id id data to update
    * @param data data to update

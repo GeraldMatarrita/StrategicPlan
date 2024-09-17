@@ -36,7 +36,9 @@ router.get("/AllStrategicPlans", async (req, res) => {
 router.get("/ById/:id", async (req, res) => {
   try {
     const { id } = req.params; // Obtener el ID del parámetro de la URL
-    const strategicPlan = await StrategicPlan.findById(id);
+    const strategicPlan = await StrategicPlan.findById(id).populate(
+      "members_ListIDS"
+    );
     if (!strategicPlan) {
       return res
         .status(404)

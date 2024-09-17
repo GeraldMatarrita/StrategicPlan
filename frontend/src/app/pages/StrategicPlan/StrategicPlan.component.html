@@ -2,7 +2,6 @@
   <button (click)="navigateToSelectPlan()" class="buttonBack m-3">
     Back to plans
   </button>
-
   <!-- Formulario esta visible porque se esta creando un plan o se edita uno -->
   <div *ngIf="isFormVisible" class="form1-card">
     <form [formGroup]="formStrategicPlan" (submit)="sendData()" class="form1">
@@ -185,6 +184,13 @@
           </div>
         </span>
       </div>
+    </div>
+  </div>
+  <div *ngIf="members" class="container">
+    <h2>Members</h2>
+
+    <div *ngFor="let item of members">
+      {{ item.name }}
     </div>
   </div>
 </div>

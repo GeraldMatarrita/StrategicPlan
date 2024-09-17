@@ -25,6 +25,7 @@ export class StrategicPlanComponent implements OnInit {
   responseMessage: string = '';
   // Variables para almacenar los datos de los planes estratégicos
   strategicPlanData: any[] = [];
+  members: any[] = [];
 
   currentPlanId: string = ''; // ID del plan actual a editar
 
@@ -100,6 +101,7 @@ export class StrategicPlanComponent implements OnInit {
   loadPlanById(planId: string): void {
     this.strategicPlanService.getPlanByID(planId).subscribe(
       (data: any) => {
+        console.log(data);
         this.strategicPlanData = [
           {
             id: data._id,
@@ -111,6 +113,14 @@ export class StrategicPlanComponent implements OnInit {
             name: data.name,
           },
         ];
+
+        // Asignar datos de members_ListIDS a members como un array de objetos
+        if (Array.isArray(data.members_ListIDS)) {
+          this.members = data.members_ListIDS.map((member: any) => ({
+            id: member._id,
+            name: member.name,
+          }));
+        }
         this.formStrategicPlan.patchValue(data);
       },
       (error: any) => {
@@ -183,7 +193,7 @@ export class StrategicPlanComponent implements OnInit {
           title: 'Eliminado',
           text: this.responseMessage,
         });
-        this.loadPlanById(this.currentPlanId);
+        this.navigateToSelectPlan();
       }
     } catch (error) {
       this.responseMessage =

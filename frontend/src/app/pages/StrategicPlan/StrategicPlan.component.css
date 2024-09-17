@@ -57,13 +57,8 @@
 /* ------------------------------ */
 /* SECTION 1: General Styling */
 /* ------------------------------ */
-#section0 {
-  min-height: 400px;
-  background-color: #171717;
-}
-
 #section1 {
-  min-height: 500px;
+  min-height: 400px;
   background-color: #171717;
 }
 
@@ -186,8 +181,7 @@
 /* ------------------------------ */
 
 @media (max-width: 992px) {
-  #section1,
-  #section0 {
+  #section1 {
     scale: 0.8;
   }
 }
@@ -196,8 +190,7 @@
 /* Media Query for screens smaller than 576px */
 /* ------------------------------ */
 @media (max-width: 576px) {
-  #section1,
-  #section0 {
-    scale: 0.9;
+  #section1 {
+    scale: 0.6;
   }
 }
