@@ -49,13 +49,13 @@
 // // Rutas de la API (Declarar rutas del backend antes de servir archivos estáticos)
 // // ---------------------------------------------------------------------
 // const StrategicPlanRoute = require("./Routes/strategicPlanRoute");
-// app.use("/strategicPlan", StrategicPlanRoute);
+// app.use("/api/strategicPlan", StrategicPlanRoute);
 
 // const AuthRoute = require("./Routes/UserRoute");
-// app.use("/auth", AuthRoute);
+// app.use("/api/auth", AuthRoute);
 
 // const Invitations = require("./Routes/invitationRoute");
-// app.use("/invitations", Invitations);
+// app.use("/api/invitations", Invitations);
 
 // // ---------------------------------------------------------------------
 // // Servir archivos estáticos del frontend solo después de las rutas del backend
@@ -108,13 +108,13 @@ app.listen(port, () => console.log(`Listening on port ${port}...`));
 // Rutas
 // ---------------------------------------------------------------------
 const StrategicPlanRoute = require("./Routes/strategicPlanRoute");
-app.use("/strategicPlan", StrategicPlanRoute);
+app.use("/api/strategicPlan", StrategicPlanRoute);
 
 const AuthRoute = require("./Routes/UserRoute");
-app.use("/auth", AuthRoute);
+app.use("/api/auth", AuthRoute);
 
 const Invitations = require("./Routes/invitationRoute");
-app.use("/invitations", Invitations);
+app.use("/api/invitations", Invitations);
 
 // --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
@@ -124,7 +124,7 @@ app.use("/invitations", Invitations);
 // Ejemplo de rutas
 const basicaRoutes = require("./Routes/basicaRoute");
 // Ruta basica
-app.use("/basica", basicaRoutes);
+app.use("/api/basica", basicaRoutes);
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
