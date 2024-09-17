@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { StrategicPlanService } from './StrategicPlan.service';
 import { AuthService } from '../Auth/Auth.service';
 import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
-import { API_ROUTES } from '../../config/api.routes';
 
 @Component({
   selector: 'app-strategic-plan',
@@ -27,11 +26,10 @@ export class StrategicPlanComponent implements OnInit {
   // Variables para almacenar los datos de los planes estratégicos
   strategicPlanData: any[] = [];
 
-  planSelected: boolean = false; // Variable para indicar que selecionó un plan
-  currentPlanId: string = ''; // ID del plan actual a editar (si lo hay)
+  currentPlanId: string = ''; // ID del plan actual a editar
 
   // Variable para almacenar el ID del usuario activo
-  activeUserID: string = 'nada';
+  activeUserID: string = '';
 
   // Variable para indicar si se está viendo la vista de planes finalizados
   isFinishedPlansView: boolean = false;
@@ -51,6 +49,31 @@ export class StrategicPlanComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForm();
     this.loadData();
+  }
+
+  async loadData(): Promise<void> {
+    try {
+      this.activeUserID = await this.authService.getActiveUserID();
+      // Verificar si hay un PlanID almacenado en localStorage
+      const storedPlanId = localStorage.getItem('PlanID');
+      if (storedPlanId) {
+        // Si hay un PlanID almacenado, cargar el plan correspondiente
+        this.currentPlanId = storedPlanId;
+        this.loadPlanById(this.currentPlanId);
+        console.log(this.currentPlanId);
+      } else {
+        // Si no
+        this.navigateToSelectPlan();
+      }
+    } catch (error) {
+      console.error('Error al cargar los datos:', error);
+    }
+  }
+  /**
+   * Método para enviar los datos del formulario
+   */
+  sendData(): void {
+    this.updatePlan();
   }
 
   /**
@@ -74,95 +97,29 @@ export class StrategicPlanComponent implements OnInit {
   }
 
   /**
-   * Método para cargar los datos de los planes estratégicos
-   * - Obtener el ID del usuario activo
-   * - Cargar los planes activos del usuario
+   *  Método para cargar los datos de un plan por su ID
+   * @param planId ID del plan a cargar
    */
-  async loadData(): Promise<void> {
-    try {
-      this.activeUserID = await this.authService.getActiveUserID();
-      this.loadActivePlans();
-    } catch (error) {
-      console.error('Error al cargar los datos:', error);
-    }
-  }
-
-  /**
-   * Método para cargar los planes activos del usuario
-   */
-  loadActivePlans() {
-    this.strategicPlanService.getActivePlans(this.activeUserID).subscribe(
-      (data: any[]) => {
-        this.strategicPlanData = data.map((item) => ({
-          id: item._id,
-          mission: item.mission,
-          vision: item.vision,
-          values: item.values,
-          startDate: item.startDate,
-          endDate: item.endDate,
-          name: item.name,
-        }));
-        this.isFinishedPlansView = false;
+  loadPlanById(planId: string): void {
+    this.strategicPlanService.getPlanByID(planId).subscribe(
+      (data: any) => {
+        this.strategicPlanData = [
+          {
+            id: data._id,
+            mission: data.mission,
+            vision: data.vision,
+            values: data.values,
+            startDate: data.startDate,
+            endDate: data.endDate,
+            name: data.name,
+          },
+        ];
+        this.formStrategicPlan.patchValue(data);
       },
       (error: any) => {
-        console.error('Error al obtener los planes activos:', error);
+        console.error('Error al obtener el plan:', error);
       }
     );
-  }
-
-  /**
-   * Método para cargar los planes finalizados del usuario
-   */
-  loadFinishedPlans() {
-    this.strategicPlanService.getFinishedPlans(this.activeUserID).subscribe(
-      (data: any[]) => {
-        this.strategicPlanData = data.map((item) => ({
-          id: item._id,
-          mission: item.mission,
-          vision: item.vision,
-          values: item.values,
-          startDate: item.startDate,
-          endDate: item.endDate,
-          name: item.name,
-        }));
-        this.isFinishedPlansView = true;
-      },
-      (error: any) => {
-        console.error('Error al obtener los planes finalizados:', error);
-      }
-    );
-  }
-
-  /**
-   * Método para verificar si el plan ha expirado
-   * @param endDate La fecha de finalización del plan
-   * @returns true si el plan ha expirado, false en caso contrario
-   */
-  isPlanExpired(endDate: Date): boolean {
-    const currentDate = new Date();
-    return new Date(endDate) < currentDate;
-  }
-
-  /**
-   * función para seleccionar un plan y cargar los datos en el formulario
-   * @param plan plan a editar
-   */
-  onClickPlan(plan: any): void {
-    this.planSelected = true;
-    this.currentPlanId = plan.id.toString();
-
-    this.formStrategicPlan.patchValue(plan); // Cargar los datos del plan en el formulario
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Hacer scroll al top de la página
-  }
-
-  /**
-   * función para crear un nuevo plan
-   * - limpiar el formulario
-   * - mostrar el formulario
-   */
-  onClickCreateNewPlan(): void {
-    this.formStrategicPlan.reset(); // Limpiar el formulario
-    this.isFormVisible = true; // Mostrar el formulario
   }
 
   /**
@@ -170,49 +127,6 @@ export class StrategicPlanComponent implements OnInit {
    */
   setFormVisibility(): void {
     this.isFormVisible = !this.isFormVisible;
-  }
-
-  /**
-   * función para enviar los datos del formulario en modo edición o creación según el caso
-   */
-  sendData(): void {
-    if (this.planSelected) {
-      // Si estamos en modo edición, actualizamos el plan
-      this.updatePlan();
-    } else {
-      this.createPlan();
-    }
-  }
-
-  /**
-   * función para crear un plan estratégico
-   * @returns promesa con el mensaje de respuesta
-   */
-  async createPlan(): Promise<void> {
-    try {
-      const cleanedData = this.cleanFormData();
-
-      this.responseMessage =
-        await this.strategicPlanService.createStrategicPlan(
-          cleanedData,
-          this.activeUserID
-        );
-      Swal.fire({
-        icon: 'success',
-        title: 'Creado',
-        text: this.responseMessage,
-      });
-      this.loadData();
-      this.resetForm();
-    } catch (error) {
-      this.responseMessage =
-        (error as any).error?.message || 'Error desconocido';
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: this.responseMessage,
-      });
-    }
   }
 
   /**
@@ -232,8 +146,8 @@ export class StrategicPlanComponent implements OnInit {
         title: 'Actualizado',
         text: this.responseMessage,
       });
-      this.loadData();
-      this.resetForm();
+      this.loadPlanById(this.currentPlanId);
+      this.setFormVisibility();
     } catch (error) {
       this.responseMessage =
         (error as any).error?.message || 'Error desconocido';
@@ -251,6 +165,8 @@ export class StrategicPlanComponent implements OnInit {
    * @returns promesa con el mensaje de respuesta
    */
   async outPlan(planID: string): Promise<void> {
+    console.log(planID);
+
     try {
       const result = await Swal.fire({
         title: '¿Estás seguro?',
@@ -270,7 +186,7 @@ export class StrategicPlanComponent implements OnInit {
           title: 'Eliminado',
           text: this.responseMessage,
         });
-        this.loadData();
+        this.loadPlanById(this.currentPlanId);
       }
     } catch (error) {
       this.responseMessage =
@@ -281,17 +197,6 @@ export class StrategicPlanComponent implements OnInit {
         text: this.responseMessage,
       });
     }
-  }
-
-  /**
-   * funcion para resetear el formulario
-   * y ocultar el formulario volviendo al modo de selección de crear o ver plan
-   */
-  resetForm(): void {
-    this.formStrategicPlan.reset();
-    this.planSelected = false; // Reiniciar el modo de edición
-    this.currentPlanId = ''; // Limpiar el ID del plan actual
-    this.isFormVisible = false; // Ocultar el formulario
   }
 
   /**
@@ -315,18 +220,25 @@ export class StrategicPlanComponent implements OnInit {
    * función para navegar a la página de FODAMECA
    */
   navigateToFodaMeca(): void {
-    localStorage.setItem('PlanID', this.currentPlanId);
-    const FODAMECA: string = `${NAVIGATIONS_ROUTES.FODAMECA}/${this.currentPlanId}`;
+    const FODAMECA: string = `${NAVIGATIONS_ROUTES.FODAMECA}`;
     this.router.navigate([FODAMECA]);
   }
 
-  showFinishedPlans(): void {
-    this.isFinishedPlansView = true;
-    this.loadFinishedPlans();
+  /**
+   * función para cargar navegar a seleccionar un plan
+   */
+  navigateToSelectPlan(): void {
+    const SELECT_PLAN: string = `${NAVIGATIONS_ROUTES.SELECT_STRATEGIC_PLAN}`;
+    this.router.navigate([SELECT_PLAN]);
   }
 
-  showActivePlans(): void {
-    this.isFinishedPlansView = false;
-    this.loadActivePlans();
+  /**
+   * Método para verificar si el plan ha expirado
+   * @param endDate La fecha de finalización del plan
+   * @returns true si el plan ha expirado, false en caso contrario
+   */
+  isPlanExpired(endDate: Date): boolean {
+    const currentDate = new Date();
+    return new Date(endDate) < currentDate;
   }
 }

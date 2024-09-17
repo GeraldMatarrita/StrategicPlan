@@ -231,10 +231,21 @@
           </div>
         </div>
 
-        <button class="buttonCreate m-4">Save</button>
-        <button class="buttonBack m-4" type="button" (click)="toggleEditMode()">
-          Go Back
-        </button>
+        <div class="badInfo" *ngIf="!fodaMecaForm.valid">
+          <p> please complete everything</p>
+        </div>
+
+        <div>
+          <button
+            class="buttonBack m-4"
+            type="button"
+            (click)="toggleEditMode()"
+          >
+            Go Back
+          </button>
+
+          <button class="buttonCreate m-4" type="submit">Save</button>
+        </div>
       </form>
     </div>
   </div>

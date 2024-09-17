@@ -52,26 +52,23 @@ export class InvitationsService {
 
   /**
    * función para obtener todas las invitaciones de un usuario
-   * @param id del usuario
+   * @param userId del usuario
    * @returns promesa con los datos
    */
-  getInvitationsForUser(id: string): Observable<any[]> {
+  getInvitationsForUser(userId: string): Observable<any[]> {
     return this.http.get<any[]>(
-      `${API_ROUTES.BASE_URL}${API_ROUTES.INVITATION}/${id}`
+      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_ByUserID_Invitations}/${userId}`
     );
   }
 
   /**
-   * funcion para obtener los planes estrategicos de un usuario
-   * @param id del usuario
+   * funcion para obtener los planes estrategicos de un usuario por su id
+   * @param userId del usuario
    * @returns promesa con los datos
    */
-  getStrategicPlansForUser(id: string): Observable<any[]> {
-    console.log(
-      `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN_FOR_USER}/${id}`
-    );
+  getStrategicPlansForUser(userId: string): Observable<any[]> {
     return this.http.get<any[]>(
-      `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN_FOR_USER}/${id}`
+      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_ByUSerID_StrategicPlan}/${userId}`
     );
   }
 
@@ -83,7 +80,7 @@ export class InvitationsService {
   createInvitation(data: any): Promise<string> {
     return new Promise((resolve, reject) => {
       this.postData(
-        `${API_ROUTES.BASE_URL}${API_ROUTES.INVITATION}`,
+        `${API_ROUTES.BASE_URL}${API_ROUTES.Create_Invitation}`,
         data
       ).subscribe(
         (response: any) => {
@@ -105,7 +102,7 @@ export class InvitationsService {
   responseInvitation(data: any): Promise<string> {
     return new Promise((resolve, reject) => {
       this.postData(
-        `${API_ROUTES.BASE_URL}${API_ROUTES.RESPONSE_INVITATION}`,
+        `${API_ROUTES.BASE_URL}${API_ROUTES.Response_Invitation}`,
         data
       ).subscribe(
         (response: any) => {

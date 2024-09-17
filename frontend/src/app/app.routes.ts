@@ -5,12 +5,14 @@ import { StrategicPlanComponent } from './pages/StrategicPlan/StrategicPlan.comp
 import { FodaMecaComponent } from './pages/FodaMeca/FodaMeca.component';
 import { InvitationsComponent } from './pages/Invitations/Invitations.component';
 import { AuthComponent } from './pages/Auth/Auth.component';
+import { StrategicPlanToSelect } from './pages/StrategicPlanToSelect/StrategicPlanToSelect.component';
 
 export const routes: Routes = [
   { path: 'Basico', component: BasicoComponent },
   { path: 'NotFound', component: NotFoundComponent },
   { path: 'StrategicPlan', component: StrategicPlanComponent },
-  { path: 'FodaMeca/:id', component: FodaMecaComponent },
+  { path: 'SelectStrategicPlan', component: StrategicPlanToSelect },
+  { path: 'FodaMeca', component: FodaMecaComponent },
   { path: 'Invitations', component: InvitationsComponent },
   { path: 'Auth', component: AuthComponent },
   { path: '', component: AuthComponent }, // Redirige la ruta si no hay nada

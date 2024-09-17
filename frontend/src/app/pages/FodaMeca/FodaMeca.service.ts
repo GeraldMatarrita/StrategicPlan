@@ -11,7 +11,7 @@ export class FodaMecaService {
 
   getFodaMecaData(planId: string): Observable<any[]> {
     return this.http.get<any[]>(
-      `${API_ROUTES.BASE_URL}${API_ROUTES.STRATEGIC_PLAN}/${planId}`
+      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_ById_StrategicPlan}/${planId}`
     );
   }
 
@@ -37,7 +37,7 @@ export class FodaMecaService {
   updateFodaMeca(id: string, data: any): Promise<string> {
     return new Promise((resolve, reject) => {
       this.updateData(
-        `${API_ROUTES.BASE_URL}${API_ROUTES.FODAMECA_UPDATE}`,
+        `${API_ROUTES.BASE_URL}${API_ROUTES.Update_FodaMeca_StrategicPlan}`,
         id,
         data
       ).subscribe(

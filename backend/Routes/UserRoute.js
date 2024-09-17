@@ -6,7 +6,7 @@ const { User: UserModel, validateUser } = require("../Models/UserModel"); // Imp
  * @returns {Object} - Lista de usuarios
  * @throws {Object} - Mensaje de error
  */
-router.get("/All-users", async (req, res) => {
+router.get("/AllUsers", async (req, res) => {
   try {
     const users = await UserModel.find();
     res.json(users);
@@ -24,7 +24,7 @@ router.get("/All-users", async (req, res) => {
  * @returns {Object} - Mensaje de confirmación
  * @throws {Object} - Mensaje de error
  */
-router.post("/", async (req, res) => {
+router.post("/create", async (req, res) => {
   try {
     // Validar datos del usuario
     const { error } = validateUser(req.body);

@@ -11,7 +11,7 @@ const { User, validateUser } = require("../Models/UserModel"); // Ajusta la ruta
  * @returns {Object} - Lista de invitaciones
  * @throws {Object} - Mensaje de error
  */
-router.get("/:userId", async (req, res) => {
+router.get("/UserInvitations/:userId", async (req, res) => {
   const { userId } = req.params;
   if (!userId) {
     return res.status(400).json({
@@ -67,7 +67,7 @@ router.get("/:userId", async (req, res) => {
  * @returns {Object} - Mensaje de confirmación
  * @throws {Object} - Mensaje de error
  */
-router.post("/", async (req, res) => {
+router.post("/create", async (req, res) => {
   const { userId, planId } = req.body;
 
   if (!userId || !planId) {

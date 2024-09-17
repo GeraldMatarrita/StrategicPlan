@@ -49,7 +49,7 @@ export class StrategicPlanService {
   // --------------------------------------------
 
   /**
-   * función para crear los datos de StrategicPlan
+   * función para craer los datos de StrategicPlan
    * @param data datos a enviar
    * @returns promesa con el mensaje de respuesta
    */
@@ -73,7 +73,7 @@ export class StrategicPlanService {
   /**
    * función para salir de un StrategicPlan con un usuario
    * @param planId del plan a eliminar
-   * @param userId del usuario a eliminar
+   * @param userId del user a eliminar
    * @returns promesa con el mensaje de respuesta
    */
   outStrategicPlan(planId: string, userId: string): Promise<string> {
@@ -86,7 +86,7 @@ export class StrategicPlanService {
           resolve(response.message);
         },
         (error: any) => {
-          console.error('Error al enviar los datos:', error);
+          console.error('Error al  los datos:', error);
           reject(error);
         }
       );
@@ -118,8 +118,8 @@ export class StrategicPlanService {
   }
 
   /**
-   * función para obtener los datos de StrategicPlan por id
-   * @param planId del StrategicPlan a buscar
+   * funcion para obtener los datos de StrategicPlan por id
+   * @param planId del strategicPlan a buscar
    * @returns Observable con los datos del plan activo
    */
   getPlanByID(planId: string): Observable<any> {
@@ -129,8 +129,8 @@ export class StrategicPlanService {
   }
 
   /**
-   * función para obtener todos los StrategicPlans
-   * @returns Observable con los datos de StrategicPlan
+   * función para obtener todos los StrategicPlan
+   * @returns promesa con los datos de StrategicPlan
    */
   getStrategicPlans(): Observable<any[]> {
     return this.http.get<any[]>(

@@ -104,7 +104,7 @@ export class AuthService {
    */
   getAllUsers(): Observable<any[]> {
     return this.http.get<any[]>(
-      `${API_ROUTES.BASE_URL}${API_ROUTES.GetAllUsers}`
+      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_All_Users}`
     );
   }
 
@@ -115,7 +115,7 @@ export class AuthService {
    */
   createAccount(data: any): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.postData(`${API_ROUTES.BASE_URL}${API_ROUTES.AUTH}`, data).subscribe(
+      this.postData(`${API_ROUTES.BASE_URL}${API_ROUTES.Create_User}`, data).subscribe(
         (response: any) => {
           resolve(response.message);
         },
@@ -135,7 +135,7 @@ export class AuthService {
   login(data: any): Promise<{ message: string; userActive: any }> {
     return new Promise((resolve, reject) => {
       this.postData(
-        `${API_ROUTES.BASE_URL}${API_ROUTES.LOGIN}`,
+        `${API_ROUTES.BASE_URL}${API_ROUTES.Login_User}`,
         data
       ).subscribe(
         (response: { message: string; userActive: any }) => {
