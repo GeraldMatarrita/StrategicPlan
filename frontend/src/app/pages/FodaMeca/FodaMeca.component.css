@@ -11,6 +11,7 @@
   text-align: center;
 }
 
+/* textarea */
 .foda-meca-style textarea {
   background-color: transparent;
   color: white;
@@ -36,22 +37,7 @@
   height: 80px;
 }
 
-.Foda-container {
-  min-height: 500px;
-  padding: 20px 0;
-}
-.Meca-container {
-  min-height: 500px;
-  padding: 20px 0;
-}
-
-.row-personalized {
-  min-height: 250px;
-}
-
-.gradient {
-  background: linear-gradient(190deg, var(--color2), var(--color3));
-}
+/* ... */
 
 h2 {
   border: 1px solid var(--color2);
@@ -78,8 +64,132 @@ h3 {
   padding: 25px 20px;
 }
 
+.row-personalized {
+  min-height: 250px;
+}
+
 label {
   padding: 25px 20px;
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+/* ----------------------------------- */
+/* FODA */
+/* ----------------------------------- */
+
+.Foda-container {
+  min-height: 500px;
+  padding: 20px 0;
+}
+
+/* Aplicar padding interno y bordes redondeados a cada columna */
+.Foda-container .col-12 {
+  padding: 20px;
+  border-radius: 25px; /* Bordes redondeados para las secciones internas */
+  border: 3px solid var(--basicBackground);
+}
+
+/* Colores diferentes para cada sección */
+
+/* Fortaleza: Color 2 a Color 4, el Color 4 comienza al 80% */
+.fortaleza {
+  background: linear-gradient(
+    to top left,
+    var(--color4) 0%,
+    var(--color3) 35%,
+    var(--color3) 100%
+  );
+  color: #ffffff; /* Texto blanco para un buen contraste */
+}
+
+/* Debilidad: Color 2 a Color 4, el Color 4 comienza al 80% */
+.debilidad {
+  background: linear-gradient(
+    to top right,
+    var(--color5) 0%,
+    var(--color3) 35%,
+    var(--color3) 100%
+  );
+  color: #ffffff; /* Texto blanco para un buen contraste */
+}
+
+/* Oportunidad: Color 2 a Color 4, el Color 4 comienza al 80% */
+.oportunidad {
+  background: linear-gradient(
+    to bottom left,
+    var(--color5) 0%,
+    var(--color3) 35%,
+    var(--color3) 100%
+  );
+  color: #ffffff; /* Texto blanco para un buen contraste */
+}
+
+/* Amenaza: Color 2 a Color 4, el Color 4 comienza al 80% */
+.amenaza {
+  background: linear-gradient(
+    to bottom right,
+    var(--color5) 0%,
+    var(--color3) 35%,
+    var(--color3) 100%
+  );
+  color: #ffffff; /* Texto blanco para un buen contraste */
+}
+
+/* ----------------------------------- */
+/* MECA */
+/* ----------------------------------- */
+
+.Meca-container {
+  min-height: 500px;
+  padding: 20px 0;
+}
+
+/* Aplicar padding interno y bordes redondeados a cada columna */
+.Meca-container .col-12 {
+  padding: 20px;
+  border-radius: 25px; /* Bordes redondeados para las secciones internas */
+  border: 3px solid var(--basicBackground);
+}
+
+/* Colores diferentes para cada sección en MECA */
+
+.mantener {
+  background: linear-gradient(
+    to bottom left,
+    var(--color3) 0%,
+    var(--color2) 55%,
+    var(--color2) 100%
+  );
+  color: #ffffff; /* Texto blanco para un buen contraste */
+}
+
+.explorar {
+  background: linear-gradient(
+    to bottom right,
+    var(--color3) 0%,
+    var(--color2) 55%,
+    var(--color2) 100%
+  );
+  color: #ffffff; /* Texto blanco para un buen contraste */
+}
+
+.correcciones {
+  background: linear-gradient(
+    to top left,
+    var(--color3) 0%,
+    var(--color2) 55%,
+    var(--color2) 100%
+  );
+  color: #ffffff; /* Texto blanco para un buen contraste */
+}
+
+.adaptar {
+  background: linear-gradient(
+    to top right,
+    var(--color3) 0%,
+    var(--color2) 55%,
+    var(--color2) 100%
+  );
+  color: #ffffff; /* Texto blanco para un buen contraste */
 }

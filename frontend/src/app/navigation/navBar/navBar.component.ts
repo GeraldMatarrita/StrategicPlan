@@ -20,9 +20,7 @@ export class NavBarComponent {
   navigateToHome() {
     this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
   }
-  navigateToBasico() {
-    this.router.navigate([NAVIGATIONS_ROUTES.BASICO]);
-  }
+
   navigateToStrategicPlan() {
     this.router.navigate([NAVIGATIONS_ROUTES.STRATEGIC_PLAN]);
   }
@@ -31,5 +29,14 @@ export class NavBarComponent {
   }
   navigateToAuth() {
     this.router.navigate([NAVIGATIONS_ROUTES.AUTH]);
+  }
+
+  // --------------------------------------------------------------------------------
+  // --------------------------------------------------------------------------------
+  // al finalizar borrar esto para abajo ya que es solo de pruebas
+  // --------------------------------------------------------------------------------
+  // --------------------------------------------------------------------------------
+  navigateToBasico() {
+    this.router.navigate([NAVIGATIONS_ROUTES.BASICO]);
   }
 }

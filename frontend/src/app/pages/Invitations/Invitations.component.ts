@@ -5,7 +5,6 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
-  FormControl,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -76,7 +75,6 @@ export class InvitationsComponent implements OnInit {
       this.activeUserID = await this.authService.getActiveUserID();
       this.loadStrategicPlansForActiveUser();
       this.getPendingInvitations();
-      this.loadUserToInvite();
     } catch (error) {
       console.error('Error al cargar los datos:', error);
     }
@@ -104,19 +102,20 @@ export class InvitationsComponent implements OnInit {
   }
 
   /**
-   * Método para cargar los usuarios a invitar (excluyendo al usuario activo)
+   * Método para cargar los usuarios a invitar
    */
   loadUserToInvite(): void {
-    this.authService.getAllUsers().subscribe(
-      (data: any[]) => {
-        // Filtrar los usuarios para excluir al que coincide con activeUserID
-        this.usersToInvite = data
-          .filter((item: any) => item._id !== this.activeUserID)
-          .map((item: any) => ({
-            id: item._id,
-            name: item.name,
-            email: item.email,
-          }));
+    this.invitationsService.getUserToInvite(this.strategicPlanId).subscribe(
+      (data: any) => {
+        // Asegúrate de que 'data' tiene la propiedad 'users'
+        console.log(data);
+
+        // Mapear directamente los usuarios recibidos a un nuevo formato
+        this.usersToInvite = data.users.map((item: any) => ({
+          id: item._id,
+          name: item.name,
+          email: item.email,
+        }));
       },
       (error: any) => {
         console.error('Error al obtener los datos:', error);
@@ -147,6 +146,7 @@ export class InvitationsComponent implements OnInit {
   onSelectPlan(id: string): void {
     this.showPlans = false;
     this.strategicPlanId = id;
+    this.loadUserToInvite();
   }
 
   /**
@@ -155,6 +155,33 @@ export class InvitationsComponent implements OnInit {
   cancelSelection(): void {
     this.showPlans = true;
     this.strategicPlanId = '';
+    this.invitationForm.reset();
+  }
+
+  /**
+   * Método para enviar las invitaciones utiliza createInvitation para enviar
+   * las invitaciones a todos los usuarios seleccionados
+   */
+  async sendInvitations(): Promise<void> {
+    try {
+      this.selectedUsers = this.invitationForm.get('users')?.value;
+
+      // Usar Promise.all para ejecutar todas las promesas y manejar errores
+      await Promise.all(
+        this.selectedUsers.map((user) =>
+          this.createInvitation(user, this.strategicPlanId)
+        )
+      );
+      this.cancelSelection();
+      this.loadUserToInvite();
+    } catch (error) {
+      // Si ocurre un error inesperado fuera de `createInvitation`
+      Swal.fire({
+        icon: 'error',
+        title: 'Error en el envío de invitaciones',
+        text: 'Ocurrió un error al enviar las invitaciones.',
+      });
+    }
   }
 
   /**
@@ -180,30 +207,6 @@ export class InvitationsComponent implements OnInit {
         icon: 'error',
         title: 'Error',
         text: this.responseMessage,
-      });
-    }
-  }
-
-  /**
-   * Método para enviar las invitaciones utiliza createInvitation para enviar
-   * las invitaciones a todos los usuarios seleccionados
-   */
-  async sendInvitations(): Promise<void> {
-    try {
-      this.selectedUsers = this.invitationForm.get('users')?.value;
-
-      // Usar Promise.all para ejecutar todas las promesas y manejar errores
-      await Promise.all(
-        this.selectedUsers.map((user) =>
-          this.createInvitation(user, this.strategicPlanId)
-        )
-      );
-    } catch (error) {
-      // Si ocurre un error inesperado fuera de `createInvitation`
-      Swal.fire({
-        icon: 'error',
-        title: 'Error en el envío de invitaciones',
-        text: 'Ocurrió un error al enviar las invitaciones.',
       });
     }
   }

@@ -12,7 +12,7 @@ const { User, validateUser } = require("../Models/UserModel"); // Ajusta la ruta
  * @returns {Object} - Lista de planes estratégicos
  * @throws {Object} - Mensaje de error
  */
-router.get("/", async (req, res) => {
+router.get("/AllStrategicPlans", async (req, res) => {
   try {
     const strategicPlans = await StrategicPlan.find();
     res.json(strategicPlans);
@@ -33,10 +33,12 @@ router.get("/", async (req, res) => {
  * @returns {Object} - Plan estratégico
  * @throws {Object} - Mensaje de error
  */
-router.get("/:id", async (req, res) => {
+router.get("/ById/:id", async (req, res) => {
   try {
     const { id } = req.params; // Obtener el ID del parámetro de la URL
-    const strategicPlan = await StrategicPlan.findById(id);
+    const strategicPlan = await StrategicPlan.findById(id).populate(
+      "members_ListIDS"
+    );
     if (!strategicPlan) {
       return res
         .status(404)
@@ -60,7 +62,7 @@ router.get("/:id", async (req, res) => {
  * @returns {Object} - Lista de planes estratégicos del usuario
  * @throws {Object} - Mensaje de error
  */
-router.get("/plans-to-user/:userId", async (req, res) => {
+router.get("/ByUserID/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
     const user = await User.findById(userId).populate("strategicPlans_ListIDS");
@@ -203,7 +205,7 @@ router.post("/out", async (req, res) => {
  * @returns {Object} - Mensaje de confirmación.
  * @throws {Object} - Mensaje de error.
  */
-router.post("/:userId", async (req, res) => {
+router.post("/create/:userId", async (req, res) => {
   try {
     console.log("req.body", req.body);
     // Validar los datos de entrada
@@ -331,7 +333,7 @@ router.put("/FodaMeca/:id", async (req, res) => {
  * @returns {Object} - Mensaje de confirmación
  * @throws {Object} - Mensaje de error
  * */
-router.put("/:id", async (req, res) => {
+router.put("/update/:id", async (req, res) => {
   try {
     const { error } = validateStrategicPlan(req.body);
     if (error)

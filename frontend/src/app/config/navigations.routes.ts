@@ -6,4 +6,5 @@ export const NAVIGATIONS_ROUTES = {
   AUTH: '/Auth',
   FODAMECA: '/FodaMeca',
   BASICO: '/Basico',
+  SELECT_STRATEGIC_PLAN: '/SelectStrategicPlan',
 };
