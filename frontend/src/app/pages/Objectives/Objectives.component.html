@@ -1,1 +1,62 @@
-<h2>hiu</h2>
+<div class="ObjectiveStyle">
+  <div class="container">
+    <div *ngIf="objectivesData.length > 0">
+      <div class="card-container">
+        <div
+          *ngFor="let item of objectivesData"
+          class="card-Objective-container"
+        >
+          <div class="card-Objective">
+            <span class="title">Description:</span>
+            <span class="value">{{ item.description }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <ng-template #noData>
+      <p>No data available.</p>
+    </ng-template> -->
+
+    <!-- <div *ngIf="isFormVisible" class="form1-card"> -->
+    <div class="form1-card">
+      <form
+        [formGroup]="formObjectivesPlan"
+        (submit)="sendData()"
+        class="form1"
+      >
+        <div>
+          <h2>Objective</h2>
+
+          <div>
+            <textarea
+              placeholder="description"
+              type="text"
+              id="description"
+              formControlName="description"
+            ></textarea>
+            <div
+              *ngIf="
+                formObjectivesPlan.get('description')?.invalid &&
+                (formObjectivesPlan.get('description')?.dirty ||
+                  formObjectivesPlan.get('description')?.touched)
+              "
+              class="error"
+            >
+              <p
+                *ngIf="formObjectivesPlan.get('description')?.errors?.['required']"
+              >
+                Description is required.
+              </p>
+            </div>
+          </div>
+
+          <div class="badInfo" *ngIf="!formObjectivesPlan.valid">
+            <p>Not ready to send</p>
+          </div>
+          <button type="submit" class="buttonCreate m-3">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

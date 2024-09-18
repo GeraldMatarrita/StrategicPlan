@@ -101,7 +101,6 @@ export class StrategicPlanComponent implements OnInit {
   loadPlanById(planId: string): void {
     this.strategicPlanService.getPlanByID(planId).subscribe(
       (data: any) => {
-        console.log(data);
         this.strategicPlanData = [
           {
             id: data._id,

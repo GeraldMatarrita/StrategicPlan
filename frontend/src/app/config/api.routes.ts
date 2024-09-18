@@ -29,6 +29,12 @@ export const API_ROUTES = {
   Update_StrategicPlan: '/strategicPlan/update', // PUT
   Update_FodaMeca_StrategicPlan: '/strategicPlan/FodaMeca', // PUT + "/StrategicPlanId"
 
+  // -------------------------------------------------------------
+  // Para los Objetivos
+  // -------------------------------------------------------------
+  Get_AllByPlanID_Objective: '/objective/getPlanObjectives', // GET + "/StrategicPlanId"
+  Create_Objective: '/objective/create', // POST
+
   // --------------------------------------------------------------------------------
   // --------------------------------------------------------------------------------
   // al finalizar borrar esta ya que es solo de pruebas

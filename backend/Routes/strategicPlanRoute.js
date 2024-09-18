@@ -207,7 +207,6 @@ router.post("/out", async (req, res) => {
  */
 router.post("/create/:userId", async (req, res) => {
   try {
-    console.log("req.body", req.body);
     // Validar los datos de entrada
     const { error } = validateStrategicPlan(req.body);
     if (error) {
@@ -218,7 +217,6 @@ router.post("/create/:userId", async (req, res) => {
 
     // Verificar si el usuario existe
     const { userId } = req.params;
-    console.log("userId", userId);
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });

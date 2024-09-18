@@ -116,6 +116,9 @@ app.use("/api/auth", AuthRoute);
 const Invitations = require("./Routes/invitationRoute");
 app.use("/api/invitations", Invitations);
 
+const Objective = require("./Routes/objectiveRoute");
+app.use("/api/objective", Objective);
+
 // --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
 // al finalizar borrar esta ya que es solo de pruebas

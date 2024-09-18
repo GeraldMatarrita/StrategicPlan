@@ -40,6 +40,7 @@ export class StrategicPlanService {
   /**
    * función para crear los datos de StrategicPlan
    * @param data datos a enviar
+   * @param userId id del usuario 
    * @returns promesa con el mensaje de respuesta
    */
   createStrategicPlan(data: any, userId: string): Promise<string> {
