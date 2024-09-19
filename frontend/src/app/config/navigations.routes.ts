@@ -7,4 +7,5 @@ export const NAVIGATIONS_ROUTES = {
   FODAMECA: '/FodaMeca',
   BASICO: '/Basico',
   SELECT_STRATEGIC_PLAN: '/SelectStrategicPlan',
+  OBJECTIVE: '/Objectives',
 };

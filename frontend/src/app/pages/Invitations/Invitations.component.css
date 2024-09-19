@@ -11,8 +11,31 @@
   align-items: center;
 }
 
-.table {
+table {
   text-align: center;
+}
+
+th {
+  background: linear-gradient(
+    to bottom right,
+    var(--color3) 0%,
+    var(--color2) 65%,
+    var(--color2) 100%
+  );
+  border: 1px solid var(--color3);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 10px;
+}
+
+td {
+  background-color: transparent;
+  border: 1px solid var(--color3);
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+  vertical-align: middle; /* Centrar verticalmente */
 }
 /* ----------------------------------------------------- */
 /* card perzonalizada numero 1 Varation */

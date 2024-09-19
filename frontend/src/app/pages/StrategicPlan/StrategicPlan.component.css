@@ -23,6 +23,27 @@
   margin-bottom: 20px;
 }
 
+/* --- buttonDashboard */
+.buttonDashboard {
+  max-width: 200px;
+  padding: 10px;
+  border-radius: 10px;
+  width: auto;
+  color: white;
+  background: linear-gradient(
+    to bottom left,
+    var(--color4) 0%,
+    var(--color3) 30%,
+    var(--color3) 70%,
+    var(--color4) 100%
+  );
+}
+
+.buttonDashboard:hover {
+  background: black;
+  color: white;
+}
+
 /* ----------------------------------------------------- */
 /* card perzonalizada numero 1 Varation */
 /* ----------------------------------------------------- */

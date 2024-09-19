@@ -4,7 +4,7 @@
     <h2>Invitations</h2>
     <div *ngIf="invitationData.length > 0; else noData">
       <div class="table-responsive">
-        <table class="table table-dark">
+        <table class="table">
           <thead>
             <tr>
               <th>Plan Name</th>
@@ -17,17 +17,19 @@
               <ng-container *ngFor="let invitation of invitationData">
                 <tr>
                   <td>{{ invitation.planName }}</td>
-                  <td>{{ invitation.status }}</td>
+                  <td style="text-transform: uppercase">
+                    {{ invitation.status }}
+                  </td>
                   <td>
                     <button
                       (click)="responseInvitation(false, invitation.planId)"
-                      class="btn btn-danger m-2"
+                      class="buttonDelete m-2"
                     >
                       Decline
                     </button>
                     <button
                       (click)="responseInvitation(true, invitation.planId)"
-                      class="btn btn-success"
+                      class="buttonCreate m-2"
                     >
                       Accept
                     </button>
