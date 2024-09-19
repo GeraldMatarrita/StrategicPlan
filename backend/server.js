@@ -116,6 +116,9 @@ app.use("/api/auth", AuthRoute);
 const Invitations = require("./Routes/invitationRoute");
 app.use("/api/invitations", Invitations);
 
+const CameAnalysis = require("./Routes/cameAnalysisRoute")
+app.use("/api/cameAnalysis",CameAnalysis)
+
 // --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
 // al finalizar borrar esta ya que es solo de pruebas
