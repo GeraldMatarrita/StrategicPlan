@@ -54,13 +54,4 @@ export class NavBarComponent {
   navigateToAuth() {
     this.router.navigate([NAVIGATIONS_ROUTES.AUTH]);
   }
-
-  // --------------------------------------------------------------------------------
-  // --------------------------------------------------------------------------------
-  // al finalizar borrar esto para abajo ya que es solo de pruebas
-  // --------------------------------------------------------------------------------
-  // --------------------------------------------------------------------------------
-  navigateToBasico() {
-    this.router.navigate([NAVIGATIONS_ROUTES.BASICO]);
-  }
 }

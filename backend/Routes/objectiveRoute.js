@@ -88,4 +88,77 @@ router.post("/create/:planId", async (req, res) => {
   }
 });
 
+/**
+ * función que actualiza un objetivo
+ * @param {Object} req - Request object
+ * @param {String} objectiveId - ID del objetive
+ * @returns {Object} - Mensaje de éxito o error
+ * @throws {Object} - Mensaje de error
+ */
+router.put("/update/:objectiveId", async (req, res) => {
+  try {
+    console.log("req.body", req.body);
+    const { error } = validateObjective(req.body);
+    if (error) {
+      return res
+        .status(400)
+        .json({ message: error.details[0].message || "Datos inválidos" });
+    }
+
+    const { objectiveId } = req.params;
+
+    // Buscar el objetivo
+    const objective = await ObjectiveModel.findById(objectiveId);
+    if (!objective) {
+      return res.status(404).json({
+        message: "Objective not found.",
+      });
+    }
+
+    // Actualizar el objetivo
+    await ObjectiveModel.updateOne({ _id: objectiveId }, req.body);
+
+    res.status(200).json({
+      message: "Objective updated successfully.",
+    });
+  } catch (error) {
+    console.error("Error updating objective:", error);
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+});
+
+/**
+ * función que elimina un objetivo
+ * @param {String} objectiveId - ID del objetivo
+ * @returns {Object} - Mensaje de éxito o error
+ * @throws {Object} - Mensaje de error
+ */
+router.delete("/delete/:objectiveId", async (req, res) => {
+  try {
+    const { objectiveId } = req.params;
+
+    // Buscar el objetivo
+    const objective = await ObjectiveModel.findById(objectiveId);
+    if (!objective) {
+      return res.status(404).json({
+        message: "Objective not found.",
+      });
+    }
+
+    // Eliminar el objetivo
+    await ObjectiveModel.deleteOne({ _id: objectiveId });
+
+    res.status(200).json({
+      message: "Objective deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Error deleting objective:", error);
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+});
+
 module.exports = router;

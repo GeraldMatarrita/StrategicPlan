@@ -42,17 +42,8 @@ export class SideNavComponent {
   navigateToNotFound() {
     this.router.navigate([NAVIGATIONS_ROUTES.NOT_FOUND]);
   }
-  navigateToHome() {
-    this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
-  }
 
-  navigateToStrategicPlan() {
-    this.router.navigate([NAVIGATIONS_ROUTES.STRATEGIC_PLAN]);
-  }
-  navigateToInvitations() {
-    this.router.navigate([NAVIGATIONS_ROUTES.INVITATIONS]);
-  }
-  navigateToAuth() {
-    this.router.navigate([NAVIGATIONS_ROUTES.AUTH]);
+  navigateToObjective() {
+    this.router.navigate([NAVIGATIONS_ROUTES.OBJECTIVE]);
   }
 }

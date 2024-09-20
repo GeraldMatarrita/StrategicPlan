@@ -20,12 +20,16 @@ export class ObjectivesComponent implements OnInit {
   formObjectivesPlan!: FormGroup;
   activeUserID = '';
   currentPlanId: string = ''; // ID del plan actual a editar
+  isEditing = false; // Controla si estás editando o creando
 
   // Variable para almacenar el mensaje de respuesta
   responseMessage: string = '';
 
   // Variables para almacenar los datos de los objetivos
   objectivesData: any[] = [];
+  objectiveIdSelected: string = '';
+
+  showModal: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -85,20 +89,12 @@ export class ObjectivesComponent implements OnInit {
   loadObjectives(): void {
     this.objectivesService.getObjectivesByPlanId(this.currentPlanId).subscribe(
       (data: any[]) => {
-        console.log(data);
         this.objectivesData = data;
       },
       (error: any) => {
         console.error('Error al obtener el plan:', error);
       }
     );
-  }
-
-  /**
-   * Método para enviar los datos del formulario
-   */
-  sendData(): void {
-    this.createObjective();
   }
 
   /**
@@ -117,6 +113,9 @@ export class ObjectivesComponent implements OnInit {
         title: 'Creado',
         text: this.responseMessage,
       });
+      this.loadObjectives();
+      this.toogleShowModal();
+      this.formObjectivesPlan.reset();
     } catch (error) {
       this.responseMessage =
         (error as any).error?.message || 'Error desconocido';
@@ -128,6 +127,34 @@ export class ObjectivesComponent implements OnInit {
     }
   }
 
+  /**
+   * Método para actualizar un objetivo
+   */
+  async updateObjective(): Promise<void> {
+    try {
+      const cleanedData = this.cleanFormData();
+
+      this.responseMessage = await this.objectivesService.updateObjective(
+        cleanedData,
+        this.objectiveIdSelected
+      );
+      Swal.fire({
+        icon: 'success',
+        title: 'Actualizado',
+        text: this.responseMessage,
+      });
+      this.loadObjectives();
+      this.toogleShowModal();
+    } catch (error) {
+      this.responseMessage =
+        (error as any).error?.message || 'Error desconocido';
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: this.responseMessage,
+      });
+    }
+  }
   /**
    * función para limpiar los campos vacíos del formulario
    * @returns objeto con los datos limpios
@@ -151,5 +178,35 @@ export class ObjectivesComponent implements OnInit {
   navigateToSelectPlan(): void {
     const SELECT_PLAN: string = `${NAVIGATIONS_ROUTES.SELECT_STRATEGIC_PLAN}`;
     this.router.navigate([SELECT_PLAN]);
+  }
+
+  /**
+   * Método para mostrar u ocultar el modal
+   */
+  toogleShowModal(): void {
+    this.showModal = !this.showModal;
+  }
+
+  /**
+   * Método para cuando se hace click en el botón de agregar objetivo
+   * - Cambiar el estado de edición
+   * - Mostrar el modal
+   * - Limpiar el formulario
+   * - Cambiar el estado de edición
+   */
+  onClickAddObjective(): void {
+    this.isEditing = false;
+    this.showModal = true;
+    this.formObjectivesPlan.reset();
+  }
+
+  /**
+   * Método para cuando se hace click en un objetivo
+   */
+  onClickObjective(objective: any): void {
+    this.objectiveIdSelected = objective._id;
+    this.formObjectivesPlan.patchValue(objective);
+    this.isEditing = true;
+    this.showModal = true;
   }
 }

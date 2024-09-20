@@ -18,7 +18,7 @@ button:active {
 
   --gray_low_dark: #171717;
   --gray_middle_dark: #121212;
-  --gray_high_dark: #0d0d0d;
+  --gray_high_dark: #111010;
 
   --error_color: #ef665b;
   --succes_color: #84d65a;
@@ -246,7 +246,7 @@ button:active {
   font-weight: 500;
   cursor: pointer;
   border-radius: 10px;
-  box-shadow: 5px 5px 0px #2f01d6;
+  box-shadow: 5px 5px 0px var(--color1_blue);
   transition-duration: 0.3s;
   padding-left: 30px; /* Asegura espacio para el ícono en el lado izquierdo */
 }
@@ -477,8 +477,9 @@ button:active {
 .form1 h2 {
   text-align: center;
   margin: 2em;
-  color: rgb(255, 255, 255);
-  font-size: 1.2em;
+  color: rgb(250, 232, 232);
+  font-size: 1.5em;
+  font-weight: bold;
 }
 
 @media (min-width: 600px) {

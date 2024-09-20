@@ -3,17 +3,7 @@
 }
 
 .StrategicPlanStyle {
-  background-color: var(--basicBackground);
-  color: white;
-  min-height: calc(100vh - 52px);
-  padding: 10px 0px 50px 0px; /* top right bottom left */
-  margin: auto;
-}
-.StrategicPlanStyle h1 {
-  text-align: center;
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 20px;
+  padding: 10px 10px 50px 10px; /* top right bottom left */
 }
 
 /* ----------------------------------------------------- */
@@ -50,14 +40,9 @@
 /* ------------------------------ */
 /* SECTION 1: General Styling */
 /* ------------------------------ */
-#section0 {
-  min-height: 400px;
-  background-color: #171717;
-}
 
 #section1 {
-  min-height: 500px;
-  background-color: #171717;
+  min-height: 350px;
 }
 
 #section1NameTitle {
@@ -106,72 +91,6 @@
   display: inline-block; /* Asegura que se alineen en la misma línea */
   font-size: 1.2rem;
   color: white;
-}
-
-/* ------------------------------ */
-/* SECTION 2: Background and Title */
-/* ------------------------------ */
-
-#section2 {
-  min-height: 600px;
-  background-color: #111010;
-}
-
-#section2Title {
-  border: 1px solid var(--color2);
-  border-radius: 22px;
-  padding: 25px 20px;
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-left: 10%;
-}
-
-#section2Value {
-  padding: 0 10%;
-}
-
-/* ------------------------------ */
-/* SECTION 3: Gradient Background and Title */
-/* ------------------------------ */
-
-#section3 {
-  min-height: 600px;
-  background: linear-gradient(190deg, var(--color2), var(--color3));
-}
-
-#section3Title {
-  border: 2px solid var(--color4);
-  border-radius: 22px;
-  padding: 25px 20px;
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-left: 10%;
-}
-
-#section3Value {
-  padding: 0 10%;
-}
-
-/* ------------------------------ */
-/* SECTION 4: Background and Title */
-/* ------------------------------ */
-
-#section4 {
-  min-height: 600px;
-  background-color: #111010;
-}
-
-#section4Title {
-  border: 1px solid var(--color2);
-  border-radius: 22px;
-  padding: 25px 20px;
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-left: 10%;
-}
-
-#section4Value {
-  padding: 0 10%;
 }
 
 /* ------------------------------ */

@@ -1,11 +1,7 @@
 .chargingStyle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #1d1c1c;
-  min-height: 100vh;
-  min-width: 100%;
-  margin: auto;
+  display: grid;
+  place-items: center; /* Centra tanto horizontal como verticalmente */
+  min-height: calc(100vh - 52px);
 }
 
 .svg-frame {

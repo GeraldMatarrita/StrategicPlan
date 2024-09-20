@@ -142,7 +142,14 @@
           <div class="badInfo" *ngIf="!formStrategicPlan.valid">
             <p>Not ready to send</p>
           </div>
-          <button type="submit" class="buttonCreate m-3">Submit</button>
+          <button type="submit" class="buttonCreate m-3">Create</button>
+          <button
+            type="button"
+            (click)="setFormVisibility()"
+            class="buttonDelete"
+          >
+            Cancel
+          </button>
         </div>
       </form>
     </div>

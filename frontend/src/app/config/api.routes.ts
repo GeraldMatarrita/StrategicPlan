@@ -34,7 +34,8 @@ export const API_ROUTES = {
   // -------------------------------------------------------------
   Get_AllByPlanID_Objective: '/objective/getPlanObjectives', // GET + "/StrategicPlanId"
   Create_Objective: '/objective/create', // POST
-
+  Update_Objective: '/objective/update', // PUT + "/StrategicPlanId"
+  Delete_Objective: '/objective/delete', // DELETE + "/StrategicPlanId"
   // --------------------------------------------------------------------------------
   // --------------------------------------------------------------------------------
   // al finalizar borrar esta ya que es solo de pruebas

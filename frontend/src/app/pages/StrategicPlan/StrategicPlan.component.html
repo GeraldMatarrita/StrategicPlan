@@ -95,8 +95,8 @@
         class="container-fluid"
         id="containerStrateciPlan"
       >
-        <div id="section1" class="row d-flex justify-content-center">
-          <div class="col-lg-7 col-12">
+        <div class="row d-flex justify-content-center">
+          <div id="section1" class="col-lg-7 col-12">
             <div class="container-card1-view">
               <div class="card-perzonnalized1">
                 <div class="shadowTopRight"></div>
@@ -128,28 +128,24 @@
             </div>
           </div>
           <div class="col-lg-5 col-12">
-            <div>
-              <button
-                *ngIf="!isPlanExpired(item.endDate)"
-                (click)="setFormVisibility()"
-                class="buttonEdit m-4"
-              >
-                Edit
-              </button>
-              <button (click)="navigateToFodaMeca()" class="buttonCreate m-4">
-                Foda Meca
-              </button>
-            </div>
-            <div>
-              <button (click)="outPlan(item.id)" class="buttonDelete m-4">
-                Out Plan
-              </button>
-              <button
-                (click)="navigateToObjective()"
-                class="buttonDashboard m-4"
-              >
-                Dashboard
-              </button>
+            <div id="sectionButtons">
+              <div>
+                <button
+                  *ngIf="!isPlanExpired(item.endDate)"
+                  (click)="setFormVisibility()"
+                  class="buttonEdit m-4"
+                >
+                  Edit
+                </button>
+                <button (click)="navigateToFodaMeca()" class="buttonCreate m-4">
+                  Foda Meca
+                </button>
+              </div>
+              <div>
+                <button (click)="outPlan(item.id)" class="buttonDelete m-4">
+                  Out Plan
+                </button>
+              </div>
             </div>
           </div>
         </div>

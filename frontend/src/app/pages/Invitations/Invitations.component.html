@@ -1,8 +1,8 @@
 <div class="invitationStyle">
   <!-- muestra las invitaciones pendientes y permite aceptarlas o rechazarlas-->
   <div *ngIf="showPlans">
-    <h2>Invitations</h2>
-    <div *ngIf="invitationData.length > 0; else noData">
+    <h2 class="p-3">Invitations</h2>
+    <div *ngIf="invitationData.length > 0; else noData" class="container">
       <div class="table-responsive">
         <table class="table">
           <thead>
@@ -51,10 +51,10 @@
     <!-- muestra solo los planes para invitar a un usuario segun el usuario logueado -->
     <div *ngIf="strategicPlanData.length > 0; else noData2">
       <span *ngIf="showPlans">
-        <h2>Select Plan To Invite</h2>
+        <h2 id="toInvite">Select Plan To Invite</h2>
 
         <div *ngFor="let item of strategicPlanData" class="container">
-          <div id="section0" class="row d-flex justify-content-center">
+          <div id="section1" class="row d-flex justify-content-center">
             <div class="container-card1-preview">
               <div class="card-perzonnalized1" (click)="onSelectPlan(item.id)">
                 <div class="shadowButtomLeft"></div>
@@ -101,9 +101,9 @@
         </button>
       </div>
 
-      <h3>Invite User</h3>
+      <h2>Invite User</h2>
 
-      <div class="container">
+      <div class="invitation-container">
         <form [formGroup]="invitationForm" (ngSubmit)="sendInvitations()">
           <ng-select
             [items]="usersToInvite"
