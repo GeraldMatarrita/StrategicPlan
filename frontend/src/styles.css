@@ -12,11 +12,16 @@ button:active {
 }
 
 :root {
-  --color2: #3700ff;
-  --color3: #9900ff;
-  --color4: #ff00ff;
-  --color5: #ce0ace;
-  --basicBackground: #171717;
+  --color1_blue: #3700ff;
+  --color2_purple: #9900ff;
+  --color3_pink: #ff00ff;
+
+  --gray_low_dark: #171717;
+  --gray_middle_dark: #121212;
+  --gray_high_dark: #0d0d0d;
+
+  --error_color: #ef665b;
+  --succes_color: #84d65a;
 }
 
 /* ----------------------------------------------------- */
@@ -35,7 +40,8 @@ button:active {
   position: absolute;
   width: 100%; /* 100% del contenedor */
   height: 100%; /* 100% del contenedor */
-  background-color: #1f1d1d;
+  background-color: var(--gray_low_dark);
+  /* background-color: #1f1d1d; */
   border-radius: 20px;
 }
 
@@ -49,8 +55,8 @@ button:active {
   background: linear-gradient(
     to top right,
     transparent 0%,
-    var(--color4) 50%,
-    var(--color4) 100%
+    var(--color3_pink) 50%,
+    var(--color3_pink) 100%
   );
   z-index: -1;
 }
@@ -65,8 +71,8 @@ button:active {
   background: linear-gradient(
     to bottom left,
     transparent 0%,
-    var(--color2) 70%,
-    var(--color2) 100%
+    var(--color1_blue) 70%,
+    var(--color1_blue) 100%
   );
   z-index: -1;
 }
@@ -81,7 +87,7 @@ button:active {
   border-radius: 10px;
   width: auto;
   color: white;
-  background-color: rgb(19, 19, 243);
+  background-color: var(--color1_blue);
 }
 
 .buttonCreate:hover {
@@ -171,7 +177,7 @@ button:active {
 .link-button {
   background: none;
   border: none;
-  color: blue;
+  color: var(--color1_blue);
   text-decoration: underline;
   cursor: pointer;
 }
@@ -186,12 +192,12 @@ button:active {
   height: 40px;
   border: none;
   padding: 0px 8px;
-  background-color: #ff00ff;
+  background-color: var(--color3_pink);
   color: white;
   font-weight: 500;
   cursor: pointer;
   border-radius: 10px;
-  box-shadow: 5px 5px 0px #ff00ff;
+  box-shadow: 5px 5px 0px var(--color3_pink);
   transition-duration: 0.3s;
   padding-left: 30px; /* Asegura espacio para el ícono en el lado izquierdo */
 }
@@ -201,7 +207,7 @@ button:active {
   display: inline-flex;
   width: 16px;
   height: 16px;
-  background-image: url('data:image/svg+xml,%3Csvg%20fill%3D%22%23ffffff%22%20height%3D%22200px%22%20width%3D%22200px%22%20version%3D%221.1%22%20id%3D%22Capa_1%22%20xmlns%3D%22http://www.w3.org/2000/svg%22%20xmlns:xlink%3D%22http://www.w3.org/1999/xlink%22%20viewBox%3D%220%200%20219.15%20219.15%22%20xml%3Aspace%3D%22preserve%22%20stroke%3D%22%23ffffff%22%3E%3Cg%20id%3D%22SVGRepo_bgCarrier%22%20stroke-width%3D%220%22%3E%3C/g%3E%3Cg%20id%3D%22SVGRepo_tracerCarrier%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3C/g%3E%3Cg%20id%3D%22SVGRepo_iconCarrier%22%3E%3Cg%3E%3Cpath%20d%3D%22M109.575%2C0C49.156%2C0%2C0.001%2C49.155%2C0.001%2C109.574c0%2C60.42%2C49.154%2C109.576%2C109.573%2C109.576%20c60.42%2C0%2C109.574-49.156%2C109.574-109.576C219.149%2C49.155%2C169.995%2C0%2C109.575%2C0z%20M109.575%2C204.15%20c-52.148%2C0-94.573-42.427-94.573-94.576C15.001%2C57.426%2C57.427%2C15%2C109.575%2C15c52.148%2C0%2C94.574%2C42.426%2C94.574%2C94.574%20C204.149%2C161.724%2C161.723%2C204.15%2C109.575%2C204.15z%22%3E%3C/path%3E%3Cpath%20d%3D%22M166.112%2C108.111h-52.051V51.249c0-4.142-3.357-7.5-7.5-7.5c-4.142%2C0-7.5%2C3.358-7.5%2C7.5v64.362c0%2C4.142%2C3.358%2C7.5%2C7.5%2C7.5%20h59.551c4.143%2C0%2C7.5-3.358%2C7.5-7.5C173.612%2C111.469%2C170.254%2C108.111%2C166.112%2C108.111z%22%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+  background-image: url("data:image/svg+xml,%3Csvg%20fill%3D%22%23ffffff%22%20height%3D%22200px%22%20width%3D%22200px%22%20version%3D%221.1%22%20id%3D%22Capa_1%22%20xmlns%3D%22http://www.w3.org/2000/svg%22%20xmlns:xlink%3D%22http://www.w3.org/1999/xlink%22%20viewBox%3D%220%200%20219.15%20219.15%22%20xml%3Aspace%3D%22preserve%22%20stroke%3D%22%23ffffff%22%3E%3Cg%20id%3D%22SVGRepo_bgCarrier%22%20stroke-width%3D%220%22%3E%3C/g%3E%3Cg%20id%3D%22SVGRepo_tracerCarrier%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3C/g%3E%3Cg%20id%3D%22SVGRepo_iconCarrier%22%3E%3Cg%3E%3Cpath%20d%3D%22M109.575%2C0C49.156%2C0%2C0.001%2C49.155%2C0.001%2C109.574c0%2C60.42%2C49.154%2C109.576%2C109.573%2C109.576%20c60.42%2C0%2C109.574-49.156%2C109.574-109.576C219.149%2C49.155%2C169.995%2C0%2C109.575%2C0z%20M109.575%2C204.15%20c-52.148%2C0-94.573-42.427-94.573-94.576C15.001%2C57.426%2C57.427%2C15%2C109.575%2C15c52.148%2C0%2C94.574%2C42.426%2C94.574%2C94.574%20C204.149%2C161.724%2C161.723%2C204.15%2C109.575%2C204.15z%22%3E%3C/path%3E%3Cpath%20d%3D%22M166.112%2C108.111h-52.051V51.249c0-4.142-3.357-7.5-7.5-7.5c-4.142%2C0-7.5%2C3.358-7.5%2C7.5v64.362c0%2C4.142%2C3.358%2C7.5%2C7.5%2C7.5%20h59.551c4.143%2C0%2C7.5-3.358%2C7.5-7.5C173.612%2C111.469%2C170.254%2C108.111%2C166.112%2C108.111z%22%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   background-size: contain;
   background-repeat: no-repeat;
   position: absolute;
@@ -235,7 +241,7 @@ button:active {
   height: 40px;
   border: none;
   padding: 0px 8px;
-  background-color: #2f01d6;
+  background-color: var(--color1_blue);
   color: white;
   font-weight: 500;
   cursor: pointer;
@@ -284,12 +290,12 @@ button:active {
   height: 40px;
   border: none;
   padding: 0px 8px;
-  background-color: var(--color3);
+  background-color: var(--color2_purple);
   color: white;
   font-weight: 500;
   cursor: pointer;
   border-radius: 10px;
-  box-shadow: 5px 5px 0px var(--color3);
+  box-shadow: 5px 5px 0px var(--color2_purple);
   transition-duration: 0.3s;
   padding-right: 25px;
 }
@@ -333,12 +339,12 @@ button:active {
   height: 40px;
   border: none;
   padding: 0px 10px;
-  background-color: var(--color3);
+  background-color: var(--color2_purple);
   color: white;
   font-weight: 500;
   cursor: pointer;
   border-radius: 10px;
-  box-shadow: 5px 5px 0px var(--color3);
+  box-shadow: 5px 5px 0px var(--color2_purple);
   transition-duration: 0.3s;
   padding-left: 35px; /* Asegura espacio para el ícono en el lado izquierdo */
 }
@@ -380,8 +386,8 @@ button:active {
   padding: 0;
   background-image: linear-gradient(
     163deg,
-    var(--color4) 0%,
-    var(--color2) 100%
+    var(--color3_pink) 0%,
+    var(--color1_blue) 100%
   );
   border-radius: 20px;
 }
@@ -390,7 +396,7 @@ button:active {
   display: flex;
   flex-direction: column;
   padding: 2em;
-  background-color: #161616;
+  background-color: var(--gray_high_dark);
   border-radius: 30px;
   color: white;
   margin: auto;
@@ -420,7 +426,6 @@ button:active {
   margin-bottom: 1em;
   width: 80%;
   max-width: 400px;
-  /* box-shadow: inset 25px 15px 15px var(--inputform1Color); */
   border: 1px solid black;
 }
 .form1 input:focus {
@@ -513,7 +518,7 @@ button:active {
 
 .error p {
   display: inline-block;
-  background: #ef665b;
+  background: var(--error_color);
   border-radius: 8px;
   padding: 10px 12px;
   max-width: 80%;
@@ -533,7 +538,7 @@ button:active {
 
 .succes p {
   display: inline-block;
-  background: #84d65a;
+  background: var(--succes_color);
   border-radius: 8px;
   padding: 10px 12px;
   max-width: 80%;
@@ -553,7 +558,7 @@ button:active {
 
 .badInfo p {
   display: inline-block;
-  background: #212121;
+  background: var(--gray_low_dark);
   border-radius: 50px;
   padding: 10px 12px;
   max-width: 80%;
@@ -597,3 +602,12 @@ paleta de colores por si se necesita
 
 #f52d0a
 */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

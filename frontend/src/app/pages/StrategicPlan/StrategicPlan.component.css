@@ -2,13 +2,6 @@
   display: block;
 }
 
-:root {
-  --color2: #3700ff;
-  --color3: #9900ff;
-  --color4: #ff00ff;
-  --basicBackground: #171717;
-}
-
 .StrategicPlanStyle {
   background-color: var(--basicBackground);
   color: white;

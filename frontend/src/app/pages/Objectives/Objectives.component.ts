@@ -7,12 +7,11 @@ import { Router } from '@angular/router';
 import { AuthService } from '../Auth/Auth.service';
 import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 import { ObjectivesService } from './Objectives.service';
-import { SidebarStrategicPlanComponent } from '../../navigation/sidebarStrategicPlan/sidebarStrategicPlan.component';
 
 @Component({
   selector: 'app-strategic-plan',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SidebarStrategicPlanComponent],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './Objectives.component.html',
   styleUrls: ['./Objectives.component.css'],
 })
