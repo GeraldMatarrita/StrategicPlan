@@ -128,6 +128,43 @@ export class ObjectivesComponent implements OnInit {
   }
 
   /**
+   * Método para eliminar un objetivo
+   */
+  async deleteObjective(): Promise<void> {
+    try {
+      const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'No podrás revertir esto',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonColor: '#f52d0a',
+      });
+      if (result.isConfirmed) {
+        this.responseMessage = await this.objectivesService.deleteObjective(
+          this.objectiveIdSelected,
+          this.currentPlanId
+        );
+        Swal.fire({
+          icon: 'success',
+          title: 'Eliminado',
+          text: this.responseMessage,
+        });
+        this.loadObjectives();
+        this.toogleShowModal();
+      }
+    } catch (error) {
+      this.responseMessage =
+        (error as any).error?.message || 'Error desconocido';
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: this.responseMessage,
+      });
+    }
+  }
+
+  /**
    * Método para actualizar un objetivo
    */
   async updateObjective(): Promise<void> {

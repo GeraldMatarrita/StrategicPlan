@@ -8,6 +8,9 @@
       <div>
         <h2>Strategic Plan Form</h2>
         <div>
+          <div>
+            <label for="Name"> Name: </label>
+          </div>
           <input
             placeholder="Name"
             type="text"
@@ -29,6 +32,9 @@
         </div>
 
         <div>
+          <div>
+            <label for="mission"> Mission: </label>
+          </div>
           <textarea
             placeholder="mission"
             type="text"
@@ -38,6 +44,9 @@
         </div>
 
         <div>
+          <div>
+            <label for="vision"> Vision: </label>
+          </div>
           <textarea
             placeholder="vision"
             type="text"
@@ -47,8 +56,11 @@
         </div>
 
         <div>
+          <div>
+            <label for="vision"> Vision: </label>
+          </div>
           <textarea
-            placeholder="values"
+            placeholder="vision"
             type="text"
             id="values"
             formControlName="values"
@@ -84,6 +96,13 @@
           <p>Not ready to send</p>
         </div>
         <button type="submit" class="buttonCreate m-3">Submit</button>
+        <button
+          type="button"
+          class="buttonDelete m-3"
+          (click)="cancelEdit()"
+        >
+          Cancel
+        </button>
       </div>
     </form>
   </div>

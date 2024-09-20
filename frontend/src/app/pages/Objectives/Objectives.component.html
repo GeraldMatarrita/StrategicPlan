@@ -1,6 +1,9 @@
 <div class="ObjectiveStyle">
-  <div class="container">
+  <div class="objectiveMenu">
     <button class="buttonAdd m-3" (click)="onClickAddObjective()">Add</button>
+    <p>PlanId: {{ currentPlanId }}</p>
+  </div>
+  <div class="container">
     <div *ngIf="objectivesData.length > 0">
       <div class="card-container">
         <div
@@ -13,64 +16,76 @@
               <div class="value-container">
                 <span class="value">{{ item.description }}</span>
               </div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div *ngIf="showModal" class="modal-background">
-        <div class="modal-content">
-          <div class="form1-card">
-            <form
-              [formGroup]="formObjectivesPlan"
-              (submit)="isEditing ? updateObjective() : createObjective()"
-              class="form1"
-            >
+    <div *ngIf="showModal" class="modal-background">
+      <div class="modal-content">
+        <div class="form1-card">
+          <form
+            [formGroup]="formObjectivesPlan"
+            (submit)="isEditing ? updateObjective() : createObjective()"
+            class="form1"
+          >
+            <div>
+              <h2>Objective</h2>
+
               <div>
-                <h2>Objective</h2>
-
-                <div>
-                  <textarea
-                    placeholder="description"
-                    type="text"
-                    id="description"
-                    formControlName="description"
-                  ></textarea>
-                  <div
+                <textarea
+                  placeholder="description"
+                  type="text"
+                  id="description"
+                  formControlName="description"
+                ></textarea>
+                <div
+                  *ngIf="
+                    formObjectivesPlan.get('description')?.invalid &&
+                    (formObjectivesPlan.get('description')?.dirty ||
+                      formObjectivesPlan.get('description')?.touched)
+                  "
+                  class="error"
+                >
+                  <p
                     *ngIf="
-                      formObjectivesPlan.get('description')?.invalid &&
-                      (formObjectivesPlan.get('description')?.dirty ||
-                        formObjectivesPlan.get('description')?.touched)
-                    "
-                    class="error"
-                  >
-                    <p
-                      *ngIf="
                         formObjectivesPlan.get('description')?.errors?.['required']
                       "
-                    >
-                      Description is required.
-                    </p>
-                  </div>
+                  >
+                    Description is required.
+                  </p>
                 </div>
+              </div>
 
-                <div class="badInfo" *ngIf="!formObjectivesPlan.valid">
-                  <p>Not ready to send</p>
-                </div>
+              <div class="badInfo" *ngIf="!formObjectivesPlan.valid">
+                <p>Not ready to send</p>
+              </div>
 
-                <!-- Cambia el texto y método del botón según el modo -->
+              <!-- Cambia el texto y método del botón según el modo -->
+              <div>
                 <button type="submit" class="buttonCreate m-3">
                   {{ isEditing ? "Update" : "Create" }}
                 </button>
                 <button
                   type="button"
-                  class="buttonDelete m-3"
+                  class="btnCancel m-3"
                   (click)="toogleShowModal()"
                 >
                   Cancel
                 </button>
               </div>
-            </form>
-          </div>
+              <div>
+                <button
+                  type="button"
+                  class="buttonDelete m-3"
+                  (click)="deleteObjective()"
+                >
+                  Borrar
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

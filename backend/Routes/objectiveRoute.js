@@ -97,7 +97,6 @@ router.post("/create/:planId", async (req, res) => {
  */
 router.put("/update/:objectiveId", async (req, res) => {
   try {
-    console.log("req.body", req.body);
     const { error } = validateObjective(req.body);
     if (error) {
       return res
@@ -138,7 +137,6 @@ router.put("/update/:objectiveId", async (req, res) => {
 router.delete("/delete/:objectiveId", async (req, res) => {
   try {
     const { objectiveId } = req.params;
-
     // Buscar el objetivo
     const objective = await ObjectiveModel.findById(objectiveId);
     if (!objective) {
@@ -146,6 +144,19 @@ router.delete("/delete/:objectiveId", async (req, res) => {
         message: "Objective not found.",
       });
     }
+
+    // const strategicPlan = await StrategicPlan.findById(planId);
+    // if (!strategicPlan) {
+    //   return res.status(404).json({
+    //     message: "Strategic Plan not found.",
+    //   });
+    // }
+
+    // // Eliminar el objetivo del plan estratégico
+    // await StrategicPlan.updateOne(
+    //   { _id: planId },
+    //   { $pull: { objective_ListIDS: objectiveId } }
+    // );
 
     // Eliminar el objetivo
     await ObjectiveModel.deleteOne({ _id: objectiveId });

@@ -252,4 +252,12 @@ export class StrategicPlanComponent implements OnInit {
     const currentDate = new Date();
     return new Date(endDate) < currentDate;
   }
+
+  /**
+   * Método para cancelar la edicion de un plan
+   */
+  cancelEdit(): void {
+    this.setFormVisibility();
+    this.loadPlanById(this.currentPlanId);
+  }
 }

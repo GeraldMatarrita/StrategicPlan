@@ -463,7 +463,6 @@ button:active {
 .form1 textarea::-webkit-scrollbar {
   width: 8px; /* Ancho del scroll */
   border-radius: 25px;
-  background-color: var(--color2);
 }
 
 .form1 textarea::-webkit-scrollbar-thumb {
@@ -480,6 +479,13 @@ button:active {
   color: rgb(250, 232, 232);
   font-size: 1.5em;
   font-weight: bold;
+}
+
+.form1 label {
+  text-align: center;
+  margin: 15px 0 5px 0;
+  color: rgb(250, 232, 232);
+  font-size: 1em;
 }
 
 @media (min-width: 600px) {

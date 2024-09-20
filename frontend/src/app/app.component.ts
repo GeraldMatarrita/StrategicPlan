@@ -1,4 +1,4 @@
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { NavBarComponent } from './navigation/navBar/navBar.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
   @ViewChild(MatSidenav, { static: true })
   public sidenav!: MatSidenav;
 
-  constructor(private observer: BreakpointObserver) {}
+  constructor(private observer: BreakpointObserver, private router: Router) {}
 
   ngOnInit(): void {
     this.observer.observe(['(max-width: 800px)']).subscribe((res) => {
@@ -44,12 +44,27 @@ export class AppComponent implements OnInit {
         this.sidenav.close();
       } else {
         this.sidenav.mode = 'side';
-        this.sidenav.open();
+        this.router.events.subscribe((event) => {
+          if (event instanceof NavigationEnd) {
+            // Detecta cuando la navegación termina
+            this.checkRouteAndToggleSidenav(event.urlAfterRedirects); // Usa la URL final
+          }
+        });
       }
     });
   }
 
   toggleSidenav() {
     this.sidenav.toggle();
+  }
+
+  checkRouteAndToggleSidenav(url: string): void {
+    console.log('ruta', url); // Imprime la ruta actual
+    if (url.includes('Objectives')) {
+      // Verifica si está en 'objectives'
+      this.sidenav.open(); // Abre el sidenav si la ruta contiene 'objectives'
+    } else {
+      this.sidenav.close(); // Si no está en 'objectives', lo cierra
+    }
   }
 }

@@ -5,6 +5,7 @@
 .invitationStyle {
   padding: 10px 10px 50px 10px; /* top right bottom left */
   color: rgb(214, 208, 208);
+  text-align: center;
 }
 
 h2 {

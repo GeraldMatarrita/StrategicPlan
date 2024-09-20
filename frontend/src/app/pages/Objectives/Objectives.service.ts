@@ -33,6 +33,16 @@ export class ObjectivesService {
     return this.http.put<any>(`${url}/${id}`, data);
   }
 
+  /**
+   * @param url to delete data
+   * @param data data to delete
+   * @returns
+   */
+  deleteData(url: string): Observable<any> {
+    console.log('delete url', url);
+    return this.http.delete<any>(url);
+  }
+
   // --------------------------------------------
   // Métodos para la API
   // --------------------------------------------
@@ -102,9 +112,8 @@ export class ObjectivesService {
    */
   deleteObjective(objectiveId: string, planId: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.postData(
-        `${API_ROUTES.BASE_URL}${API_ROUTES.Delete_Objective}/${planId}`,
-        { objectiveId }
+      this.deleteData(
+        `${API_ROUTES.BASE_URL}${API_ROUTES.Delete_Objective}/${objectiveId}`
       ).subscribe(
         (response: any) => {
           resolve(response.message);

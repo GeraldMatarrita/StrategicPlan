@@ -1,13 +1,18 @@
 /* Estilos para el sidenav - parte de la izquierda*/
 mat-sidenav {
-  background-color: #0d1117;
+  background: linear-gradient(
+    to bottom right,
+    var(--color2_purple) 0%,
+    var(--color1_blue) 65%,
+    var(--color1_blue) 100%
+  );
   border-radius: 0;
   width: 200px;
+  border-right: 1px solid #9900ff;
 }
 
 .content {
   background-color: var(--gray_middle_dark);
   min-height: calc(100svh - 52px);
-  margin: 0 auto;
   border: none;
 }
