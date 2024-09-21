@@ -1,7 +1,7 @@
 <div class="ObjectiveStyle">
   <div class="objectiveMenu">
     <button class="buttonAdd m-3" (click)="onClickAddObjective()">Add</button>
-    <p>PlanId: {{ currentPlanId }}</p>
+    <p>Plan: {{ planData?.name }}</p>
   </div>
   <div class="container">
     <div *ngIf="objectivesData.length > 0">

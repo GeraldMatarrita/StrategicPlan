@@ -1,0 +1,6 @@
+estilos de mat-icon:
+https://www.angularjswiki.com/angular/angular-material-icons-list-mat-icon-list/
+
+
+de donde se sacaron ideas:
+https://uiverse.io/elements

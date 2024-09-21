@@ -2,6 +2,7 @@
 mat-icon {
   color: #ffffff !important;
 }
+
 mat-list-item:hover {
   background-color: #21262c;
 }

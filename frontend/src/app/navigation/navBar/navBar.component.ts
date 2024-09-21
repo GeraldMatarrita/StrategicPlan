@@ -48,9 +48,11 @@ export class NavBarComponent {
   navigateToStrategicPlan() {
     this.router.navigate([NAVIGATIONS_ROUTES.STRATEGIC_PLAN]);
   }
+
   navigateToInvitations() {
     this.router.navigate([NAVIGATIONS_ROUTES.INVITATIONS]);
   }
+  
   navigateToAuth() {
     this.router.navigate([NAVIGATIONS_ROUTES.AUTH]);
   }

@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../Auth/Auth.service';
 import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 import { ObjectivesService } from './Objectives.service';
+import { StrategicPlanService } from '../StrategicPlan/StrategicPlan.service';
 
 @Component({
   selector: 'app-strategic-plan',
@@ -20,13 +21,14 @@ export class ObjectivesComponent implements OnInit {
   formObjectivesPlan!: FormGroup;
   activeUserID = '';
   currentPlanId: string = ''; // ID del plan actual a editar
+  planData: any = {};
   isEditing = false; // Controla si estás editando o creando
 
   // Variable para almacenar el mensaje de respuesta
   responseMessage: string = '';
 
   // Variables para almacenar los datos de los objetivos
-  objectivesData: any[] = [];
+  objectivesData: any = [];
   objectiveIdSelected: string = '';
 
   showModal: boolean = false;
@@ -35,6 +37,7 @@ export class ObjectivesComponent implements OnInit {
     private formBuilder: FormBuilder,
     private objectivesService: ObjectivesService,
     private router: Router,
+    private strategicPlanService: StrategicPlanService,
     private authService: AuthService
   ) {}
 
@@ -78,9 +81,22 @@ export class ObjectivesComponent implements OnInit {
       }
 
       this.loadObjectives();
+      this.loadStrategicPlan();
     } catch (error) {
       console.error('Error al cargar los datos:', error);
     }
+  }
+
+  loadStrategicPlan(): void {
+    this.strategicPlanService.getPlanByID(this.currentPlanId).subscribe(
+      (data: any) => {
+        console.log(data);
+        this.planData = data;
+      },
+      (error: any) => {
+        console.error('Error al obtener el plan:', error);
+      }
+    );
   }
 
   /**

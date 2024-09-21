@@ -39,11 +39,15 @@ export class SideNavComponent {
     this.appComponent.toggleSidenav();
   }
 
-  navigateToNotFound() {
-    this.router.navigate([NAVIGATIONS_ROUTES.NOT_FOUND]);
+  navigateToStrategicPlan() {
+    this.router.navigate([NAVIGATIONS_ROUTES.STRATEGIC_PLAN]);
   }
 
   navigateToObjective() {
     this.router.navigate([NAVIGATIONS_ROUTES.OBJECTIVE]);
+  }
+
+  navigateToNotFound() {
+    this.router.navigate([NAVIGATIONS_ROUTES.NOT_FOUND]);
   }
 }

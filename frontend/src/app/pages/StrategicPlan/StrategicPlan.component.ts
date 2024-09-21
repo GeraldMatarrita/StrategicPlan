@@ -238,11 +238,6 @@ export class StrategicPlanComponent implements OnInit {
     this.router.navigate([SELECT_PLAN]);
   }
 
-  navigateToObjective(): void {
-    const OBJECTIVE: string = `${NAVIGATIONS_ROUTES.OBJECTIVE}`;
-    this.router.navigate([OBJECTIVE]);
-  }
-
   /**
    * Método para verificar si el plan ha expirado
    * @param endDate La fecha de finalización del plan
