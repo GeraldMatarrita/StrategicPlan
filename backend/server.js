@@ -119,6 +119,10 @@ app.use("/api/invitations", Invitations);
 const CameAnalysis = require("./Routes/cameAnalysisRoute")
 app.use("/api/cameAnalysis",CameAnalysis)
 
+const SwotAnalysis = require("./Routes/swotAnalysisRoute")
+app.use("/api/swotAnalysis",SwotAnalysis)
+
+
 // --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
 // al finalizar borrar esta ya que es solo de pruebas

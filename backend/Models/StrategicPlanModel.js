@@ -12,9 +12,9 @@ const strategicPlanSchema = new mongoose.Schema(
     startDate: { type: Date, default: Date.now, required: true },
     endDate: { type: Date, required: true },
     name: { type: String, required: true },
-    members_ListIDS: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Referencia directa
-    ],
+    SWOT : {type:mongoose.Schema.Types.ObjectId,ref: "SWOT"},
+    CAME : {type:mongoose.Schema.Types.ObjectId,ref: "CAME"},
+    members_ListIDS:[{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     objective_ListIDS: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Objective" }, // Referencia directa
     ],
