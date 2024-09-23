@@ -333,3 +333,5 @@ router.post("/explore/deleteCard/:id",async (req,res)=>{
     });
   }
 })
+
+module.exports = router;
