@@ -26,14 +26,42 @@ export const API_ROUTES = {
   Get_finishedByUserID_StrategicPlan: '/strategicPlan/finished', // GET + "/userId"
   Out_StrategicPlan: '/strategicPlan/out', // POST
   Create_StrategicPlan: '/strategicPlan/create', // POST + "/userId"
-  Update_StrategicPlan: '/strategicPlan/update', // PUT
-  Update_FodaMeca_StrategicPlan: '/strategicPlan/FodaMeca', // PUT + "/StrategicPlanId"
+  Update_StrategicPlan: '/strategicPlan/update',
+  // -------------------------------------------------------------
+  // Para los analisis de FODA y MECA de cada plan estratégico
+  // -------------------------------------------------------------
+
+  //FODA
+  Get_All_SWOT: '/swotAnalysis/allAnalisis',//Get + "/strategicPlanID"
+  Get_All_CAME: '/cameAnalysis/allAnalisis',//Get + "/strategicPlanID"
+  Add_New_Strength_Card: '/swotAnalysis/strengths/addCardAnalysis',//Post + "strategicPlanID"
+  Add_New_Weaknes_Card: '/swotAnalysis/weaknesses/addCardAnalysis',//Post + "strategicPlanID"
+  Add_New_Opportuniti_Card: '/swotAnalysis/opportunities/addCardAnalysis',//Post + "strategicPlanID"
+  Add_New_Threat_Card: '/swotAnalysis/threats/addCardAnalysis',//Post + "strategicPlanID"
+  Delete_Strength_Card: '/swotAnalysis/strengths/deleteCard',//Post + "strategicPlanID"
+  Delete_Weaknes_Card: '/swotAnalysis/weaknesses/deleteCard',//Post + "strategicPlanID"
+  Delete_Opportuniti_Card: '/swotAnalysis/opportunities/deleteCard',//Post + "strategicPlanID"
+  Delete_Threat_Card: '/swotAnalysis/threatsdeleteCard',//Post + "strategicPlanID"
+
+  //CAME
+  Add_New_Correct_Card: '/cameAnalysis/correct/addCardAnalysis',//Post + "strategicPlanID"
+  Add_New_Afront_Card: '/cameAnalysis/adapt/addCardAnalysis',//Post + "strategicPlanID"
+  Add_New_Maintain_Card: '/cameAnalysis/maintain/addCardAnalysis',//Post + "strategicPlanID"
+  Add_New_Explore_Card: '/cameAnalysis/explore/addCardAnalysis',//Post + "strategicPlanID"
+  Delete_Correct_Card: '/cameAnalysis/correct/deleteCard',//Post + "strategicPlanID"
+  Delete_Afront_Card: '/cameAnalysis/adapt/deleteCard',//Post + "strategicPlanID"
+  Delete_Maintain_Card: '/cameAnalysis/maintain/deleteCard',//Post + "strategicPlanID"
+  Delete_Explore_Card: '/cameAnalysis/explore/deleteCard',
+
+  //CardAnalysis
+  Get_CardAnalisis: '/cardAnalysis/getCard',//Get + "CardAnalysisID"
+  Update_CardAnalisis: '/cardAnalysis/updateCard',//Get + "CardAnalysisID"
 
   // --------------------------------------------------------------------------------
   // --------------------------------------------------------------------------------
   // al finalizar borrar esta ya que es solo de pruebas
   // --------------------------------------------------------------------------------
   // --------------------------------------------------------------------------------
-
+  
   BASICA: '/basica',
 };

@@ -1,7 +1,7 @@
 const router = require("express").Router()
 const {cardAnalysis, validateCardAnalysis, cardAnalysis} = require("../Models/cardAnalysis")
 
-router.get("/cardAnalysis/getCard/:id",async (req,res)=>{
+router.get("/getCard/:id",async (req,res)=>{
     try{
         const { id } = req.params
         const card = cardAnalysis.findById(id)
@@ -18,7 +18,7 @@ router.get("/cardAnalysis/getCard/:id",async (req,res)=>{
     }
 })
 
-router.put("/cardAnalysis/updateCard/:id", async (req,res)=>{
+router.put("/updateCard/:id", async (req,res)=>{
     try {
         const {id} = req.params
         const checkCard = validateCardAnalysis(req.body)

@@ -6,7 +6,7 @@ const {StrategicPlan} = require("../Models/StrategicPlanModel"); // Importa el m
 
 
 /**
- * Funcion para crear el analisis MECA desde cero.
+ * Funcion para crear el una carta de analisis en el analisis MECA
  * @param {String} strategicPlanId - ID del plan estrategico
  * @returns {Object} - MECA analisis
  * @throws {Object} - Mensajes de error
