@@ -1,5 +1,81 @@
 const router = require("express").Router();
+const bcrypt = require("bcrypt");
 const { User: UserModel, validateUser } = require("../Models/UserModel"); // Importa el modelo User
+
+// Configurar nodemailer
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
+
+/**
+ * función para manejar la solicitud de "Olvidé mi contraseña"
+ */
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await UserModel.findOne({ email });
+    
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Generar un token de restablecimiento
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
+    await user.save();
+
+    // Enviar correo electrónico
+    const resetUrl = `${process.env.RESET_PASSWORD_URL}/${resetToken}`;
+    const mailOptions = {
+      from: process.env.SMTP_USER,
+      to: user.email,
+      subject: "Restablecimiento de contraseña",
+      text: `Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace para restablecerla: ${resetUrl}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ message: "Correo de restablecimiento enviado" });
+  } catch (error) {
+    console.error("Error al enviar el correo de restablecimiento:", error);
+    res.status(500).json({ message: "Error al enviar el correo de restablecimiento" });
+  }
+});
+
+/**
+ * función para restablecer la contraseña
+ */
+router.post("/reset-password/:token", async (req, res) => {
+  try {
+    const user = await UserModel.findOne({
+      resetPasswordToken: req.params.token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Token inválido o expirado" });
+    }
+
+    const { newPassword } = req.body;
+
+    // Actualizar la contraseña
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.status(200).json({ message: "Contraseña actualizada correctamente" });
+  } catch (error) {
+    console.error("Error al restablecer la contraseña:", error);
+    res.status(500).json({ message: "Error al restablecer la contraseña" });
+  }
+});
 
 /**
  * función que obtiene todos los usuarios
@@ -91,11 +167,19 @@ router.post("/login", async (req, res) => {
     }
 
     // Verificar si la contraseña es correcta
-    if (user.password !== password) {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res
         .status(400)
         .json({ message: "Email/UserName o contraseña incorrectos" });
     }
+
+    // // Verificar si la contraseña es correcta
+    // if (user.password !== password) {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "Email/UserName o contraseña incorrectos" });
+    // }
 
     // Devolver respuesta exitosa
     res.status(201).json({
