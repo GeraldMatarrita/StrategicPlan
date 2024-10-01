@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable, BehaviorSubject } from 'rxjs';
 import { API_ROUTES } from '../../config/api.routes';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InvitationsService {
+  private pendingInvitationsCount = new BehaviorSubject<number>(0);
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -33,6 +35,27 @@ export class InvitationsService {
     return this.http.get<any[]>(
       `${API_ROUTES.BASE_URL}${API_ROUTES.Get_ByUserID_Invitations}/${userId}`
     );
+  }
+
+  /**
+   * función para obtener el conteo de invitaciones pendientes para un usuario
+   * @param userId del usuario
+   * @returns promesa con el conteo de invitaciones pendientes
+   */
+  getPendingInvitationsCount(userId: string): Observable<number> {
+    return this.http.get<{ pendingCount: number }>(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_Amount_Pending_Invitations}/${userId}`
+    ).pipe(map(response => response.pendingCount));
+  }
+
+  // Método para obtener el observable del conteo
+  getPendingInvitationsCountObservable(): Observable<number> {
+    return this.pendingInvitationsCount.asObservable();
+  }
+
+  // Método para actualizar el conteo de invitaciones
+  updatePendingInvitationsCount(count: number) {
+    this.pendingInvitationsCount.next(count);
   }
 
   /**

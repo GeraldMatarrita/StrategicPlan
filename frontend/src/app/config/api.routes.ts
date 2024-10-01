@@ -6,6 +6,7 @@ export const API_ROUTES = {
   // -------------------------------------------------------------
   Get_ByUserID_Invitations: '/invitations/UserInvitations', // GET + "/userId"
   Get_UsersToInvite_Invitations: '/invitations/getUsersNotInPlan', // GET + "/StrategicPlanId"
+  Get_Amount_Pending_Invitations: '/invitations/pendingCount', // GET + "/userId"
   Create_Invitation: '/invitations/create', // POST
   Response_Invitation: '/invitations/response', // POST
 
@@ -15,6 +16,8 @@ export const API_ROUTES = {
   Get_All_Users: '/auth/AllUsers', // GET
   Create_User: '/auth/create', // POST
   Login_User: '/auth/login', // POST
+  Forgot_Password: '/auth/forgot-password', // POST
+  Reset_Password: '/auth/reset-password', // POST
 
   // -------------------------------------------------------------
   // Para los planes estratégicos

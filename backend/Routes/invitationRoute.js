@@ -61,6 +61,46 @@ router.get("/UserInvitations/:userId", async (req, res) => {
 });
 
 /**
+ * Función que obtiene la cantidad de invitaciones pendientes para un usuario por su ID
+ * @param {String} userId - ID del usuario
+ * @returns {Object} - Cantidad de invitaciones pendientes
+ * @throws {Object} - Mensaje de error
+ */
+router.get("/pendingCount/:userId", async (req, res) => {
+  const { userId } = req.params;
+  if (!userId) {
+    return res.status(400).json({
+      message: "User ID is required.",
+    });
+  }
+
+  try {
+    // Verificar si el usuario existe
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found.",
+      });
+    }
+
+    // Contar las invitaciones pendientes
+    const pendingCount = user.invitations.filter(
+      (invitation) => invitation.status === "pending"
+    ).length;
+
+    // Enviar la respuesta con la cantidad de invitaciones pendientes
+    res.status(200).json({
+      pendingCount,
+    });
+  } catch (error) {
+    console.error("Error getting pending invitations count:", error);
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+});
+
+/**
  * funcion para obtener los usuarios que no esten en la lista de miembros de un plan estratégico
  * @param {String} planId - ID del plan estratégico
  * @returns {Object} - Lista de usuarios que no están en el plan

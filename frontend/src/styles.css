@@ -260,11 +260,11 @@ button:active {
   transition-duration: 0.3s;
 }
 
-.buttonAdd:hover {
+.buttonAdd:hover, .buttonReset:hover {
   color: transparent;
 }
 
-.buttonAdd:hover::before {
+.buttonAdd:hover::before, .buttonReset:hover::before {
   left: 43%;
   transition-duration: 0.3s;
 }
@@ -372,6 +372,54 @@ button:active {
   box-shadow: 2px 2px 0px rgb(140, 32, 212);
 }
 
+.buttonReset {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 40px;
+  height: 40px;
+  border: none;
+  padding: 0px 8px;
+  background-color: #097486;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 10px;
+  transition-duration: 0.3s;
+  padding-left: 32px; /* Asegura espacio para el ícono en el lado izquierdo */
+}
+
+.buttonReset::before {
+  content: "";
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="-0.75 -0.75 16 16" stroke="%23ffffff" aria-hidden="true" id="Link--Streamline-Heroicons-Outline" height="16" width="16"><path stroke-linecap="round" stroke-linejoin="round" d="M8.055233333333334 5.0089041666666665C9.952316666666666 5.914610416666666 10.382664583333332 8.424681249999999 8.895629166666666 9.910629166666666L5.850629166666666 12.955629166666666C4.193158333333333 14.613160416666666 1.3629395833333333 13.854749999999997 0.7562354166666666 11.590575C0.47469374999999997 10.539808333333333 0.7751458333333332 9.418595833333333 1.5443708333333332 8.649370833333332L2.73325 7.460431249999999M11.766749999999998 7.03956875L12.955629166666666 5.850689583333333C14.6131 4.193158333333333 13.854749999999997 1.3629395833333333 11.590575 0.7562354166666666C10.539808333333333 0.47469374999999997 9.418595833333333 0.7751458333333332 8.649310416666667 1.5443708333333332L5.604370833333332 4.589370833333333C4.117335416666666 6.075318749999999 4.547683333333333 8.585389583333333 6.444766666666666 9.491095833333333" stroke-width="1.5"></path></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: 8px; /* Ajusta la posición a la izquierda */
+  top: 50%;
+  transform: translateY(-50%);
+  transition-duration: 0.3s;
+}
+
+.buttonReset:active {
+  transition-duration: 0.3s;
+}
+
+.buttonCancelReset {
+  background-color: #e74c3c !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 8px 20px !important;
+  border-radius: 10px !important;
+  cursor: pointer;
+  color: white;
+  font-weight: 500;
+}
+
 /* ----------------------------------------------------- */
 /* form perzonalizado numero 1  */
 /* ----------------------------------------------------- */
@@ -412,7 +460,7 @@ button:active {
   color: black;
 }
 
-.form1 input {
+.form1 input, .inputReset {
   background-color: transparent;
   color: white;
   border-radius: 25px;
@@ -507,6 +555,19 @@ button:active {
     width: 98%;
   }
 }
+
+.form1-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.form1-group label {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 /* ----------------------------------------------------- */
 /* para alertas de info en los form */
 /* ----------------------------------------------------- */
@@ -572,6 +633,51 @@ button:active {
   background-repeat: no-repeat;
   transform: translateY(-1px);
   margin-left: 10px;
+}
+
+.a-link {
+  color: #298cfd;
+  margin-bottom: 10px;
+  text-decoration: none;
+}
+
+.a-link:hover {
+  cursor: pointer;
+  color: #6d54ff;
+  text-decoration: underline;
+}
+
+
+/* Estilo del contenedor del modal */
+.my-swal {
+  margin-top: 50px;
+  background-color: var(--basicBackground) !important;
+  padding: 20px !important;
+  border-radius: 20px !important;
+  border: 1px solid #450076 !important;
+}
+
+/* Estilo del título */
+.my-swal-title {
+  color: #f0f0ff !important;
+  font-size: 24px !important;
+}
+
+/* Estilo del texto del contenido */
+.my-swal-content {
+  color: #ffffff !important;
+  font-size: 16px !important;
+}
+
+.notification-dot {
+  background-color: red; /* Color del punto */
+  color: white; /* Color del texto */
+  border-radius: 50%; /* Hacerlo redondo */
+  padding: 1px 6px; /* Espaciado */
+  position: absolute; /* Para posicionar correctamente */
+  top: 0; /* Ajusta según sea necesario */
+  left: -2px; /* Ajusta según sea necesario */
+  font-size: 10px; /* Tamaño de fuente */
 }
 
 /* 

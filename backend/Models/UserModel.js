@@ -37,9 +37,7 @@ const userSchema = new mongoose.Schema(
 userSchema.pre("save", async function (next) {
   if (this.isModified("password") || this.isNew) {
     const saltRounds = parseInt(process.env.SALT) || 10; // Número de rondas de sal
-    console.log("Se cae esta madre aquí");
     this.password = await bcrypt.hash(this.password, saltRounds);
-    console.log("Se cae esta madre aquí después");
   }
   next();
 });

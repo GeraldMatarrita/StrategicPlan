@@ -1,11 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
@@ -223,6 +219,14 @@ export class InvitationsComponent implements OnInit {
         planId: planId,
         userId: this.activeUserID,
       });
+
+      // Actualizar el conteo de invitaciones después de responder
+      this.invitationsService
+        .getPendingInvitationsCount(this.activeUserID)
+        .subscribe((count) => {
+          this.invitationsService.updatePendingInvitationsCount(count);
+        });
+
       Swal.fire({
         icon: 'success',
         title: 'Respuesta enviada',
