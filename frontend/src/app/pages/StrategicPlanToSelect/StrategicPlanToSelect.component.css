@@ -6,7 +6,7 @@
   padding: 10px 10px 50px 10px; /* top right bottom left */
 }
 .StrategicPlanStyle h2 {
-  color: rgb(214, 208, 208);
+  color: var(--text_color);
   text-align: center;
   margin: 25px 0 0 0;
 }
@@ -55,7 +55,7 @@
   display: inline-block; /* Asegura que se alineen en la misma línea */
   font-size: 1.3rem;
   font-weight: bold;
-  color: white;
+  color: var(--text_color);
 }
 
 #section1StartDateTitle {
@@ -64,7 +64,7 @@
   display: inline-block; /* Asegura que se alineen en la misma línea */
   font-size: 1.3rem;
   font-weight: bold;
-  color: white;
+  color: var(--text_color);
 }
 
 #section1EndDateTitle {
@@ -73,7 +73,7 @@
   display: inline-block; /* Asegura que se alineen en la misma línea */
   font-size: 1.3rem;
   font-weight: bold;
-  color: white;
+  color: var(--text_color);
 }
 
 #section1startDateValue {
@@ -81,7 +81,7 @@
   padding: 10px;
   display: inline-block; /* Asegura que se alineen en la misma línea */
   font-size: 1rem;
-  color: rgb(214, 208, 208);
+  color: var(--text_color);
 }
 
 #section1EndDateValue {
@@ -89,13 +89,13 @@
   padding: 10px;
   display: inline-block; /* Asegura que se alineen en la misma línea */
   font-size: 1rem;
-  color: rgb(214, 208, 208);
+  color: var(--text_color);
 }
 
 #section1NameValue {
   display: inline-block; /* Asegura que se alineen en la misma línea */
   font-size: 1.2rem;
-  color: white;
+  color: var(--text_color);
 }
 
 /* ------------------------------ */

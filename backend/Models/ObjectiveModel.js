@@ -6,11 +6,12 @@ const Joi = require("joi");
  */
 const objectiveSchema = new mongoose.Schema(
   {
-    startDate: { type: Date, default: Date.now }, // Fecha automática como 'now'
-    description: { type: String, required: true }, // Solo description es required
-    totalGoals: { type: Number },
-    completedGoals: { type: Number },
+    startDate: { type: Date, default: Date.now },
+    description: { type: String, required: true },
+    totalGoals: { type: Number, default: 0 }, // Asegúrate de que tenga un valor predeterminado
+    completedGoals: { type: Number, default: 0 }, // Igualmente aquí
     responsible: { type: String },
+    goals_ListIDS: [{ type: mongoose.Schema.Types.ObjectId, ref: "Goals" }],
   },
   { strict: "throw" }
 );
@@ -22,8 +23,8 @@ const objectiveSchema = new mongoose.Schema(
  */
 const validateObjective = (data) => {
   const schema = Joi.object({
-    startDate: Joi.date().optional().label("Start Date"), // No es required
-    description: Joi.string().min(3).max(255).required().label("Description"), // Único required
+    startDate: Joi.date().optional().label("Start Date"), // No es requerido
+    description: Joi.string().min(3).max(255).required().label("Description"), // Solo description es requerido
     totalGoals: Joi.number().integer().min(1).optional().label("Total Goals"),
     completedGoals: Joi.number()
       .integer()
@@ -32,6 +33,10 @@ const validateObjective = (data) => {
       .optional()
       .label("Completed Goals"),
     responsible: Joi.string().min(3).max(50).optional().label("Responsible"),
+    goals_ListIDS: Joi.array()
+      .items(Joi.string().regex(/^[0-9a-fA-F]{24}$/))
+      .optional()
+      .label("Goals List IDs"), // Validación de lista de ObjectIDs
   });
   return schema.validate(data);
 };

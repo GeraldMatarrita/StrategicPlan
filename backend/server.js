@@ -119,6 +119,9 @@ app.use("/api/invitations", Invitations);
 const Objective = require("./Routes/objectiveRoute");
 app.use("/api/objective", Objective);
 
+const Goals = require("./Routes/goalsRoute");
+app.use("/api/goals", Goals);
+
 // --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
 // al finalizar borrar esta ya que es solo de pruebas

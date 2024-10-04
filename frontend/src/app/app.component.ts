@@ -13,6 +13,7 @@ import { MatListModule } from '@angular/material/list';
 
 import { LayoutModule } from '@angular/cdk/layout';
 import { SideNavComponent } from './navigation/sideNav/sideNav.component';
+import { NAVIGATIONS_ROUTES } from './config/navigations.routes';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -60,11 +61,13 @@ export class AppComponent implements OnInit {
 
   checkRouteAndToggleSidenav(url: string): void {
     console.log('ruta', url); // Imprime la ruta actual
-    if (url.includes('Objectives')) {
-      // Verifica si está en 'objectives'
-      this.sidenav.open(); // Abre el sidenav si la ruta contiene 'objectives'
+    if (
+      url.includes(NAVIGATIONS_ROUTES.OBJECTIVE) ||
+      url.includes(NAVIGATIONS_ROUTES.GOALS)
+    ) {
+      this.sidenav.open(); // Abre el sidenav si la ruta es una pensada para dejarlo abierto
     } else {
-      this.sidenav.close(); // Si no está en 'objectives', lo cierra
+      this.sidenav.close();
     }
   }
 }

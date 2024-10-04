@@ -1,28 +1,17 @@
-<div class="ObjectiveStyle">
-  <div class="objectiveMenu">
-    <button class="buttonAdd m-3" (click)="onClickAddObjective()">Add</button>
+<div class="goalsStyle">
+  <div class="goalsMenu">
+    <button class="buttonAdd m-3" (click)="onClickAddGoal()">Add</button>
     <p>Plan: {{ planData?.name }}</p>
   </div>
   <div class="container">
-    <div *ngIf="objectivesData.length > 0">
+    <div *ngIf="goalsData.length > 0">
       <div class="card-container">
-        <div
-          *ngFor="let item of objectivesData"
-          class="card-Objective-container"
-        >
-          <div class="card-Objective" (click)="onClickObjective(item)">
+        <div *ngFor="let item of goalsData" class="card-Objective-container">
+          <div class="card-Objective" (click)="onClickGoal(item)">
             <div class="content-wrapper">
               <span class="title">Description:</span>
               <div class="value-container">
                 <span class="value">{{ item.description }}</span>
-              </div>
-              <div>
-                <span class="startDate"
-                  >Goals: {{ item.completedGoals}} / {{ item.totalGoals}}</span
-                >
-                <span class="startDate"
-                  >Start Date: {{ item.startDate | date : "dd/MM/yyyy" }}</span
-                >
               </div>
             </div>
           </div>
@@ -34,12 +23,22 @@
       <div class="modal-content">
         <div class="form1-card">
           <form
-            [formGroup]="formObjective"
-            (submit)="isEditing ? updateObjective() : createObjective()"
+            [formGroup]="formGoal"
+            (submit)="isEditing ? updateGoal() : createGoal()"
             class="form1"
           >
             <div>
-              <h2>Objective</h2>
+              <h2>Goal</h2>
+              <div>
+                <select formControlName="objectiveIdSelectedForm">
+                  <option
+                    *ngFor="let objective of objectiveData"
+                    [value]="objective._id"
+                  >
+                    {{ objective.description }}
+                  </option>
+                </select>
+              </div>
 
               <div>
                 <textarea
@@ -50,27 +49,24 @@
                 ></textarea>
                 <div
                   *ngIf="
-                    formObjective.get('description')?.invalid &&
-                    (formObjective.get('description')?.dirty ||
-                      formObjective.get('description')?.touched)
+                    formGoal.get('description')?.invalid &&
+                    (formGoal.get('description')?.dirty ||
+                      formGoal.get('description')?.touched)
                   "
                   class="error"
                 >
                   <p
                     *ngIf="
-                    formObjective.get('description')?.errors?.['required']
-                      "
+                      formGoal.get('description')?.errors?.['required']
+                    "
                   >
                     Description is required.
                   </p>
                 </div>
               </div>
-
-              <div class="badInfo" *ngIf="!formObjective.valid">
+              <div class="badInfo" *ngIf="!formGoal.valid">
                 <p>Not ready to send</p>
               </div>
-
-              <!-- Cambia el texto y método del botón según el modo -->
               <div>
                 <button type="submit" class="buttonCreate m-3">
                   {{ isEditing ? "Update" : "Create" }}
@@ -81,15 +77,6 @@
                   (click)="toogleShowModal()"
                 >
                   Cancel
-                </button>
-              </div>
-              <div>
-                <button
-                  type="button"
-                  class="buttonDelete m-3"
-                  (click)="deleteObjective()"
-                >
-                  Borrar
                 </button>
               </div>
             </div>

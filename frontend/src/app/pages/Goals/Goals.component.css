@@ -2,12 +2,12 @@
   display: block;
 }
 
-.ObjectiveStyle {
+.goalsStyle {
   padding: 0px 0px 50px 0px; /* top right bottom left */
   color: var(--text_color);
 }
 
-.objectiveMenu {
+.goalsMenu {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
@@ -18,7 +18,7 @@
     var(--color1_blue) 100%
   );
 }
-.objectiveMenu p {
+.goalsMenu p {
   margin: 0;
   padding: 0;
   color: var(--text_color);
@@ -117,8 +117,9 @@
 }
 
 .title {
-  font-size: 0.8em;
+  font-size: 1em;
   font-weight: bold;
+  margin-bottom: 0.5em;
 }
 
 .value-container {
@@ -127,14 +128,10 @@
 }
 
 .value {
-  font-size: 0.6em;
+  font-size: 0.95em;
   display: -webkit-box;
-  /* -webkit-line-clamp: 3; /* Número de líneas antes de truncar */
+  -webkit-line-clamp: 3; /* Número de líneas antes de truncar */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.startDate {
-  font-size: 0.6rem;
 }

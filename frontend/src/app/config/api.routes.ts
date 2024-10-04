@@ -36,6 +36,14 @@ export const API_ROUTES = {
   Create_Objective: '/objective/create', // POST
   Update_Objective: '/objective/update', // PUT + "/StrategicPlanId"
   Delete_Objective: '/objective/delete', // DELETE + "/StrategicPlanId"
+
+  // -------------------------------------------------------------
+  // Para los Goals - Metas
+  // -------------------------------------------------------------
+  Get_ByPlanID_Goals: '/goals/getPlanGoals', // GET + "/StrategicPlanId"
+  Create_Goals: '/goals/create', // POST + "/ObjectiveId"
+  Update_Goals: '/goals/update', // PUT
+
   // --------------------------------------------------------------------------------
   // --------------------------------------------------------------------------------
   // al finalizar borrar esta ya que es solo de pruebas

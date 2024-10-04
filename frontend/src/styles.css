@@ -20,6 +20,8 @@ button:active {
   --gray_middle_dark: #121212;
   --gray_high_dark: #111010;
 
+  --text_color: rgb(214, 208, 208);
+
   --error_color: #ef665b;
   --succes_color: #84d65a;
 }
