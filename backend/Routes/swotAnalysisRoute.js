@@ -8,30 +8,33 @@ const {StrategicPlan} = require("../Models/StrategicPlanModel"); // Importa el m
 router.post("/strengths/addCardAnalysis/:id",async (req,res)=> {
     try {
         const { id } = req.params; // Obtener el ID del parámetro de la URL
+        console.log(id)
         const strategicPlan = await StrategicPlan.findById(id)
+        console.log(strategicPlan)
         if (!strategicPlan) {
           return res
             .status(500)
             .json({ message: "StrategicPlanModel no encontrado" });
         }
-
+        console.log(strategicPlan.SWOT)
         const swotAnalisis = await SWOT.findById(strategicPlan.SWOT)
+        console.log(swotAnalisis)
         if(!swotAnalisis){
           return res.status(500).json({message:"Analisis FODA no encontrado"})
         }
-
-        const {error} = validateCardAnalysis(req.body)
-        if(error){
+        console.log("Request Body:",req.body)
+       /*const {err} = validateCardAnalysis(req.body)
+        if(err){
           return res
             .status(500)
             .json({ message: "Datos del card analisis mal ingresados, revisa los datos" });
-        }
+        }*/
 
 
         const newAnalisis = new cardAnalysis(req.body)
-        newAnalisis.save()
-        swotAnalisis.strengths.push(newAnalisis._id)
-        swotAnalisis.save()
+        await newAnalisis.save()
+        await swotAnalisis.strengths.push(newAnalisis._id)
+        await swotAnalisis.save()
 
         
         res.status(201).json({
@@ -195,9 +198,9 @@ router.get("/allAnalisis/:id",async (req,res)=>{
           .json({ message: "StrategicPlanModel no encontrado" });
       }
 
-      const cameAnalisis = await CAME.findById(strategicPlan.CAME)
-      if(!cameAnalisis){
-        return res.status(500).json({message:"Analisis MECA no encontrado"})
+      const swotAnalisis = await SWOT.findById(strategicPlan.SWOT)
+      if(!swotAnalisis){
+        return res.status(500).json({message:"Analisis FODA no encontrado"})
       }
 
       SWOT.findById(strategicPlan.SWOT)

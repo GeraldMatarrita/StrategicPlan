@@ -1,245 +1,49 @@
-<div class="foda-meca-style">
-  <div class="container">
-    <!-- Si hay datos de FODA/MECA o no está en modo edición, muestra los datos -->
-    <!-- <div *ngIf="fodaMecaData && fodaMecaData.strengths && !editMode"> -->
-    <div *ngIf="!editMode">
-      <div class="Foda-container">
-        <div class="title-container">
-          <h2>FODA</h2>
-        </div>
-        <div class="row-personalized row">
-          <div class="fortaleza col-12 col-md-6">
-            <h3>Fortalezas</h3>
-            <span>{{ fodaMecaData.strengths }}</span>
-          </div>
-          <div class="debilidad col-12 col-md-6">
-            <h3>Debilidades</h3>
-            <span>{{ fodaMecaData.weaknesses }}</span>
-          </div>
-        </div>
-        <div class="row-personalized row">
-          <div class="oportunidad col-12 col-md-6">
-            <h3>Oportunidades</h3>
-            <span>{{ fodaMecaData.opportunities }}</span>
-          </div>
-          <div class="amenaza col-12 col-md-6">
-            <h3>Amenazas</h3>
-            <span>{{ fodaMecaData.threats }}</span>
-          </div>
-        </div>
+<div class="container mt-5">
+  <div class="row">
+    <!-- Strengths Column -->
+    <div class="col-md-3">
+      <h4>Strengths</h4>
+      <div *ngFor="let card of swot.strengths" class="card mb-2">
+        <div class="card-header">{{ card.title }}</div>
+        <div class="card-body">{{ card.description }}</div>
+        <button class="btn btn-danger" (click)="deleteCard('strengths', card._id)">Delete</button>
       </div>
-
-      <div class="Meca-container">
-        <div class="title-container">
-          <h2>MECA</h2>
-        </div>
-        <div class="row-personalized row">
-          <div class="correcciones col-12 col-md-6">
-            <h3>Correcciones</h3>
-            <span>{{ fodaMecaData.correct }}</span>
-          </div>
-          <div class="adaptar col-12 col-md-6">
-            <h3>Adaptar</h3>
-            <span>{{ fodaMecaData.adapt }}</span>
-          </div>
-        </div>
-        <div class="row-personalized row">
-          <div class="mantener col-12 col-md-6">
-            <h3>Mantener</h3>
-            <span>{{ fodaMecaData.maintain }}</span>
-          </div>
-          <div class="explorar col-12 col-md-6">
-            <h3>Explorar</h3>
-            <span>{{ fodaMecaData.explore }}</span>
-          </div>
-        </div>
+      <button class="btn btn-primary" (click)="addCard('strengths')">Add Strength</button>
+    </div>
+    
+    <!-- Weaknesses Column -->
+    <div class="col-md-3">
+      <h4>Weaknesses</h4>
+      <div *ngFor="let card of swot.weaknesses" class="card mb-2">
+        <div class="card-header">{{ card.title }}</div>
+        <div class="card-body">{{ card.description }}</div>
+        <button class="btn btn-danger" (click)="deleteCard('weaknesses', card._id)">Delete</button>
       </div>
-
-      <button class="buttonEdit m-4" (click)="toggleEditMode()">Editar</button>
+      <button class="btn btn-primary" (click)="addCard('weaknesses')">Add Weakness</button>
     </div>
 
-    <!-- Template para editar FODA/MECA -->
-    <!-- <div *ngIf="!fodaMecaData.strengths || editMode"> -->
-    <div *ngIf="editMode">
-      <form [formGroup]="fodaMecaForm" (ngSubmit)="updateFodaMecaForPlan()">
-        <!-- Contenedor FODA -->
-        <div class="Foda-container">
-          <div class="title-container">
-            <h2>FODA</h2>
-          </div>
-          <div class="row-personalized row">
-            <div class="fortaleza col-12 col-md-6">
-              <label for="strengthsText">Fortalezas</label>
-              <textarea
-                id="strengthsText"
-                formControlName="strengths"
-              ></textarea>
-              <div
-                *ngIf="
-                  fodaMecaForm.get('strengths')?.invalid &&
-                  (fodaMecaForm.get('strengths')?.dirty ||
-                    fodaMecaForm.get('strengths')?.touched)
-                "
-                class="error"
-              >
-                <p *ngIf="fodaMecaForm.get('strengths')?.errors?.['required']">
-                  Fortalezas es requerido.
-                </p>
-              </div>
-            </div>
-            <div class="debilidad col-12 col-md-6">
-              <label for="weaknessesText">Debilidades</label>
-              <textarea
-                id="weaknessesText"
-                formControlName="weaknesses"
-              ></textarea>
-              <div
-                *ngIf="
-                  fodaMecaForm.get('weaknesses')?.invalid &&
-                  (fodaMecaForm.get('weaknesses')?.dirty ||
-                    fodaMecaForm.get('weaknesses')?.touched)
-                "
-                class="error"
-              >
-                <p *ngIf="fodaMecaForm.get('weaknesses')?.errors?.['required']">
-                  Debilidades es requerido.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="row-personalized row">
-            <div class="oportunidad col-12 col-md-6">
-              <label for="opportunitiesText">Oportunidades</label>
-              <textarea
-                id="opportunitiesText"
-                formControlName="opportunities"
-              ></textarea>
-              <div
-                *ngIf="
-                  fodaMecaForm.get('opportunities')?.invalid &&
-                  (fodaMecaForm.get('opportunities')?.dirty ||
-                    fodaMecaForm.get('opportunities')?.touched)
-                "
-                class="error"
-              >
-                <p
-                  *ngIf="fodaMecaForm.get('opportunities')?.errors?.['required']"
-                >
-                  Oportunidades es requerido.
-                </p>
-              </div>
-            </div>
-            <div class="amenaza col-12 col-md-6">
-              <label for="threatsText">Amenazas</label>
-              <textarea id="threatsText" formControlName="threats"></textarea>
-              <div
-                *ngIf="
-                  fodaMecaForm.get('threats')?.invalid &&
-                  (fodaMecaForm.get('threats')?.dirty ||
-                    fodaMecaForm.get('threats')?.touched)
-                "
-                class="error"
-              >
-                <p *ngIf="fodaMecaForm.get('threats')?.errors?.['required']">
-                  Amenazas es requerido.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+    <!-- Opportunities Column -->
+    <div class="col-md-3">
+      <h4>Opportunities</h4>
+      <div *ngFor="let card of swot.opportunities" class="card mb-2">
+        <div class="card-header">{{ card.title }}</div>
+        <div class="card-body">{{ card.description }}</div>
+        <button class="btn btn-danger" (click)="deleteCard('opportunities', card._id)">Delete</button>
+      </div>
+      <button class="btn btn-primary" (click)="addCard('opportunities')">Add Opportunity</button>
+    </div>
 
-        <div class="Meca-container">
-          <div class="title-container">
-            <h2>MECA</h2>
-          </div>
-          <!-- Contenedor MECA -->
-          <div class="row-personalized row">
-            <div class="correcciones col-12 col-md-6">
-              <label for="improvementsText">Correcciones</label>
-              <textarea
-                id="improvementsText"
-                formControlName="correct"
-              ></textarea>
-              <div
-                *ngIf="
-                  fodaMecaForm.get('correct')?.invalid &&
-                  (fodaMecaForm.get('correct')?.dirty ||
-                    fodaMecaForm.get('correct')?.touched)
-                "
-                class="error"
-              >
-                <p *ngIf="fodaMecaForm.get('correct')?.errors?.['required']">
-                  Correcciones es requerido.
-                </p>
-              </div>
-            </div>
-            <div class="adaptar col-12 col-md-6">
-              <label for="strategiesText">Adaptar</label>
-              <textarea id="strategiesText" formControlName="adapt"></textarea>
-              <div
-                *ngIf="
-                  fodaMecaForm.get('adapt')?.invalid &&
-                  (fodaMecaForm.get('adapt')?.dirty ||
-                    fodaMecaForm.get('adapt')?.touched)
-                "
-                class="error"
-              >
-                <p *ngIf="fodaMecaForm.get('adapt')?.errors?.['required']">
-                  Adaptar es requerido.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="row-personalized row">
-            <div class="mantener col-12 col-md-6">
-              <label for="correctionsText">Mantener</label>
-              <textarea
-                id="correctionsText"
-                formControlName="maintain"
-              ></textarea>
-              <div
-                *ngIf="
-                  fodaMecaForm.get('maintain')?.invalid &&
-                  (fodaMecaForm.get('maintain')?.dirty ||
-                    fodaMecaForm.get('maintain')?.touched)
-                "
-                class="error"
-              >
-                <p *ngIf="fodaMecaForm.get('maintain')?.errors?.['required']">
-                  Mantener es requerido.
-                </p>
-              </div>
-            </div>
-            <div class="explorar col-12 col-md-6">
-              <label for="mecaThreatsText">Explorar</label>
-              <textarea
-                id="mecaThreatsText"
-                formControlName="explore"
-              ></textarea>
-              <div
-                *ngIf="
-                  fodaMecaForm.get('explore')?.invalid &&
-                  (fodaMecaForm.get('explore')?.dirty ||
-                    fodaMecaForm.get('explore')?.touched)
-                "
-                class="error"
-              >
-                <p *ngIf="fodaMecaForm.get('explore')?.errors?.['required']">
-                  Explorar es requerido.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <button type="submit" class="buttonCreate m-4">Guardar</button>
-        <button
-          type="button"
-          class="buttonDelete m-4"
-          (click)="toggleEditMode()"
-        >
-          Cancelar
-        </button>
-      </form>
+    <!-- Threats Column -->
+    <div class="col-md-3">
+      <h4>Threats</h4>
+      <div *ngFor="let card of swot.threats" class="card mb-2">
+        <div class="card-header">{{ card.title }}</div>
+        <div class="card-body">{{ card.description }}</div>
+        <button class="btn btn-danger" (click)="deleteCard('threats', card._id)">Delete</button>
+      </div>
+      <button class="btn btn-primary" (click)="addCard('threats')">Add Threat</button>
     </div>
   </div>
 </div>
+
+

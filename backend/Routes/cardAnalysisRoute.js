@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {cardAnalysis, validateCardAnalysis, cardAnalysis} = require("../Models/cardAnalysis")
+const {cardAnalysis, validateCardAnalysis} = require("../Models/cardAnalysis")
 
 router.get("/getCard/:id",async (req,res)=>{
     try{

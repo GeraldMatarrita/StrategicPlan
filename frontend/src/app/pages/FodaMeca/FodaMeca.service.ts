@@ -4,51 +4,22 @@ import { Observable } from 'rxjs';
 import { API_ROUTES } from '../../config/api.routes';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class FodaMecaService {
+export class SwotService {
+  private apiUrl = API_ROUTES.BASE_URL;  // Cambia la URL según tu backend
+
   constructor(private http: HttpClient) {}
 
-  getFodaMecaData(planId: string): Observable<any[]> {
-    return this.http.get<any[]>(
-      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_ById_StrategicPlan}/${planId}`
-    );
+  getSwotAnalysis(id: any): Observable<any> {
+    return this.http.get(`${this.apiUrl}/swotAnalysis/allAnalisis/${id}`);
   }
 
-  /**
-   * @param url to update data
-   * @param id id data to update
-   * @param data data to update
-   * @returns
-   */
-  updateData(url: string, id: string, data: any): Observable<any> {
-    console.log('update id', id);
-    console.log('update data', data);
-    console.log('update url', url);
-    return this.http.put<any>(`${url}/${id}`, data);
+  addSwotCard(type: string, id: any, card: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/swotAnalysis/${type}/addCardAnalysis/${id}`, card);
   }
 
-  /**
-   * función para actualizar los datos de fodaMeca
-   * @param id del plan estratégico a actualizar
-   * @param data datos a enviar para actualizar
-   * @returns promesa con el mensaje de respuesta
-   */
-  updateFodaMeca(id: string, data: any): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.updateData(
-        `${API_ROUTES.BASE_URL}${API_ROUTES.Update_FodaMeca_StrategicPlan}`,
-        id,
-        data
-      ).subscribe(
-        (response: any) => {
-          resolve(response.message);
-        },
-        (error: any) => {
-          console.error('Error al actualizar los datos:', error);
-          reject(error);
-        }
-      );
-    });
+  deleteSwotCard(type: string, id: any, cardId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/swotAnalysis/${type}/deleteCard/${id}`, { idCard: cardId });
   }
 }

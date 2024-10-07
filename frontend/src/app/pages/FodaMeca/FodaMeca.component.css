@@ -193,3 +193,12 @@ label {
   );
   color: #ffffff; /* Texto blanco para un buen contraste */
 }
+.card {
+  min-height: 150px;
+}
+
+h4 {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+}

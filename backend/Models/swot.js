@@ -6,7 +6,6 @@ const swotSchema = new mongoose.Schema({
   weaknesses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'cardAnalysis' }],
   opportunities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'cardAnalysis' }],
   threats: [{ type: mongoose.Schema.Types.ObjectId, ref: 'cardAnalysis' }],
-  StrategicPlanID: {type:mongoose.Schema.Types.ObjectId,ref: 'StrategicPlan'}
 });
 
 const SWOT = mongoose.model('SWOT', swotSchema);

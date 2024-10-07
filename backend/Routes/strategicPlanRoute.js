@@ -230,36 +230,27 @@ router.post("/create/:userId", async (req, res) => {
 
     // Crear un nuevo plan estratégico con FODA y MECA vacios
     const newStrategicPlan = new StrategicPlan(req.body);
+    
+      
+    const newSWOT = new SWOT({
+        strengths:[],
+        weaknesses:[],
+        opportunities:[],
+        threats:[]
+    });
+    const newCAME = new CAME({
+          correct: [],
+          afront: [],
+          maintain: [],
+          explore: []
+        }
+      );
+    await newSWOT.save()
+    await newCAME.save()
+    newStrategicPlan.SWOT = newSWOT._id
+    newStrategicPlan.CAME = newCAME._id
+    console.log(newStrategicPlan)
     await newStrategicPlan.save()
-      .then(plan => {
-          const newSWOT = new SWOT({
-              StrategicPlanID: plan._id,//Se enlaza el plan Estrategico a su analisis FODA
-              strengths:[],
-              weaknesses:[],
-              opportunities:[],
-              threats:[]
-          });
-          const newCAME = new CAME({
-                StrategicPlanID: plan._id,//Se enlaza el plan Estrategico a su analisis MECA
-                correct: [],
-                afront: [],
-                maintain: [],
-                explore: []
-              }
-            );
-          
-          newCAME.save()
-              .then(came => {
-              // Actualizar el StrategicPlan con el ID de CAME
-                plan.CAME = came._id;
-                })
-
-          newSWOT.save()
-              .then(swot => {
-              // Actualizar el StrategicPlan con el ID de CAME
-                plan.SWOT = swot._id;
-                })
-          });
 
     // Asociar el plan al usuario
     await User.updateOne(

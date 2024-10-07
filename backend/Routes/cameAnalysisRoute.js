@@ -20,7 +20,7 @@ router.post("/correct/addCardAnalysis/:id",async (req,res)=> {
             .status(500)
             .json({ message: "StrategicPlanModel no encontrado" });
         }
-
+        
         const cameAnalisis = await CAME.findById(strategicPlan.CAME)
         if(!cameAnalisis){
           return res.status(500).json({message:"Analisis MECA no encontrado"})

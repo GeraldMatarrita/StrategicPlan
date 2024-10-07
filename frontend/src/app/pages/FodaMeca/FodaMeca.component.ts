@@ -1,133 +1,42 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { Router } from '@angular/router';
-import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
-import { FodaMecaService } from './FodaMeca.service';
-import Swal from 'sweetalert2';
-import { NgSelectModule } from '@ng-select/ng-select';
+import { SwotService } from './FodaMeca.service';
 
 @Component({
-  selector: 'app-foda-meca',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule],
+  selector: 'app-swot-board',
   templateUrl: './FodaMeca.component.html',
-  styleUrl: './FodaMeca.component.css',
+  styleUrls: ['./FodaMeca.component.scss']
 })
-export class FodaMecaComponent {
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private FodaMecaSevice: FodaMecaService
-  ) {}
+export class FodaMecaComponent implements OnInit {
+  swot: any = { strengths: [], weaknesses: [], opportunities: [], threats: [] };
+  planId: any = localStorage.getItem('PlanID')
+  constructor(private swotService: SwotService) {}
 
-  fodaMecaForm!: FormGroup;
-
-  responseMessage: any = '';
-  currentPlanId: string = '';
-  fodaMecaData: any = [];
-  editMode = false;
-
-  ngOnInit() {
-    this.createForm();
-    this.currentPlanId = String(localStorage.getItem('PlanID'));
-    this.getFodaMecaForPlan();
+  ngOnInit(): void {
+    this.loadSwot();
   }
 
-  createForm() {
-    this.fodaMecaForm = this.formBuilder.group({
-      strengths: ['', [Validators.required]],
-      opportunities: ['', [Validators.required]],
-      weaknesses: ['', [Validators.required]],
-      threats: ['', [Validators.required]],
-      maintain: ['', [Validators.required]],
-      adapt: ['', [Validators.required]],
-      correct: ['', [Validators.required]],
-      explore: ['', [Validators.required]],
+  loadSwot(): void {
+      // Aquí debes poner el ID del plan estratégico
+    this.swotService.getSwotAnalysis(this.planId).subscribe((data) => {
+      this.swot = data;
     });
   }
-  /**
-   * funcion para enviar los datos a actualizar de fodaMeca
-   * @returns
-   */
-  async updateFodaMecaForPlan(): Promise<void> {
-    if (this.fodaMecaForm.valid) {
-      try {
-        this.responseMessage = await this.FodaMecaSevice.updateFodaMeca(
-          this.currentPlanId,
-          this.fodaMecaForm.value
-        );
-        Swal.fire({
-          icon: 'success',
-          title: 'Guardado',
-          text: this.responseMessage,
-        });
-        this.getFodaMecaForPlan();
-        this.editMode = false;
-      } catch (error) {
-        this.responseMessage =
-          (error as any).error?.message || 'Error desconocido';
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: this.responseMessage,
-        });
-      }
+
+  addCard(type: string): void {
+    
+    const title = prompt('Enter card title');
+    const description = prompt('Enter card description');
+    
+    if (title && description) {
+      this.swotService.addSwotCard(type, this.planId, {title, description}) 
+        .subscribe(() => this.loadSwot());
     }
   }
 
-  /**
-   * función para obtener los datos de FODA y MECA de un plan
-   * - Se obtienen los datos de FODA y MECA de un plan y se asignan al formulario y
-   *  a la variable `fodaMecaData`
-   */
-  getFodaMecaForPlan(): void {
-    this.FodaMecaSevice.getFodaMecaData(this.currentPlanId).subscribe(
-      (data: any) => {
-        // Verifica si los datos incluyen FODA y MECA
-        if (data && data.FODA && data.MECA) {
-          // Asignar los datos FODA y MECA al formulario
-          this.fodaMecaData = {
-            strengths: data.FODA.strengths,
-            opportunities: data.FODA.opportunities,
-            weaknesses: data.FODA.weaknesses,
-            threats: data.FODA.threats,
-            maintain: data.MECA.maintain,
-            adapt: data.MECA.adapt,
-            correct: data.MECA.correct,
-            explore: data.MECA.explore,
-          };
-
-          // Llenar el formulario con los datos obtenidos
-          this.fodaMecaForm.patchValue(this.fodaMecaData);
-          console.log('fodameca data', this.fodaMecaData);
-        }
-      },
-      (error: any) => {
-        console.error('Error al obtener los datos:', error);
-      }
-    );
-  }
-
-  /**
-   * función para navegar a la dirección anterior strategic-plan
-   */
-  goBack(): void {
-    this.router.navigate([NAVIGATIONS_ROUTES.STRATEGIC_PLAN]);
-  }
-
-  /**
-   * función para habilitar o deshabilitar el modo de edición
-   */
-  toggleEditMode(): void {
-    this.editMode = !this.editMode;
-    console.log(this.editMode);
+  deleteCard(type: string, cardId: string): void {
+    this.swotService.deleteSwotCard(type, this.planId, cardId)
+      .subscribe(() => this.loadSwot());
   }
 }
+
+
