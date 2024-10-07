@@ -172,6 +172,8 @@ export class StrategicPlanToSelect implements OnInit {
    */
   setFormVisibility(): void {
     this.isFormVisible = !this.isFormVisible;
+    // Desplazar la página al inicio
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   /**

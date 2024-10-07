@@ -1,4 +1,16 @@
-<span>
-    <app-nav-bar></app-nav-bar>
-    <router-outlet></router-outlet>
-</span>
+<!-- <mat-toolbar>
+  <app-nav-bar></app-nav-bar>
+</mat-toolbar> -->
+<app-nav-bar></app-nav-bar>
+
+<mat-sidenav-container>
+  <mat-sidenav>
+    <app-site-nav></app-site-nav>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

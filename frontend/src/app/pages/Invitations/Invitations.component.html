@@ -1,10 +1,10 @@
 <div class="invitationStyle">
   <!-- muestra las invitaciones pendientes y permite aceptarlas o rechazarlas-->
   <div *ngIf="showPlans">
-    <h2>Invitations</h2>
-    <div *ngIf="invitationData.length > 0; else noData">
+    <h2 class="p-3">Invitations</h2>
+    <div *ngIf="invitationData.length > 0; else noData" class="container">
       <div class="table-responsive">
-        <table class="table table-dark">
+        <table class="table">
           <thead>
             <tr>
               <th>Plan Name</th>
@@ -17,17 +17,19 @@
               <ng-container *ngFor="let invitation of invitationData">
                 <tr>
                   <td>{{ invitation.planName }}</td>
-                  <td>{{ invitation.status }}</td>
+                  <td style="text-transform: uppercase">
+                    {{ invitation.status }}
+                  </td>
                   <td>
                     <button
                       (click)="responseInvitation(false, invitation.planId)"
-                      class="btn btn-danger m-2"
+                      class="buttonDelete m-2"
                     >
                       Decline
                     </button>
                     <button
                       (click)="responseInvitation(true, invitation.planId)"
-                      class="btn btn-success"
+                      class="buttonCreate m-2"
                     >
                       Accept
                     </button>
@@ -49,10 +51,10 @@
     <!-- muestra solo los planes para invitar a un usuario segun el usuario logueado -->
     <div *ngIf="strategicPlanData.length > 0; else noData2">
       <span *ngIf="showPlans">
-        <h2>Select Plan To Invite</h2>
+        <h2 id="toInvite">Select Plan To Invite</h2>
 
         <div *ngFor="let item of strategicPlanData" class="container">
-          <div id="section0" class="row d-flex justify-content-center">
+          <div id="section1" class="row d-flex justify-content-center">
             <div class="container-card1-preview">
               <div class="card-perzonnalized1" (click)="onSelectPlan(item.id)">
                 <div class="shadowButtomLeft"></div>
@@ -99,9 +101,9 @@
         </button>
       </div>
 
-      <h3>Invite User</h3>
+      <h2>Invite User</h2>
 
-      <div class="container">
+      <div class="invitation-container">
         <form [formGroup]="invitationForm" (ngSubmit)="sendInvitations()">
           <ng-select
             [items]="usersToInvite"

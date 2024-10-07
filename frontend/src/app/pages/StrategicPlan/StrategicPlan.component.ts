@@ -101,7 +101,6 @@ export class StrategicPlanComponent implements OnInit {
   loadPlanById(planId: string): void {
     this.strategicPlanService.getPlanByID(planId).subscribe(
       (data: any) => {
-        console.log(data);
         this.strategicPlanData = [
           {
             id: data._id,
@@ -247,5 +246,13 @@ export class StrategicPlanComponent implements OnInit {
   isPlanExpired(endDate: Date): boolean {
     const currentDate = new Date();
     return new Date(endDate) < currentDate;
+  }
+
+  /**
+   * Método para cancelar la edicion de un plan
+   */
+  cancelEdit(): void {
+    this.setFormVisibility();
+    this.loadPlanById(this.currentPlanId);
   }
 }

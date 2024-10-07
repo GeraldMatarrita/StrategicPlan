@@ -2,27 +2,10 @@
   display: block;
 }
 
-:root {
-  --color2: #3700ff;
-  --color3: #9900ff;
-  --color4: #ff00ff;
-  --basicBackground: #171717;
-}
-
 .StrategicPlanStyle {
-  background-color: var(--basicBackground);
-  color: white;
-  min-height: calc(100vh - 52px);
   padding: 10px 0px 50px 0px; /* top right bottom left */
-  margin: auto;
+  color: var(--text_color);
 }
-.StrategicPlanStyle h1 {
-  text-align: center;
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
 /* ----------------------------------------------------- */
 /* card perzonalizada numero 1 Varation */
 /* ----------------------------------------------------- */
@@ -59,15 +42,14 @@
 /* ------------------------------ */
 #section1 {
   min-height: 400px;
-  background-color: #171717;
 }
 
 #section1NameTitle {
   padding: 10px;
   display: inline-block; /* Asegura que se alineen en la misma línea */
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: bold;
-  color: white;
+  color: rgb(214, 208, 208);
 }
 
 #section1StartDateTitle {
@@ -76,7 +58,7 @@
   display: inline-block; /* Asegura que se alineen en la misma línea */
   font-size: 1.3rem;
   font-weight: bold;
-  color: white;
+  color: var(--text_color);
 }
 
 #section1EndDateTitle {
@@ -85,7 +67,7 @@
   display: inline-block; /* Asegura que se alineen en la misma línea */
   font-size: 1.3rem;
   font-weight: bold;
-  color: white;
+  color: var(--text_color);
 }
 
 #section1startDateValue {
@@ -93,7 +75,7 @@
   padding: 10px;
   display: inline-block; /* Asegura que se alineen en la misma línea */
   font-size: 1rem;
-  color: rgb(214, 208, 208);
+  color: var(--text_color);
 }
 
 #section1EndDateValue {
@@ -101,13 +83,13 @@
   padding: 10px;
   display: inline-block; /* Asegura que se alineen en la misma línea */
   font-size: 1rem;
-  color: rgb(214, 208, 208);
+  color: var(--text_color);
 }
 
 #section1NameValue {
   display: inline-block; /* Asegura que se alineen en la misma línea */
   font-size: 1.2rem;
-  color: white;
+  color: var(--text_color);
 }
 
 /* ------------------------------ */
@@ -116,11 +98,11 @@
 
 #section2 {
   min-height: 600px;
-  background-color: #111010;
+  background-color: var(--gray_high_dark);
 }
 
 #section2Title {
-  border: 1px solid var(--color2);
+  border: 1px solid var(--color1_blue);
   border-radius: 22px;
   padding: 25px 20px;
   font-size: 2.5rem;
@@ -138,11 +120,11 @@
 
 #section3 {
   min-height: 600px;
-  background: linear-gradient(190deg, var(--color2), var(--color3));
+  background: linear-gradient(190deg, var(--color1_blue), var(--color2_purple));
 }
 
 #section3Title {
-  border: 2px solid var(--color4);
+  border: 2px solid var(--color3_pink);
   border-radius: 22px;
   padding: 25px 20px;
   font-size: 2.5rem;
@@ -164,7 +146,7 @@
 }
 
 #section4Title {
-  border: 1px solid var(--color2);
+  border: 1px solid var(--color1_blue);
   border-radius: 22px;
   padding: 25px 20px;
   font-size: 2.5rem;
@@ -199,6 +181,8 @@
 /* Para los members*/
 /* ------------------------------ */
 .members {
+  min-height: 400px;
+
   display: flex;
   flex-direction: column; /* Asegura que los elementos estén en una columna */
   justify-content: center;
@@ -215,10 +199,16 @@
 }
 
 #memberTitle {
-  border: 1px solid var(--color4);
+  border: 1px solid var(--color3_pink);
   border-radius: 22px;
   padding: 25px 20px;
   font-size: 2rem;
   font-weight: bold;
   margin: 25px 0;
+}
+
+#sectionButtons {
+  align-items: center;
+  margin: 20px 0;
+  padding: 0 10%;
 }

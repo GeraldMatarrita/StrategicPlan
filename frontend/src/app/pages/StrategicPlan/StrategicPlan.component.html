@@ -1,13 +1,13 @@
 <div class="StrategicPlanStyle">
-  <button (click)="navigateToSelectPlan()" class="buttonBack m-3">
-    Back to plans
-  </button>
   <!-- Formulario esta visible porque se esta creando un plan o se edita uno -->
   <div *ngIf="isFormVisible" class="form1-card">
     <form [formGroup]="formStrategicPlan" (submit)="sendData()" class="form1">
       <div>
         <h2>Strategic Plan Form</h2>
         <div>
+          <div>
+            <label for="Name"> Name: </label>
+          </div>
           <input
             placeholder="Name"
             type="text"
@@ -29,6 +29,9 @@
         </div>
 
         <div>
+          <div>
+            <label for="mission"> Mission: </label>
+          </div>
           <textarea
             placeholder="mission"
             type="text"
@@ -38,6 +41,9 @@
         </div>
 
         <div>
+          <div>
+            <label for="vision"> Vision: </label>
+          </div>
           <textarea
             placeholder="vision"
             type="text"
@@ -47,8 +53,11 @@
         </div>
 
         <div>
+          <div>
+            <label for="vision"> Vision: </label>
+          </div>
           <textarea
-            placeholder="values"
+            placeholder="vision"
             type="text"
             id="values"
             formControlName="values"
@@ -84,6 +93,9 @@
           <p>Not ready to send</p>
         </div>
         <button type="submit" class="buttonCreate m-3">Submit</button>
+        <button type="button" class="buttonDelete m-3" (click)="cancelEdit()">
+          Cancel
+        </button>
       </div>
     </form>
   </div>
@@ -95,8 +107,8 @@
         class="container-fluid"
         id="containerStrateciPlan"
       >
-        <div id="section1" class="row d-flex justify-content-center">
-          <div class="col-lg-7 col-12">
+        <div class="row d-flex justify-content-center">
+          <div id="section1" class="col-lg-7 col-12">
             <div class="container-card1-view">
               <div class="card-perzonnalized1">
                 <div class="shadowTopRight"></div>
@@ -128,22 +140,24 @@
             </div>
           </div>
           <div class="col-lg-5 col-12">
-            <div>
-              <button
-                *ngIf="!isPlanExpired(item.endDate)"
-                (click)="setFormVisibility()"
-                class="buttonEdit m-4"
-              >
-                Edit
-              </button>
-              <button (click)="navigateToFodaMeca()" class="buttonCreate m-4">
-                Foda Meca
-              </button>
-            </div>
-            <div>
-              <button (click)="outPlan(item.id)" class="buttonDelete m-4">
-                Out Plan
-              </button>
+            <div id="sectionButtons">
+              <div>
+                <button
+                  *ngIf="!isPlanExpired(item.endDate)"
+                  (click)="setFormVisibility()"
+                  class="buttonEdit m-4"
+                >
+                  Edit
+                </button>
+                <button (click)="navigateToFodaMeca()" class="buttonCreate m-4">
+                  Foda Meca
+                </button>
+              </div>
+              <div>
+                <button (click)="outPlan(item.id)" class="buttonDelete m-4">
+                  Out Plan
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -1,0 +1,12 @@
+/* Estilos para el sidenav - parte de la izquierda*/
+mat-icon {
+  color: #ffffff !important;
+}
+
+mat-list-item:hover {
+  background-color: #21262c;
+}
+
+.text-sidenav {
+  color: rgb(190, 190, 190);
+}

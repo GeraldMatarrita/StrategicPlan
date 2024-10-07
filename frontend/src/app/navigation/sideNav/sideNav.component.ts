@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 
+import { MatSidenav } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
@@ -14,7 +15,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { AppComponent } from '../../app.component';
 
 @Component({
-  selector: 'app-nav-bar',
+  selector: 'app-site-nav',
   standalone: true,
   imports: [
     CommonModule,
@@ -27,33 +28,30 @@ import { AppComponent } from '../../app.component';
     MatListModule,
     LayoutModule,
   ],
-  templateUrl: './navBar.component.html',
-  styleUrl: './navBar.component.css',
+  templateUrl: './sideNav.component.html',
+  styleUrl: './sideNav.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavBarComponent {
+export class SideNavComponent {
   constructor(private router: Router, private appComponent: AppComponent) {}
 
   toggleSidenav() {
     this.appComponent.toggleSidenav();
   }
 
-  navigateToNotFound() {
-    this.router.navigate([NAVIGATIONS_ROUTES.NOT_FOUND]);
-  }
-  navigateToHome() {
-    this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
-  }
-
   navigateToStrategicPlan() {
     this.router.navigate([NAVIGATIONS_ROUTES.STRATEGIC_PLAN]);
   }
 
-  navigateToInvitations() {
-    this.router.navigate([NAVIGATIONS_ROUTES.INVITATIONS]);
+  navigateToObjective() {
+    this.router.navigate([NAVIGATIONS_ROUTES.OBJECTIVE]);
   }
-  
-  navigateToAuth() {
-    this.router.navigate([NAVIGATIONS_ROUTES.AUTH]);
+
+  navigateToGoals() {
+    this.router.navigate([NAVIGATIONS_ROUTES.GOALS]);
+  }
+
+  navigateToNotFound() {
+    this.router.navigate([NAVIGATIONS_ROUTES.NOT_FOUND]);
   }
 }
