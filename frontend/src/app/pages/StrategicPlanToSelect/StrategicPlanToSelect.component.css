@@ -11,6 +11,13 @@
   margin: 25px 0 0 0;
 }
 
+.StrategicPlanStyle p {
+  color: var(--text_color);
+  padding-top: 20px;
+  text-align: center;
+  margin: 0 0 25px 0;
+}
+
 /* ----------------------------------------------------- */
 /* card perzonalizada numero 1 Varation */
 /* ----------------------------------------------------- */
