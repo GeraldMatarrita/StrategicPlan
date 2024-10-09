@@ -89,15 +89,19 @@ export class StrategicPlanToSelect implements OnInit {
   loadActivePlans() {
     this.strategicPlanService.getActivePlans(this.activeUserID).subscribe(
       (data: any[]) => {
-        this.strategicPlanData = data.map((item) => ({
-          id: item._id,
-          mission: item.mission,
-          vision: item.vision,
-          values: item.values,
-          startDate: item.startDate,
-          endDate: item.endDate,
-          name: item.name,
-        }));
+        if (data && data.length > 0) {
+          this.strategicPlanData = data.map((item) => ({
+            id: item._id,
+            mission: item.mission,
+            vision: item.vision,
+            values: item.values,
+            startDate: item.startDate,
+            endDate: item.endDate,
+            name: item.name,
+          }));
+        } else {
+          this.strategicPlanData = [];
+        }
         this.isFinishedPlansView = false;
       },
       (error: any) => {

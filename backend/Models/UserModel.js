@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
+const bcrypt = require("bcrypt");
 
 /**
  * Modelo de usuario.
@@ -9,6 +10,8 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
     strategicPlans_ListIDS: [
       { type: mongoose.Schema.Types.ObjectId, ref: "StrategicPlan" },
     ],
@@ -29,6 +32,15 @@ const userSchema = new mongoose.Schema(
   },
   { strict: "throw" }
 );
+
+// Middleware para encriptar la contraseña antes de guardar el usuario
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password") || this.isNew) {
+    const saltRounds = parseInt(process.env.SALT) || 10; // Número de rondas de sal
+    this.password = await bcrypt.hash(this.password, saltRounds);
+  }
+  next();
+});
 
 /**
  * Función de validación de datos de usuario.

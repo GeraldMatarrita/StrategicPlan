@@ -1,12 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import Swal from 'sweetalert2';
 
 import { AuthService } from './Auth.service';
 import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 import { Router } from '@angular/router';
+// import { ResetPasswordComponent } from '../reset-password/reset.password.component';
 @Component({
   selector: 'app-auth',
   standalone: true,
@@ -28,6 +34,8 @@ export class AuthComponent {
   // Variable para almacenar el usuario activo
   activeUser: any = {};
 
+  showResetPassword = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -40,16 +48,45 @@ export class AuthComponent {
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
       usernameOrEmail: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(2)]],
+      password: ['', [Validators.required]],
     });
 
-    this.registerForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', Validators.required],
-    });
+    this.registerForm = this.formBuilder.group(
+      {
+        name: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.pattern(
+              /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/
+            ),
+          ],
+        ],
+        confirmPassword: ['', Validators.required],
+      },
+      {
+        validators: this.passwordsMatchValidator, // Validador de grupo
+      }
+    );
 
     this.loadData();
+  }
+
+  // Validador personalizado que compara las contraseñas
+  passwordsMatchValidator(control: AbstractControl) {
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
+
+    if (password !== confirmPassword) {
+      control.get('confirmPassword')?.setErrors({ passwordsMismatch: true });
+      return { passwordsMismatch: true };
+    } else {
+      control.get('confirmPassword')?.setErrors(null);
+      return null;
+    }
   }
 
   /**
@@ -73,10 +110,6 @@ export class AuthComponent {
     } else {
       this.login();
     }
-  }
-
-  navigateToStrategicPlan(): void {
-    this.router.navigate([NAVIGATIONS_ROUTES.STRATEGIC_PLAN]);
   }
 
   /**
@@ -103,12 +136,7 @@ export class AuthComponent {
       // Almacenar los datos en localStorage
       localStorage.setItem('token', JSON.stringify(userActive));
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Login',
-        text: this.responseMessage,
-      });
-      this.navigateToStrategicPlan();
+      this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
     } catch (error) {
       this.responseMessage =
         (error as any).error?.message || 'Error desconocido';
@@ -126,14 +154,37 @@ export class AuthComponent {
    */
   async register(): Promise<void> {
     try {
-      this.responseMessage = await this.authService.createAccount(
-        this.registerForm.value
-      );
+      const registerData = {
+        name: this.registerForm.get('name')?.value,
+        email: this.registerForm.get('email')?.value,
+        password: this.registerForm.get('password')?.value,
+      };
+
+      this.responseMessage = await this.authService.createAccount(registerData);
+
       Swal.fire({
         icon: 'success',
         title: 'Registro',
         text: this.responseMessage,
       });
+      
+      // Login automático después de un registro exitoso
+      const loginResponse = await this.authService.login({
+        email: registerData.email,
+        password: registerData.password,
+      });
+
+      // Almacenar los datos en localStorage
+      localStorage.setItem('token', JSON.stringify(loginResponse.userActive));
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Successfull Registration',
+        text: `Welcome! You have been successfully registered.`,
+      });
+
+      // Redirigir al usuario a la página de inicio
+      this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
     } catch (error) {
       this.responseMessage =
         (error as any).error?.message || 'Error desconocido';
@@ -150,5 +201,79 @@ export class AuthComponent {
    */
   changeForm(): void {
     this.regiterActive = !this.regiterActive;
+  }
+
+  /**
+   * Método para mostrar el formulario de restablecimiento de contraseña en un SweetAlert
+   */
+  toggleResetPassword(): void {
+    const resetPasswordForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+    });
+
+    Swal.fire({
+      title: 'Reset Password',
+      position: 'top', // Cambia la posición a 'top', 'top-start', 'top-end', etc.
+      customClass: {
+        popup: 'my-swal',
+        title: 'my-swal-title',
+        htmlContainer: 'my-swal-content',
+        confirmButton: 'buttonReset',
+        cancelButton: 'buttonCancelReset',
+        input: 'inputReset',
+      },
+      html: `
+      <form id="reset-password-form">
+        <div>
+          <p>We will send you an email with a link to reset your password.</p>
+          <br>
+          <label style="margin-bottom:6px" for="email">Email:</label>
+          <br>
+          <input class="inputReset" id="email" type="email" placeholder="Enter your email" class="swal2-input" />
+        </div>
+      </form>
+    `,
+      showCancelButton: true,
+      confirmButtonText: 'Send Link',
+      preConfirm: () => {
+        const emailInput = (
+          document.getElementById('email') as HTMLInputElement
+        ).value;
+
+        // Validar el formulario
+        if (!resetPasswordForm.valid) {
+          resetPasswordForm.get('email')?.setValue(emailInput);
+          if (resetPasswordForm.invalid) {
+            Swal.showValidationMessage('Please provide a valid email');
+            return;
+          }
+        }
+        return { email: emailInput };
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const email = result.value?.email;
+
+        if (email) {
+          // Hacer la solicitud al servicio de restablecimiento de contraseña
+          this.authService.requestPasswordReset({ email }).subscribe(
+            (response) => {
+              Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: response.message,
+              });
+            },
+            (error) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error?.error?.message || 'An error occurred',
+              });
+            }
+          );
+        }
+      }
+    });
   }
 }

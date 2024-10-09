@@ -1,18 +1,35 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { API_ROUTES } from '../../config/api.routes';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  // BehaviorSubject para gestionar el estado de autenticación
+  private isLoggedInSubject = new BehaviorSubject<boolean>(
+    this.isUserLoggedIn()
+  );
+  public isLoggedIn$ = this.isLoggedInSubject.asObservable();
+
+  private invitationCountSubject = new BehaviorSubject<number>(0);
+  public invitationCount$ = this.invitationCountSubject.asObservable();
+
+  private userNameSubject = new BehaviorSubject<string>('');
+  userName$ = this.userNameSubject.asObservable();
+
   // Variables para almacenar el usuario activo
   private activeUserID: string = '';
   private activeUser: any = {};
 
   constructor(private http: HttpClient, private router: Router) {}
+
+  private isUserLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
 
   /**
    * Función que se usará para obtener el token del usuario activo.
@@ -27,14 +44,15 @@ export class AuthService {
           const token = JSON.parse(tokenString);
           this.activeUserID = token._id;
           this.activeUser = token;
+          this.isLoggedInSubject.next(true); // Actualiza el estado a "logged in"
           resolve();
         } catch (error) {
-          this.router.navigate(['/Auth']);
+          this.router.navigate([NAVIGATIONS_ROUTES.AUTH]);
           reject(error);
         }
       } else {
-        this.router.navigate(['/Auth']);
-        reject(new Error('No token found'));
+        this.logout();
+        this.router.navigate([NAVIGATIONS_ROUTES.AUTH]);
       }
     });
   }
@@ -115,7 +133,10 @@ export class AuthService {
    */
   createAccount(data: any): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.postData(`${API_ROUTES.BASE_URL}${API_ROUTES.Create_User}`, data).subscribe(
+      this.postData(
+        `${API_ROUTES.BASE_URL}${API_ROUTES.Create_User}`,
+        data
+      ).subscribe(
         (response: any) => {
           resolve(response.message);
         },
@@ -139,6 +160,9 @@ export class AuthService {
         data
       ).subscribe(
         (response: { message: string; userActive: any }) => {
+          localStorage.setItem('token', JSON.stringify(response.userActive));
+          this.isLoggedInSubject.next(true); // Actualiza el estado a "logged in"
+          this.userNameSubject.next(response.userActive.name);
           resolve(response);
         },
         (error: any) => {
@@ -147,5 +171,27 @@ export class AuthService {
         }
       );
     });
+  }
+
+  async getActiveUserName(): Promise<{ name: string }> {
+    // Retornar el usuario activo desde tu lógica
+    return { name: this.userNameSubject.getValue() };
+  }
+
+  requestPasswordReset(data: { email: string }): Observable<any> {
+    return this.http.post(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.Forgot_Password}`,
+      data
+    );
+  }
+
+  async logout(): Promise<void> {
+    localStorage.removeItem('token');
+    this.isLoggedInSubject.next(false); // Actualiza el estado de logged out
+    this.router.navigate([NAVIGATIONS_ROUTES.AUTH]);
+  }
+
+  goToHome(): void {
+    this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
   }
 }

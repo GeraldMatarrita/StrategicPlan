@@ -7,6 +7,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
 import { InvitationsService } from './Invitations.service';
 import { AuthService } from '../Auth/Auth.service';
+import { StrategicPlanService } from '../StrategicPlan/StrategicPlan.service';
 
 @Component({
   selector: 'app-invitations',
@@ -26,6 +27,7 @@ export class InvitationsComponent implements OnInit {
   usersToInvite: any[] = [];
   selectedUsers: any[] = [];
   strategicPlanId: string = '';
+  strategicPlanName: string = '';
 
   // Variables para las invitaciones pendientes del usuario
   invitationData: any[] = [];
@@ -40,7 +42,7 @@ export class InvitationsComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private invitationsService: InvitationsService,
-    private router: Router,
+    private StrategicPlanService: StrategicPlanService,
     private authService: AuthService
   ) {}
 
@@ -50,10 +52,26 @@ export class InvitationsComponent implements OnInit {
    * - Cargar los datos necesarios
    */
   ngOnInit(): void {
+    let storedPlanId = null;
+
     // Inicializar el formulario de invitaciones
     this.invitationForm = this.formBuilder.group({
       users: [null, Validators.required],
     });
+
+    const planToInvite = localStorage.getItem('planToInvite');
+    if (planToInvite) {
+      storedPlanId = planToInvite;
+      this.updatePlanName(storedPlanId);
+    } else {
+      storedPlanId = localStorage.getItem('selectedPlan');
+    }
+
+    if (storedPlanId) {
+      this.strategicPlanId = storedPlanId;
+      this.showPlans = false;
+      this.loadUserToInvite(); 
+    }
 
     // Cargar los datos necesarios
     this.loadData();
@@ -142,7 +160,18 @@ export class InvitationsComponent implements OnInit {
   onSelectPlan(id: string): void {
     this.showPlans = false;
     this.strategicPlanId = id;
+
+    localStorage.setItem('selectedPlan', id);
+
+    this.updatePlanName(id);    
+
     this.loadUserToInvite();
+  }
+
+  updatePlanName(id: string): void {
+    this.StrategicPlanService.getPlanByID(id).subscribe((plan: any) => {
+      this.strategicPlanName = plan.name;
+    });
   }
 
   /**
@@ -152,6 +181,7 @@ export class InvitationsComponent implements OnInit {
     this.showPlans = true;
     this.strategicPlanId = '';
     this.invitationForm.reset();
+    localStorage.removeItem('planToInvite');
   }
 
   /**
@@ -219,6 +249,14 @@ export class InvitationsComponent implements OnInit {
         planId: planId,
         userId: this.activeUserID,
       });
+
+      // Actualizar el conteo de invitaciones después de responder
+      this.invitationsService
+        .getPendingInvitationsCount(this.activeUserID)
+        .subscribe((count) => {
+          this.invitationsService.updatePendingInvitationsCount(count);
+        });
+
       Swal.fire({
         icon: 'success',
         title: 'Respuesta enviada',

@@ -52,21 +52,31 @@ export class StrategicPlanComponent implements OnInit {
   async loadData(): Promise<void> {
     try {
       this.activeUserID = await this.authService.getActiveUserID();
-      // Verificar si hay un PlanID almacenado en localStorage
-      const storedPlanId = localStorage.getItem('PlanID');
-      if (storedPlanId) {
-        // Si hay un PlanID almacenado, cargar el plan correspondiente
-        this.currentPlanId = storedPlanId;
-        this.loadPlanById(this.currentPlanId);
-        console.log(this.currentPlanId);
+  
+      // Obtener la lista de planes del usuario
+      const userPlans = await this.strategicPlanService.getActivePlans(this.activeUserID).toPromise();
+  
+      if (userPlans && userPlans.length > 0) {
+        // Verificar si hay un PlanID almacenado en localStorage
+        const storedPlanId = localStorage.getItem('PlanID');
+        if (storedPlanId && userPlans.some(plan => plan._id === storedPlanId)) {
+          // Si hay un PlanID almacenado y es válido, cargar el plan correspondiente
+          this.currentPlanId = storedPlanId;
+          this.loadPlanById(this.currentPlanId);
+        } else {
+          // Si no hay un PlanID almacenado o no es válido, redirigir
+          this.navigateToSelectPlan();
+        }
       } else {
-        // Si no
+        // Si el usuario no tiene planes, redirigir a la selección de plan´
+        localStorage.removeItem('PlanID');
         this.navigateToSelectPlan();
       }
     } catch (error) {
       console.error('Error al cargar los datos:', error);
     }
   }
+  
   /**
    * Método para enviar los datos del formulario
    */
@@ -171,7 +181,6 @@ export class StrategicPlanComponent implements OnInit {
    * @returns promesa con el mensaje de respuesta
    */
   async outPlan(planID: string): Promise<void> {
-    console.log(planID);
 
     try {
       const result = await Swal.fire({
@@ -192,6 +201,7 @@ export class StrategicPlanComponent implements OnInit {
           title: 'Eliminado',
           text: this.responseMessage,
         });
+        localStorage.removeItem('PlanID');
         this.navigateToSelectPlan();
       }
     } catch (error) {
@@ -236,6 +246,24 @@ export class StrategicPlanComponent implements OnInit {
   navigateToSelectPlan(): void {
     const SELECT_PLAN: string = `${NAVIGATIONS_ROUTES.SELECT_STRATEGIC_PLAN}`;
     this.router.navigate([SELECT_PLAN]);
+  }
+
+  navigateToInvitations(): void {
+    // Verificar si hay un PlanID en el localStorage
+    const selectedPlanId = localStorage.getItem('PlanID') || '';
+    localStorage.setItem("planToInvite", selectedPlanId);
+    
+    if (selectedPlanId) {
+      // Redirigir a la página de invitaciones
+      this.router.navigate([NAVIGATIONS_ROUTES.INVITATIONS]);
+    } else {
+      // Si no hay un plan seleccionado, mostrar una alerta
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se ha seleccionado ningún plan.',
+      });
+    }
   }
 
   /**

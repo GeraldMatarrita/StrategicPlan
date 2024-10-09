@@ -140,24 +140,28 @@
             </div>
           </div>
           <div class="col-lg-5 col-12">
-            <div id="sectionButtons">
-              <div>
-                <button
-                  *ngIf="!isPlanExpired(item.endDate)"
-                  (click)="setFormVisibility()"
-                  class="buttonEdit m-4"
-                >
-                  Edit
-                </button>
-                <button (click)="navigateToFodaMeca()" class="buttonCreate m-4">
-                  Foda Meca
-                </button>
-              </div>
-              <div>
-                <button (click)="outPlan(item.id)" class="buttonDelete m-4">
-                  Out Plan
-                </button>
-              </div>
+            <div>
+              <button
+                *ngIf="!isPlanExpired(item.endDate)"
+                (click)="setFormVisibility()"
+                class="buttonEdit m-4"
+              >
+                Edit
+              </button>
+              <button (click)="navigateToFodaMeca()" class="buttonCreate m-4">
+                Foda Meca
+              </button>
+            </div>
+            <div>
+              <button (click)="outPlan(item.id)" class="buttonDelete m-4">
+                Out Plan
+              </button>
+              <button
+                (click)="navigateToInvitations()"
+                id="inviteButton"
+              >
+                Invite +
+              </button>
             </div>
           </div>
         </div>

@@ -7,6 +7,7 @@ import { InvitationsComponent } from './pages/Invitations/Invitations.component'
 import { AuthComponent } from './pages/Auth/Auth.component';
 import { StrategicPlanToSelect } from './pages/StrategicPlanToSelect/StrategicPlanToSelect.component';
 import { ObjectivesComponent } from './pages/Objectives/Objectives.component';
+import { ResetPasswordComponent } from './pages/ResetPassword/ResetPassword.component';
 import { GoalsComponent } from './pages/Goals/Goals.component';
 
 export const routes: Routes = [
@@ -18,6 +19,7 @@ export const routes: Routes = [
   { path: 'Invitations', component: InvitationsComponent },
   { path: 'Auth', component: AuthComponent },
   { path: 'Objectives', component: ObjectivesComponent },
+  { path: 'reset-password/:token', component: ResetPasswordComponent },
   { path: 'Goals', component: GoalsComponent },
   { path: '', component: StrategicPlanToSelect }, // Redirige la ruta si no hay nada
   { path: '**', component: NotFoundComponent }, // Redirige cualquier otra ruta a /notfound

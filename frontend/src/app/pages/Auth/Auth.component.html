@@ -1,12 +1,16 @@
 <div class="LoginStyle">
-  <button (click)="changeForm()" class="buttonEdit">Change Form</button>
-
   <!-- --------------- Para registrarse --------------- -->
   <div *ngIf="regiterActive" class="form1-card">
     <form [formGroup]="registerForm" (ngSubmit)="sendData()" class="form1">
       <h1>Register</h1>
-      <div>
-        <input type="text" formControlName="name" placeholder="Name" />
+      <div class="form1-group">
+        <label for="name">Name</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Name"
+        />
         <div
           *ngIf="
             registerForm?.get('name')?.invalid &&
@@ -19,8 +23,14 @@
           </p>
         </div>
       </div>
-      <div>
-        <input type="email" formControlName="email" placeholder="Email" />
+      <div class="form1-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Email"
+        />
         <div
           *ngIf="
             registerForm?.get('email')?.invalid &&
@@ -36,8 +46,10 @@
           </p>
         </div>
       </div>
-      <div>
+      <div class="form1-group">
+        <label for="password">Password</label>
         <input
+          id="password"
           type="password"
           formControlName="password"
           placeholder="Password"
@@ -53,13 +65,43 @@
             Password is required
           </p>
           <p *ngIf="registerForm?.get('password')?.errors?.['minlength']">
-            Password must be at least 2 characters
+            Password must be at least 6 characters
+          </p>
+          <p *ngIf="registerForm?.get('password')?.errors?.['pattern']">
+            Password must contain at least one uppercase letter, one number, and
+            one symbol
           </p>
         </div>
-        <div>
-          <button class="buttonCreate">Register</button>
+      </div>
+
+      <div class="form1-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          placeholder="Confirm Password"
+          required
+        />
+        <div
+          *ngIf="
+            registerForm.hasError('passwordsMismatch') &&
+            registerForm.get('confirmPassword')?.touched
+          "
+          class="error"
+        >
+          <p>Passwords don't match</p>
         </div>
       </div>
+
+      <div>
+        <button class="buttonCreate">Register</button>
+      </div>
+      <br />
+      <p>
+        Do you already have an account?
+        <a class="a-link" (click)="changeForm()">Login</a>
+      </p>
     </form>
   </div>
 
@@ -67,8 +109,10 @@
   <div *ngIf="!regiterActive" class="form1-card">
     <form [formGroup]="loginForm" (ngSubmit)="sendData()" class="form1">
       <h1>Login</h1>
-      <div>
+      <div class="form1-group">
+        <label for="usernameOrEmail">Username or Email</label>
         <input
+          id="usernameOrEmail"
           type="text"
           formControlName="usernameOrEmail"
           placeholder="Username or Email"
@@ -85,8 +129,10 @@
           </p>
         </div>
       </div>
-      <div>
+      <div class="form1-group">
+        <label for="password">Password</label>
         <input
+          id="password"
           type="password"
           formControlName="password"
           placeholder="Password"
@@ -101,14 +147,21 @@
           <p *ngIf="loginForm?.get('password')?.errors?.['required']">
             Password is required
           </p>
-          <p *ngIf="loginForm?.get('password')?.errors?.['minlength']">
-            Password must be at least 2 characters
-          </p>
+        </div>
+        <div style="margin-bottom: 15px">
+          <a id="a-link-reset" class="a-link" (click)="toggleResetPassword()"
+            >Forgot password?</a
+          >
         </div>
       </div>
       <div>
         <button class="buttonCreate">Login</button>
       </div>
+      <br />
+      <p>
+        Are you not registered yet?
+        <a (click)="changeForm()" class="a-link">Register</a>
+      </p>
     </form>
   </div>
 </div>
