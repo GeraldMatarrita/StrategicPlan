@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import Swal from 'sweetalert2';
 
 import { AuthService } from './Auth.service';
@@ -46,13 +51,42 @@ export class AuthComponent {
       password: ['', [Validators.required]],
     });
 
-    this.registerForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      password: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-    });
+    this.registerForm = this.formBuilder.group(
+      {
+        name: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.pattern(
+              /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/
+            ),
+          ],
+        ],
+        confirmPassword: ['', Validators.required],
+      },
+      {
+        validators: this.passwordsMatchValidator, // Validador de grupo
+      }
+    );
 
     this.loadData();
+  }
+
+  // Validador personalizado que compara las contraseñas
+  passwordsMatchValidator(control: AbstractControl) {
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
+
+    if (password !== confirmPassword) {
+      control.get('confirmPassword')?.setErrors({ passwordsMismatch: true });
+      return { passwordsMismatch: true };
+    } else {
+      control.get('confirmPassword')?.setErrors(null);
+      return null;
+    }
   }
 
   /**
@@ -102,11 +136,6 @@ export class AuthComponent {
       // Almacenar los datos en localStorage
       localStorage.setItem('token', JSON.stringify(userActive));
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Login',
-        text: this.responseMessage,
-      });
       this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
     } catch (error) {
       this.responseMessage =
@@ -125,22 +154,25 @@ export class AuthComponent {
    */
   async register(): Promise<void> {
     try {
-      this.responseMessage = await this.authService.createAccount(
-        this.registerForm.value
-      );
+      const registerData = {
+        name: this.registerForm.get('name')?.value,
+        email: this.registerForm.get('email')?.value,
+        password: this.registerForm.get('password')?.value,
+      };
+
+      this.responseMessage = await this.authService.createAccount(registerData);
+
       Swal.fire({
         icon: 'success',
         title: 'Registro',
         text: this.responseMessage,
       });
+      
       // Login automático después de un registro exitoso
-      const request = {
-        name: this.registerForm.value.name,
-        email: this.registerForm.value.email,
-        password: this.registerForm.value.password,
-      };
-
-      const loginResponse = await this.authService.login(request);
+      const loginResponse = await this.authService.login({
+        email: registerData.email,
+        password: registerData.password,
+      });
 
       // Almacenar los datos en localStorage
       localStorage.setItem('token', JSON.stringify(loginResponse.userActive));
@@ -148,12 +180,11 @@ export class AuthComponent {
       Swal.fire({
         icon: 'success',
         title: 'Successfull Registration',
-        text: `Welcome ${this.activeUser.name}! You have been successfully registered.`,
+        text: `Welcome! You have been successfully registered.`,
       });
 
       // Redirigir al usuario a la página de inicio
       this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
-
     } catch (error) {
       this.responseMessage =
         (error as any).error?.message || 'Error desconocido';

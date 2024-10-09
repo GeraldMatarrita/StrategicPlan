@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Importar FormBuilder y Validators
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms'; // Importar AbstractControl
 import { ResetPasswordFormService } from './ResetPassword.service';
 import Swal from 'sweetalert2';
 import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
@@ -17,7 +17,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 export class ResetPasswordComponent implements OnInit {
   token: string = '';
   tokenValid: boolean = false;
-  resetPasswordForm!: FormGroup; // Añadir '!' para indicar que se inicializará
+  resetPasswordForm!: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,13 +30,21 @@ export class ResetPasswordComponent implements OnInit {
     this.token = this.route.snapshot.paramMap.get('token') || '';
     this.validateToken();
 
+    // Inicializar el formulario
     this.resetPasswordForm = this.fb.group(
       {
-        newPassword: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/)]],
-        confirmPassword: ['', Validators.required],
+        newPassword: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/)
+          ]
+        ],
+        confirmPassword: ['', Validators.required]
       },
       {
-        validator: this.passwordsMatchValidator, // Añadir la validación personalizada
+        validators: this.passwordsMatchValidator // Validador de grupo
       }
     );
   }
@@ -49,18 +57,26 @@ export class ResetPasswordComponent implements OnInit {
       (error) => {
         Swal.fire({
           icon: 'error',
-          title: 'Token inválido o expirado',
-          text: 'El enlace que has utilizado no es válido.',
+          title: 'Invalid or expired token',
+          text: 'The link you followed is invalid or expired. Please try again.',
         });
         this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
       }
     );
   }
 
-  passwordsMatchValidator(form: FormGroup) {
-    const password = form.get('newPassword')?.value;
-    const confirmPassword = form.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { passwordsMismatch: true };
+  // Cambiar el validador para que compare ambos campos directamente
+  passwordsMatchValidator(control: AbstractControl) {
+    const newPassword = control.get('newPassword')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
+
+    if (newPassword !== confirmPassword) {
+      control.get('confirmPassword')?.setErrors({ passwordsMismatch: true });
+      return { passwordsMismatch: true };
+    } else {
+      control.get('confirmPassword')?.setErrors(null);
+      return null;
+    }
   }
 
   resetPassword() {

@@ -248,6 +248,24 @@ export class StrategicPlanComponent implements OnInit {
     this.router.navigate([SELECT_PLAN]);
   }
 
+  navigateToInvitations(): void {
+    // Verificar si hay un PlanID en el localStorage
+    const selectedPlanId = localStorage.getItem('PlanID') || '';
+    localStorage.setItem("planToInvite", selectedPlanId);
+    
+    if (selectedPlanId) {
+      // Redirigir a la página de invitaciones
+      this.router.navigate([NAVIGATIONS_ROUTES.INVITATIONS]);
+    } else {
+      // Si no hay un plan seleccionado, mostrar una alerta
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se ha seleccionado ningún plan.',
+      });
+    }
+  }
+
   /**
    * Método para verificar si el plan ha expirado
    * @param endDate La fecha de finalización del plan

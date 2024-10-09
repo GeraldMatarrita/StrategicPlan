@@ -68,12 +68,34 @@
             Password must be at least 6 characters
           </p>
           <p *ngIf="registerForm?.get('password')?.errors?.['pattern']">
-            Password must contain at least one uppercase letter, one number, and one symbol
+            Password must contain at least one uppercase letter, one number, and
+            one symbol
           </p>
         </div>
-        <div>
-          <button class="buttonCreate">Register</button>
+      </div>
+
+      <div class="form1-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          placeholder="Confirm Password"
+          required
+        />
+        <div
+          *ngIf="
+            registerForm.hasError('passwordsMismatch') &&
+            registerForm.get('confirmPassword')?.touched
+          "
+          class="error"
+        >
+          <p>Passwords don't match</p>
         </div>
+      </div>
+
+      <div>
+        <button class="buttonCreate">Register</button>
       </div>
       <br />
       <p>

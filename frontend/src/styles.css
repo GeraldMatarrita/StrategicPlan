@@ -75,18 +75,26 @@ button:active {
 /* para button*/
 /* ----------------------------------------------------- */
 /* --- buttonCreate */
-.buttonCreate {
+.buttonCreate, #inviteButton {
   max-width: 200px;
   padding: 10px;
   border-radius: 10px;
   width: auto;
   color: white;
+}
+
+.buttonCreate{
   background-color: rgb(19, 19, 243);
 }
 
-.buttonCreate:hover {
+.buttonCreate:hover, #inviteButton:hover {
   background-color: black;
   color: white;
+}
+
+#inviteButton {
+  background-color: rgb(32, 173, 79);
+  margin-left: 12px;
 }
 
 /* --- buttonDelete */
