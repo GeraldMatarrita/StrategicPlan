@@ -55,8 +55,8 @@ export const API_ROUTES = {
 
   //CardAnalysis
   Get_CardAnalisis: '/cardAnalysis/getCard',//Get + "CardAnalysisID"
-  Update_CardAnalisis: '/cardAnalysis/updateCard',//Get + "CardAnalysisID"
-
+  Update_CardAnalisis: '/cardAnalysis/updateCard',//Post + "CardAnalysisID"
+  
   // --------------------------------------------------------------------------------
   // --------------------------------------------------------------------------------
   // al finalizar borrar esta ya que es solo de pruebas

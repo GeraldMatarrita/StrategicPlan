@@ -5,7 +5,7 @@ const cameSchema = new mongoose.Schema({
   afront: [{ type: mongoose.Schema.Types.ObjectId, ref: 'cardAnalysis' }],
   maintain: [{ type: mongoose.Schema.Types.ObjectId, ref: 'cardAnalysis' }],
   explore: [{ type: mongoose.Schema.Types.ObjectId, ref: 'cardAnalysis' }],
-  StrategicPlanID: {type:mongoose.Schema.Types.ObjectId,ref: 'StrategicPlan'}
+
 });
 
 const CAME = mongoose.model('CAME', cameSchema);

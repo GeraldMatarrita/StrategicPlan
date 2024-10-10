@@ -2,203 +2,92 @@
   display: block;
 }
 
-.foda-meca-style {
-  background-color: var(--basicBackground);
+:root {
+  --color2: #3700ff;
+  --color3: #9900ff;
+  --color4: #ff00ff;
+  --basicBackground: #171717;
+}
+
+/* Contenedor */
+.wrapper {
+  background-color: var(--basicBackground); 
+  padding: 0 20px; 
+  min-height: 100vh; 
+}
+
+/* Contenido principal */
+.FodaStyle {
+  background-color: #232323; 
   color: white;
   min-height: calc(100vh - 52px);
-  padding: 10px 0px 50px 0px; /* top right bottom left */
-  margin: auto;
-  text-align: center;
-}
-
-/* textarea */
-.foda-meca-style textarea {
-  background-color: transparent;
-  color: white;
-  padding: 15px;
-  width: 100%;
-  border-radius: 25px;
-  overflow: auto; /* Asegura que el scrollbar aparezca */
-  min-height: 190px;
-  border: none;
-}
-
-.foda-meca-style textarea::-webkit-scrollbar {
-  width: 8px; /* Ancho del scroll */
-  border-radius: 25px;
-  background-color: var(--color2);
-}
-
-.foda-meca-style textarea::-webkit-scrollbar-thumb {
-  background-color: rgb(255, 255, 255); /* Color del scroll */
-  border-radius: 25px;
-}
-.foda-meca-style textarea::-webkit-scrollbar-track {
-  height: 80px;
-}
-
-/* ... */
-
-h2 {
-  border: 1px solid var(--color2);
-  border-radius: 22px;
-  padding: 25px 20px;
-  font-size: 2.5rem;
-  font-weight: bold;
-  width: 150px;
-  margin: 20px 0;
-}
-
-.title-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-span {
-  font-size: 1.2rem;
-}
-
-h3 {
-  padding: 25px 20px;
-}
-
-.row-personalized {
-  min-height: 250px;
-}
-
-label {
-  padding: 25px 20px;
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-/* ----------------------------------- */
-/* FODA */
-/* ----------------------------------- */
-
-.Foda-container {
-  min-height: 500px;
-  padding: 20px 0;
-}
-
-/* Aplicar padding interno y bordes redondeados a cada columna */
-.Foda-container .col-12 {
+  max-width: 1200px; 
   padding: 20px;
-  border-radius: 25px; /* Bordes redondeados para las secciones internas */
-  border: 3px solid var(--basicBackground);
+  margin: 0 auto; 
+  border-radius: 10px; 
 }
 
-/* Colores diferentes para cada sección */
-
-/* Fortaleza: Color 2 a Color 4, el Color 4 comienza al 80% */
-.fortaleza {
-  background: linear-gradient(
-    to top left,
-    var(--color4) 0%,
-    var(--color3) 35%,
-    var(--color3) 100%
-  );
-  color: #ffffff; /* Texto blanco para un buen contraste */
-}
-
-/* Debilidad: Color 2 a Color 4, el Color 4 comienza al 80% */
-.debilidad {
-  background: linear-gradient(
-    to top right,
-    var(--color5) 0%,
-    var(--color3) 35%,
-    var(--color3) 100%
-  );
-  color: #ffffff; /* Texto blanco para un buen contraste */
-}
-
-/* Oportunidad: Color 2 a Color 4, el Color 4 comienza al 80% */
-.oportunidad {
-  background: linear-gradient(
-    to bottom left,
-    var(--color5) 0%,
-    var(--color3) 35%,
-    var(--color3) 100%
-  );
-  color: #ffffff; /* Texto blanco para un buen contraste */
-}
-
-/* Amenaza: Color 2 a Color 4, el Color 4 comienza al 80% */
-.amenaza {
-  background: linear-gradient(
-    to bottom right,
-    var(--color5) 0%,
-    var(--color3) 35%,
-    var(--color3) 100%
-  );
-  color: #ffffff; /* Texto blanco para un buen contraste */
-}
-
-/* ----------------------------------- */
-/* MECA */
-/* ----------------------------------- */
-
-.Meca-container {
-  min-height: 500px;
-  padding: 20px 0;
-}
-
-/* Aplicar padding interno y bordes redondeados a cada columna */
-.Meca-container .col-12 {
-  padding: 20px;
-  border-radius: 25px; /* Bordes redondeados para las secciones internas */
-  border: 3px solid var(--basicBackground);
-}
-
-/* Colores diferentes para cada sección en MECA */
-
-.mantener {
-  background: linear-gradient(
-    to bottom left,
-    var(--color3) 0%,
-    var(--color2) 55%,
-    var(--color2) 100%
-  );
-  color: #ffffff; /* Texto blanco para un buen contraste */
-}
-
-.explorar {
-  background: linear-gradient(
-    to bottom right,
-    var(--color3) 0%,
-    var(--color2) 55%,
-    var(--color2) 100%
-  );
-  color: #ffffff; /* Texto blanco para un buen contraste */
-}
-
-.correcciones {
-  background: linear-gradient(
-    to top left,
-    var(--color3) 0%,
-    var(--color2) 55%,
-    var(--color2) 100%
-  );
-  color: #ffffff; /* Texto blanco para un buen contraste */
-}
-
-.adaptar {
-  background: linear-gradient(
-    to top right,
-    var(--color3) 0%,
-    var(--color2) 55%,
-    var(--color2) 100%
-  );
-  color: #ffffff; /* Texto blanco para un buen contraste */
-}
+/* Estilos comunes para tarjetas */
 .card {
-  min-height: 150px;
+  padding: 10px;
+  border-radius: 3mm;
+  border-color: #232323;
+  color: white; /* Asegurar que el texto sea blanco para buen contraste */
 }
 
-h4 {
-  background-color: #f8f9fa;
-  padding: 10px;
-  border-radius: 5px;
+/* Diferentes estilos para cada columna y sus cards */
+
+.strengths-column {
+  border-left: 5px solid #3700ff; 
+  background-color: rgba(55, 0, 255, 0.1); /* Fondo azul suave para la columna */
 }
+
+.strengths-column .card {
+  background-color: #2b2b6f; /* Un tono más oscuro de azul para el card */
+  color: #ffffff; /* Texto blanco para buen contraste */
+}
+
+.weaknesses-column {
+  border-left: 5px solid #ff0000;
+  background-color: rgba(255, 0, 0, 0.1); /* Fondo rojo suave */
+}
+
+.weaknesses-column .card {
+  background-color: #7f2b2b; /* Rojo oscuro para el card */
+  color: #ffffff; /* Texto blanco para buen contraste */
+}
+
+.opportunities-column {
+  border-left: 5px solid #7a24f3;
+  background-color: rgba(0, 21, 255, 0.101); /* Fondo verde suave */
+}
+
+.opportunities-column .card {
+  background-color: #5f24f3; /* Verde oscuro para el card */
+  color: #ffffff; /* Texto blanco para buen contraste */
+}
+
+.threats-column {
+  border-left: 5px solid #ff00ff;
+  background-color: rgba(255, 0, 255, 0.1); /* Fondo morado suave */
+}
+
+.threats-column .card {
+  background-color: #7f2b7f; /* Morado oscuro para el card */
+  color: #ffffff; /* Texto blanco para buen contraste */
+}
+
+h5{
+  margin-top: 10px;
+  color: #969696;
+}
+
+/* Estilos para los botones de agregar */
+.buttonAdd {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 20px; /* Ocupa todo el ancho de la columna */
+}
+
+
+

@@ -20,24 +20,29 @@ router.get("/getCard/:id",async (req,res)=>{
 
 router.put("/updateCard/:id", async (req,res)=>{
     try {
-        const {id} = req.params
-        const checkCard = validateCardAnalysis(req.body)
-        if(checkCard){
-            return res.status(404).json({ message: "The analysis is not correct, verify card" });
-        }
-        const card = cardAnalysis.findById(id)
-        if(!card){
-            return res.status(404).json({ message: "Analisis no encontrado" });
-        }
-        card.save(req.body)
-        res.status(201).json({
-            message: `Analysis Updated `,
-          });
+        const { id } = req.params;
+        console.log(id)
+        const updatedCardData = req.body;
 
+
+        const updatedCard = await cardAnalysis.findByIdAndUpdate(
+            id,
+            updatedCardData,
+            { new: true } 
+        );
+
+        if (!updatedCard) {
+            return res.status(404).json({ message: "Análisis no encontrado" });
+        }
+
+        res.status(200).json({
+            message: "Análisis actualizado",
+            card: updatedCard
+        });
     } catch (error) {
-        console.error("Error al actualizar la carta de analisis:", error);
+        console.error("Error al actualizar la carta de análisis:", error);
         res.status(500).json({
-          message: "Error al actualizar la carta de analisis"
+            message: "Error al actualizar la carta de análisis"
         });
     }
 })
