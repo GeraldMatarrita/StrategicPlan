@@ -123,4 +123,19 @@ export class InvitationsService {
       );
     });
   }
+
+  deleteInvitation(userId: string, planId: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.http.delete(`${API_ROUTES.BASE_URL}${API_ROUTES.Delete_Invitation}/${userId}/${planId}`
+      ).subscribe(
+        (response: any) => {
+          resolve(response.message);
+        },
+        (error: any) => {
+          console.error('Error al eliminar la invitación:', error);
+          reject(error);
+        }
+      );
+    });
+  }
 }

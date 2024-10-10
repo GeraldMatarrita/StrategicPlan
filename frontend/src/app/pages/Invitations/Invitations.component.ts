@@ -250,6 +250,8 @@ export class InvitationsComponent implements OnInit {
         userId: this.activeUserID,
       });
 
+      await this.invitationsService.deleteInvitation(this.activeUserID, planId);
+
       // Actualizar el conteo de invitaciones después de responder
       this.invitationsService
         .getPendingInvitationsCount(this.activeUserID)

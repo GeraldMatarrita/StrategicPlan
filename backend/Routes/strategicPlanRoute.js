@@ -178,9 +178,11 @@ router.post("/out", async (req, res) => {
     });
 
     // Eliminar el usuario de la lista de miembros del plan
-    await StrategicPlan.findByIdAndUpdate(planId, {
-      $pull: { members_ListIDS: { userId: userId } },
-    });
+    await StrategicPlan.findByIdAndUpdate(
+      planId,
+      { $pull: { members_ListIDS: new mongoose.Types.ObjectId(userId) } },
+      { new: true }
+    );
 
     // Eliminar las invitaciones del usuario para el plan
     await User.updateOne(

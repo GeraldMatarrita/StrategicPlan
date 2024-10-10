@@ -202,6 +202,7 @@ export class StrategicPlanComponent implements OnInit {
           text: this.responseMessage,
         });
         localStorage.removeItem('PlanID');
+        localStorage.removeItem('selectedPlan');
         this.navigateToSelectPlan();
       }
     } catch (error) {

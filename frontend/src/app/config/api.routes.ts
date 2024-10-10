@@ -9,6 +9,7 @@ export const API_ROUTES = {
   Get_Amount_Pending_Invitations: '/invitations/pendingCount', // GET + "/userId"
   Create_Invitation: '/invitations/create', // POST
   Response_Invitation: '/invitations/response', // POST
+  Delete_Invitation: '/invitations/deleteInvitation', // DELETE
 
   // -------------------------------------------------------------
   // Para los usuarios

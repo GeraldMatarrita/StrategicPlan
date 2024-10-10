@@ -698,15 +698,21 @@ button:active {
   border-radius: 5px; /* Bordes redondeados */
 }
 
+/* Dot de notificación */
 .notification-dot {
-  background-color: red; /* Color del punto */
-  color: white; /* Color del texto */
-  border-radius: 50%; /* Hacerlo redondo */
-  padding: 1px 6px; /* Espaciado */
-  position: absolute; /* Para posicionar correctamente */
-  top: 0; /* Ajusta según sea necesario */
-  left: -2px; /* Ajusta según sea necesario */
-  font-size: 10px; /* Tamaño de fuente */
+  position: absolute;
+  display: inline-block;
+  width: 18px;            /* Ajusta el tamaño según sea necesario */
+  height: 18px;           /* Ajusta el tamaño según sea necesario */
+  background-color: red;   /* Color del dot */
+  border-radius: 50%;      /* Hace que el dot sea un círculo */
+  color: white;            /* Color del texto */
+  font-size: 9px;         /* Tamaño del texto */
+  text-align: center;      /* Centra el texto horizontalmente */
+  line-height: 20px;       /* Centra el texto verticalmente */
+  font-weight: bold;       /* Para que el número sea más visible */
+  top: 0px;              /* Ajusta la posición vertical si es necesario */
+  left: 0px;             /* Mueve el dot a la izquierda */
 }
 
 /* 

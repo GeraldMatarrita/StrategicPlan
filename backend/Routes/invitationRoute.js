@@ -298,6 +298,22 @@ router.post("/response", async (req, res) => {
       message: "Internal Server Error",
     });
   }
+  
+  router.delete('/deleteInvitation/:userId/:planId', async (req, res) => {
+    const { userId, planId } = req.params;
+    try {
+      const user = await User.findById(userId);
+      if (!user) return res.status(404).send('User not found');
+
+      // Filtrar las invitaciones del usuario y eliminar la del plan
+      user.invitations = user.invitations.filter(inv => inv.planId.toString() !== planId.toString());
+
+      await user.save();
+      res.status(200).json({ message: "Invitation deleted successfully" });
+    } catch (err) {
+      res.status(500).send('Error deleting invitation');
+    }
+  });
 });
 
 module.exports = router;

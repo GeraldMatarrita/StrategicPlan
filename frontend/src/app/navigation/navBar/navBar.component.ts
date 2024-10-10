@@ -137,6 +137,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     });
 
     if (result.isConfirmed) {
+      localStorage.removeItem('selectedPlan'); // Elimina el token del localStorage
       this.authService.logout(); // Llama al método de logout del servicio
     }
   }
