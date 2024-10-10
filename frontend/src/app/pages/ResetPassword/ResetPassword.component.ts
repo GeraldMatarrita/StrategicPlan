@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms'; // Importar AbstractControl
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms'; // Import AbstractControl
 import { ResetPasswordFormService } from './ResetPassword.service';
 import Swal from 'sweetalert2';
 import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
@@ -30,7 +30,7 @@ export class ResetPasswordComponent implements OnInit {
     this.token = this.route.snapshot.paramMap.get('token') || '';
     this.validateToken();
 
-    // Inicializar el formulario
+    // Initialize the form
     this.resetPasswordForm = this.fb.group(
       {
         newPassword: [
@@ -44,7 +44,7 @@ export class ResetPasswordComponent implements OnInit {
         confirmPassword: ['', Validators.required]
       },
       {
-        validators: this.passwordsMatchValidator // Validador de grupo
+        validators: this.passwordsMatchValidator // Group validator
       }
     );
   }
@@ -65,7 +65,7 @@ export class ResetPasswordComponent implements OnInit {
     );
   }
 
-  // Cambiar el validador para que compare ambos campos directamente
+  // Validator to compare both fields directly
   passwordsMatchValidator(control: AbstractControl) {
     const newPassword = control.get('newPassword')?.value;
     const confirmPassword = control.get('confirmPassword')?.value;
@@ -83,8 +83,8 @@ export class ResetPasswordComponent implements OnInit {
     if (this.resetPasswordForm.invalid) {
       Swal.fire({
         icon: 'error',
-        title: 'Las contraseñas no coinciden',
-        text: 'Por favor, verifica que ambas contraseñas son iguales.',
+        title: 'Passwords do not match',
+        text: 'Please ensure both passwords are the same.',
       });
       return;
     }
@@ -96,8 +96,8 @@ export class ResetPasswordComponent implements OnInit {
         (response) => {
           Swal.fire({
             icon: 'success',
-            title: 'Contraseña cambiada',
-            text: 'Tu contraseña ha sido actualizada correctamente.',
+            title: 'Password changed',
+            text: 'Your password has been successfully updated.',
           }).then(() => {
             this.router.navigate([NAVIGATIONS_ROUTES.AUTH]);
           });
@@ -106,7 +106,7 @@ export class ResetPasswordComponent implements OnInit {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Hubo un problema al cambiar tu contraseña. Inténtalo de nuevo más tarde.',
+            text: 'There was an issue changing your password. Please try again later.',
           });
         }
       );

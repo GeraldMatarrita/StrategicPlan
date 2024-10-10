@@ -2,9 +2,9 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
-const { User: UserModel, validateUser } = require("../Models/UserModel"); // Importa el modelo User
+const { User: UserModel, validateUser } = require("../Models/UserModel"); // Import the User model
 
-// Configurar nodemailer
+// Configure nodemailer
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: process.env.SMTP_PORT,
@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 });
 
 /**
- * función para manejar la solicitud de "Olvidé mi contraseña"
+ * Function to handle "Forgot Password" request
  */
 router.post("/forgot-password", async (req, res) => {
   try {
@@ -23,16 +23,16 @@ router.post("/forgot-password", async (req, res) => {
     const user = await UserModel.findOne({ email });
     
     if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Generar un token de restablecimiento
+    // Generate a reset token
     const resetToken = crypto.randomBytes(32).toString("hex");
     user.resetPasswordToken = resetToken;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 hora
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
     await user.save();
 
-    // Enviar correo electrónico
+    // Send email
     const resetUrl = `${process.env.RESET_PASSWORD_URL}/${resetToken}`;
     const mailOptions = {
       from: process.env.SMTP_USER,
@@ -51,30 +51,30 @@ router.post("/forgot-password", async (req, res) => {
     };
 
     await transporter.sendMail(mailOptions);
-    res.status(200).json({ message: "Correo de restablecimiento enviado" });
+    res.status(200).json({ message: "Reset email sent" });
   } catch (error) {
-    console.error("Error al enviar el correo de restablecimiento:", error);
-    res.status(500).json({ message: "Error al enviar el correo de restablecimiento" });
+    console.error("Error sending reset email:", error);
+    res.status(500).json({ message: "Error sending reset email" });
   }
 });
 
 /**
- * función para restablecer la contraseña
+ * Function to reset the password
  */
 router.post("/reset-password/:token", async (req, res) => {
   try {
     const { newPassword } = req.body;
 
-    // Busca el usuario por el token
+    // Find the user by the token
     const user = await UserModel.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } });
 
-    // Verifica si el usuario existe y si el token es válido
+    // Verify if the user exists and the token is valid
     if (!user) {
-      return res.status(400).json({ message: "Token inválido o ha expirado" });
+      return res.status(400).json({ message: "Invalid or expired token" });
     }
 
-    // Actualizar la contraseña
-    // Hash de la nueva contraseña
+    // Update the password
+    // Hash the new password
     const salt = parseInt(process.env.SALT) || 10;
     const hashedPassword = await bcrypt.hash(newPassword, salt);
     await UserModel.updateOne(
@@ -86,14 +86,14 @@ router.post("/reset-password/:token", async (req, res) => {
       }
     );
 
-    res.status(200).json({ message: "Contraseña actualizada correctamente" });
+    res.status(200).json({ message: "Password updated successfully" });
   } catch (error) {
-    console.error("Error al restablecer la contraseña:", error);
-    res.status(500).json({ message: "Error al restablecer la contraseña" });
+    console.error("Error resetting password:", error);
+    res.status(500).json({ message: "Error resetting password" });
   }
 });
 
-// Ruta para validar el token de restablecimiento de contraseña
+// Route to validate the reset password token
 router.get("/reset-password/:token", async (req, res) => {
   try {
     const user = await UserModel.findOne({
@@ -102,123 +102,123 @@ router.get("/reset-password/:token", async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).json({ message: "Token inválido o expirado" });
+      return res.status(400).json({ message: "Invalid or expired token" });
     }
 
-    // Si el token es válido
-    res.status(200).json({ message: "Token válido" });
+    // If the token is valid
+    res.status(200).json({ message: "Valid token" });
   } catch (error) {
-    console.error("Error al validar el token:", error);
-    res.status(500).json({ message: "Error al validar el token" });
+    console.error("Error validating token:", error);
+    res.status(500).json({ message: "Error validating token" });
   }
 });
 
 /**
- * función que obtiene todos los usuarios
- * @returns {Object} - Lista de usuarios
- * @throws {Object} - Mensaje de error
+ * Function to get all users
+ * @returns {Object} - List of users
+ * @throws {Object} - Error message
  */
 router.get("/AllUsers", async (req, res) => {
   try {
     const users = await UserModel.find();
     res.json(users);
   } catch (error) {
-    console.error("Error al consultar la colección User en MongoDB:", error);
+    console.error("Error fetching User collection in MongoDB:", error);
     res.status(500).json({
-      error: "Error al consultar la colección User en MongoDB",
+      error: "Error fetching User collection in MongoDB",
     });
   }
 });
 
 /**
- * función que crea un nuevo usuario
- * @param req.body - Datos del usuario
- * @returns {Object} - Mensaje de confirmación
- * @throws {Object} - Mensaje de error
+ * Function to create a new user
+ * @param req.body - User data
+ * @returns {Object} - Confirmation message
+ * @throws {Object} - Error message
  */
 router.post("/create", async (req, res) => {
   try {
-    // Validar datos del usuario
+    // Validate user data
     const { error } = validateUser(req.body);
     if (error) {
       return res.status(400).json({
-        message: error.details[0].message || "Datos inválidos",
+        message: error.details[0].message || "Invalid data",
       });
     }
 
     const { name, email } = req.body;
 
-    // Verificar si el email ya está registrado
+    // Check if the email is already registered
     const emailExists = await UserModel.findOne({ email });
     if (emailExists) {
-      return res.status(400).json({ message: "El email ya está registrado" });
+      return res.status(400).json({ message: "Email is already registered" });
     }
 
-    // Verificar si el nombre ya está registrado
+    // Check if the name is already registered
     const nameExists = await UserModel.findOne({ name });
     if (nameExists) {
-      return res.status(400).json({ message: "El nombre ya está registrado" });
+      return res.status(400).json({ message: "Name is already registered" });
     }
 
-    // Crear nuevo usuario
+    // Create new user
     const newUser = new UserModel(req.body);
     await newUser.save();
 
-    // Devolver respuesta exitosa con ID del nuevo usuario
+    // Return success response with new user ID
     res.status(201).json({
-      message: "Usuario creado correctamente",
+      message: "User created successfully",
     });
   } catch (error) {
     console.error(
-      "Error al guardar la entrada en la colección User en MongoDB:",
+      "Error saving entry in User collection in MongoDB:",
       error
     );
     res.status(500).json({
-      message: "Error al guardar la entrada en la colección User en MongoDB",
+      message: "Error saving entry in User collection in MongoDB",
     });
   }
 });
 
 /**
- * función que inicia sesión en la aplicación
- * @param req.body - Datos de inicio de sesión
- * @returns {Object} - Mensaje de confirmación
- * @throws {Object} - Mensaje de error
+ * Function to log in to the application
+ * @param req.body - Login data
+ * @returns {Object} - Confirmation message
+ * @throws {Object} - Error message
  */
 router.post("/login", async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Verificar si el email ya está registrado
+    // Check if the email is already registered
     const user = await UserModel.findOne({
       $or: [
-        { email: email }, // Buscar por email
-        { name: name }, // Buscar por nombre
+        { email: email }, // Search by email
+        { name: name }, // Search by name
       ],
     });
     if (!user) {
       return res
         .status(400)
-        .json({ message: "Email/UserName o contraseña incorrectos" });
+        .json({ message: "Incorrect email/username or password" });
     }
 
-    // Verificar si la contraseña es correcta
+    // Check if the password is correct
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res
         .status(400)
-        .json({ message: "Email/UserName o contraseña incorrectos" });
+        .json({ message: "Incorrect email/username or password" });
     }
 
-    // Devolver respuesta exitosa
+    // Return successful response
     res.status(201).json({
-      message: "Inicio de sesión correcto",
+      message: "Login successful",
       userActive: user,
     });
   } catch (error) {
-    console.error("Error al consultar la colección User en MongoDB:", error);
+    console.error("Error fetching User collection in MongoDB:", error);
     res.status(500).json({
-      message: "Error al consultar la colección User en MongoDB",
+      message: "Error fetching User collection in MongoDB",
     });
   }
 });

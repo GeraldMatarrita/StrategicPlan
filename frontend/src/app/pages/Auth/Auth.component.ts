@@ -167,7 +167,7 @@ export class AuthComponent {
         title: 'Registro',
         text: this.responseMessage,
       });
-      
+
       // Login automático después de un registro exitoso
       const loginResponse = await this.authService.login({
         email: registerData.email,
@@ -213,7 +213,7 @@ export class AuthComponent {
 
     Swal.fire({
       title: 'Reset Password',
-      position: 'top', // Cambia la posición a 'top', 'top-start', 'top-end', etc.
+      position: 'top',
       customClass: {
         popup: 'my-swal',
         title: 'my-swal-title',
@@ -244,7 +244,9 @@ export class AuthComponent {
         if (!resetPasswordForm.valid) {
           resetPasswordForm.get('email')?.setValue(emailInput);
           if (resetPasswordForm.invalid) {
-            Swal.showValidationMessage('Please provide a valid email');
+            Swal.showValidationMessage(
+              `<div class="my-validation-message">Please provide a valid email</div>`
+            );
             return;
           }
         }

@@ -136,9 +136,11 @@ td {
 /* ----------------------------------------------------- *
 
 /* Estilo principal para el ng-select */
+/* Estilo principal para el ng-select */
+/* Estilo principal para el ng-select */
 .ng-select {
   background-color: transparent;
-  color: var(--text_color); /* Color de texto blanco */
+  color: var(--text_color); /* Color de texto */
   border-radius: 25px;
   padding: 10px 15px;
   border: 1px solid var(--color2_purple);
@@ -146,13 +148,31 @@ td {
 
 /* Estilo para el contenedor del ng-select */
 .ng-select.custom ::ng-deep .ng-select-container {
-  min-height: 0px;
-  border-radius: 25px;
+  align-items: center; /* Centra el contenido verticalmente */
+}
+
+/* Centrar el texto del placeholder */
+.ng-select.custom ::ng-deep .ng-placeholder {
+  display: flex; /* Usar flexbox para centrar */
+  align-items: center; /* Centrar verticalmente */
+  height: 100%; /* Ocupa toda la altura del contenedor */
+  color: rgba(255, 255, 255, 0.5); /* Color del placeholder */
 }
 
 /* Estilo para el input dentro del ng-select */
+.ng-select.custom ::ng-deep .ng-input {
+  display: flex; /* Usa flexbox para facilitar el alineamiento */
+  align-items: center; /* Alinea el contenido verticalmente */
+  min-height: 36px; /* Establece una altura mínima para el contenedor */
+}
+
 .ng-select.custom ::ng-deep .ng-input > input {
-  color: white; /* Texto blanco cuando escribes en el select */
+  color: white; /* Texto blanco */
+  padding: 8px; /* Consistente padding */
+  height: 36px; /* Altura del input */
+  width: auto; /* Ancho automático */
+  line-height: normal; /* Mejora alineación vertical */
+  box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
 }
 
 /* Estilo para los items del ng-select */
@@ -165,14 +185,64 @@ td {
 
 /* Estilo para el item seleccionado en ng-select */
 .ng-select.custom ::ng-deep .ng-option-selected {
-  background-color: var(--color2_purple); /* Fondo  para el item seleccionado */
+  background-color: var(--color2_purple); /* Fondo para el item seleccionado */
   color: white; /* Texto blanco para el item seleccionado */
 }
 
 /* Estilo para limitar la altura de la lista desplegable */
 .ng-select.custom ::ng-deep .ng-dropdown-panel {
-  max-height: 600px; /* Altura máxima de 300px */
-  overflow-y: auto; /* Habilita el scroll si la lista es más larga que 300px */
+  max-height: 600px; /* Altura máxima */
+  overflow-y: auto; /* Habilita el scroll */
+}
+
+/* Estilo para el texto del usuario seleccionado con borde */
+.ng-select.custom ::ng-deep .ng-value {
+  background-color: var(--gray_middle_dark); /* Fondo del usuario seleccionado */
+  border: 1px solid var(--color2_purple); /* Borde alrededor del usuario seleccionado */
+  border-radius: 15px; /* Redondea los bordes */
+  padding: 5px 10px; /* Espaciado interno */
+  color: white; /* Color del texto del usuario */
+  margin-right: 5px; /* Separación entre usuarios seleccionados */
+  display: inline-flex; /* Para alinear el nombre del usuario y la "X" */
+  align-items: center; /* Alinea el texto y la "X" verticalmente */
+}
+
+/* Asegurarse de que el wrapper de la "X" tenga suficiente espacio */
+.ng-select.custom ::ng-deep .ng-clear-wrapper {
+  display: flex; /* Asegura que la X esté centrada */
+  align-items: center; /* Centra verticalmente la X */
+  justify-content: center; /* Centra horizontalmente la X */
+  width: 24px; /* Espacio suficiente para el círculo */
+  height: 24px; /* Mantiene proporciones del círculo */
+  margin-left: 8px; /* Espacio para separarla del texto */
+}
+
+/* Estilo para la "X" de "clear all" */
+.ng-select.custom ::ng-deep .ng-clear {
+  background-color: rgb(218, 59, 59); /* Fondo rojo para la "X" de clear */
+  color: white; /* Color de la "X" */
+  border-radius: 50%; /* Convierte el fondo en un círculo */
+  padding: 10px; /* Añade espacio interno */ /* Espaciado con el texto */
+  display: inline-flex; /* Asegura que sea un círculo perfecto */
+  justify-content: center; /* Centra la "X" horizontalmente */
+  align-items: center; /* Centra la "X" verticalmente */
+  width: 20px; /* Ancho del círculo */
+  height: 20px; /* Alto del círculo */
+}
+
+/* Estilo para la "X" junto al nombre del usuario */
+.ng-select.custom ::ng-deep .ng-value-icon {
+  margin-right: 5px; /* Añade espacio entre el texto del usuario y la "X" */
+  cursor: pointer; /* Cambia el cursor al pasar sobre la "X" */
+  background-color: var(--color2_purple); /* Fondo morado para el círculo de la "X" */
+  color: white; /* Color de la "X" */
+  border-radius: 50%; /* Convierte el fondo en un círculo */
+  padding: 10px; /* Añade espacio interno */
+  display: inline-flex; /* Asegura que sea un círculo perfecto */
+  justify-content: center; /* Centra la "X" horizontalmente */
+  align-items: center; /* Centra la "X" verticalmente */
+  width: 20px; /* Ancho del círculo */
+  height: 20px; /* Alto del círculo */
 }
 
 .invitation-container {

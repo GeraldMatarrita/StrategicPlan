@@ -673,7 +673,7 @@ button:active {
 /* Estilo del contenedor del modal */
 .my-swal {
   margin-top: 50px;
-  background-color: var(--basicBackground) !important;
+  background-color: var(--gray_high_dark) !important;
   padding: 20px !important;
   border-radius: 20px !important;
   border: 1px solid #450076 !important;
@@ -689,6 +689,13 @@ button:active {
 .my-swal-content {
   color: #ffffff !important;
   font-size: 16px !important;
+}
+
+.swal2-validation-message {
+  background-color: var(--gray_high_dark); /* Fondo rojo claro */
+  color: #ffffff; /* Color del texto */
+  padding: 10px; /* Espacio alrededor del texto */
+  border-radius: 5px; /* Bordes redondeados */
 }
 
 .notification-dot {
