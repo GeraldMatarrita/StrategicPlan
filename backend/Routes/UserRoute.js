@@ -21,7 +21,7 @@ router.post("/forgot-password", async (req, res) => {
   try {
     const { email } = req.body;
     const user = await UserModel.findOne({ email });
-    
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -33,7 +33,11 @@ router.post("/forgot-password", async (req, res) => {
     await user.save();
 
     // Send email
-    const resetUrl = `${process.env.RESET_PASSWORD_URL}/${resetToken}`;
+    const resetUrl =
+      process.env.TARGET === "DEV"
+        ? (resetUrl = `${process.env.RESET_PASSWORD_DEV_URL}/${resetToken}`)
+        : (resetUrl = `${process.env.RESET_PASSWORD_PROD_URL}/${resetToken}`);
+
     const mailOptions = {
       from: process.env.SMTP_USER,
       to: user.email,
@@ -66,7 +70,10 @@ router.post("/reset-password/:token", async (req, res) => {
     const { newPassword } = req.body;
 
     // Find the user by the token
-    const user = await UserModel.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } });
+    const user = await UserModel.findOne({
+      resetPasswordToken: req.params.token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
 
     // Verify if the user exists and the token is valid
     if (!user) {
@@ -169,10 +176,7 @@ router.post("/create", async (req, res) => {
       message: "User created successfully",
     });
   } catch (error) {
-    console.error(
-      "Error saving entry in User collection in MongoDB:",
-      error
-    );
+    console.error("Error saving entry in User collection in MongoDB:", error);
     res.status(500).json({
       message: "Error saving entry in User collection in MongoDB",
     });

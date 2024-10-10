@@ -17,26 +17,26 @@ import { StrategicPlanService } from '../StrategicPlan/StrategicPlan.service';
   styleUrl: './Invitations.component.css',
 })
 export class InvitationsComponent implements OnInit {
-  // Variables para almacenar los form
+  // Variables to store the form
   public invitationForm!: FormGroup;
 
-  // Variable para almacenar el mensaje de respuesta
+  // Variable to store the response message
   responseMessage: string = '';
 
-  // Variables enviar las invitaciones
+  // Variables to send invitations
   usersToInvite: any[] = [];
   selectedUsers: any[] = [];
   strategicPlanId: string = '';
   strategicPlanName: string = '';
 
-  // Variables para las invitaciones pendientes del usuario
+  // Variables for the user's pending invitations
   invitationData: any[] = [];
 
-  // Variables para los planes estratégicos
+  // Variables for the strategic plans
   strategicPlanData: any[] = [];
   showPlans: boolean = true;
 
-  // Variable para almacenar el usuario activo
+  // Variable to store the active user
   activeUserID: string = '';
 
   constructor(
@@ -47,14 +47,14 @@ export class InvitationsComponent implements OnInit {
   ) {}
 
   /**
-   * Método que se ejecuta al iniciar el componente
-   * - Inicializar el formulario de invitaciones
-   * - Cargar los datos necesarios
+   * Method that runs when the component is initialized
+   * - Initialize the invitations form
+   * - Load the necessary data
    */
   ngOnInit(): void {
     let storedPlanId = null;
 
-    // Inicializar el formulario de invitaciones
+    // Initialize the invitations form
     this.invitationForm = this.formBuilder.group({
       users: [null, Validators.required],
     });
@@ -70,19 +70,19 @@ export class InvitationsComponent implements OnInit {
     if (storedPlanId) {
       this.strategicPlanId = storedPlanId;
       this.showPlans = false;
-      this.loadUserToInvite(); 
+      this.loadUserToInvite();
     }
 
-    // Cargar los datos necesarios
+    // Load the necessary data
     this.loadData();
   }
 
   /**
-   * Método para cargar los datos
-   *  - usuario activo el ID
-   *  - planes estratégicos del usuario
-   *  - usuarios a invitar (excluyendo al usuario activo)
-   *  - invitaciones pendientes del usuario
+   * Method to load data
+   *  - active user ID
+   *  - strategic plans for the user
+   *  - users to invite (excluding the active user)
+   *  - user's pending invitations
    */
   async loadData(): Promise<void> {
     try {
@@ -90,12 +90,12 @@ export class InvitationsComponent implements OnInit {
       this.loadStrategicPlansForActiveUser();
       this.getPendingInvitations();
     } catch (error) {
-      console.error('Error al cargar los datos:', error);
+      console.error('Error loading data:', error);
     }
   }
 
   /**
-   * Método para cargar los planes estratégicos del usuario activo
+   * Method to load the strategic plans for the active user
    */
   loadStrategicPlansForActiveUser(): void {
     this.invitationsService
@@ -110,21 +110,21 @@ export class InvitationsComponent implements OnInit {
           }));
         },
         (error: any) => {
-          console.error('Error al obtener los datos:', error);
+          console.error('Error fetching data:', error);
         }
       );
   }
 
   /**
-   * Método para cargar los usuarios a invitar
+   * Method to load the users to invite
    */
   loadUserToInvite(): void {
     this.invitationsService.getUserToInvite(this.strategicPlanId).subscribe(
       (data: any) => {
-        // Asegúrate de que 'data' tiene la propiedad 'users'
+        // Ensure 'data' has the 'users' property
         console.log(data);
 
-        // Mapear directamente los usuarios recibidos a un nuevo formato
+        // Directly map the received users to a new format
         this.usersToInvite = data.users.map((item: any) => ({
           id: item._id,
           name: item.name,
@@ -132,13 +132,13 @@ export class InvitationsComponent implements OnInit {
         }));
       },
       (error: any) => {
-        console.error('Error al obtener los datos:', error);
+        console.error('Error fetching data:', error);
       }
     );
   }
 
   /**
-   * Método para obtener las invitaciones pendientes del usuario activo
+   * Method to get the pending invitations for the active user
    */
   getPendingInvitations(): void {
     this.invitationsService.getInvitationsForUser(this.activeUserID).subscribe(
@@ -148,14 +148,14 @@ export class InvitationsComponent implements OnInit {
         );
       },
       (error: any) => {
-        console.error('Error al obtener los datos:', error);
+        console.error('Error fetching data:', error);
       }
     );
   }
 
   /**
-   * Método para seleccionar un plan estratégico y cargarlo en la variable `strategicPlanId`
-   * @param id ID del plan estratégico seleccionado
+   * Method to select a strategic plan and load it into the variable `strategicPlanId`
+   * @param id ID of the selected strategic plan
    */
   onSelectPlan(id: string): void {
     this.showPlans = false;
@@ -163,7 +163,7 @@ export class InvitationsComponent implements OnInit {
 
     localStorage.setItem('selectedPlan', id);
 
-    this.updatePlanName(id);    
+    this.updatePlanName(id);
 
     this.loadUserToInvite();
   }
@@ -175,7 +175,7 @@ export class InvitationsComponent implements OnInit {
   }
 
   /**
-   * Método para cancelar la selección de un plan estratégico
+   * Method to cancel the selection of a strategic plan
    */
   cancelSelection(): void {
     this.showPlans = true;
@@ -185,14 +185,14 @@ export class InvitationsComponent implements OnInit {
   }
 
   /**
-   * Método para enviar las invitaciones utiliza createInvitation para enviar
-   * las invitaciones a todos los usuarios seleccionados
+   * Method to send invitations using createInvitation to send
+   * invitations to all selected users
    */
   async sendInvitations(): Promise<void> {
     try {
       this.selectedUsers = this.invitationForm.get('users')?.value;
 
-      // Usar Promise.all para ejecutar todas las promesas y manejar errores
+      // Use Promise.all to run all promises and handle errors
       await Promise.all(
         this.selectedUsers.map((user) =>
           this.createInvitation(user, this.strategicPlanId)
@@ -201,19 +201,19 @@ export class InvitationsComponent implements OnInit {
       this.cancelSelection();
       this.loadUserToInvite();
     } catch (error) {
-      // Si ocurre un error inesperado fuera de `createInvitation`
+      // If an unexpected error occurs outside of `createInvitation`
       Swal.fire({
         icon: 'error',
-        title: 'Error en el envío de invitaciones',
-        text: 'Ocurrió un error al enviar las invitaciones.',
+        title: 'Error sending invitations',
+        text: 'An error occurred while sending invitations.',
       });
     }
   }
 
   /**
-   * Método para enviar una invitación
-   * @param userId ID del usuario a invitar
-   * @param planId ID del plan estratégico al que se invita al usuario
+   * Method to send an invitation
+   * @param userId ID of the user to invite
+   * @param planId ID of the strategic plan to invite the user to
    */
   async createInvitation(userId: string, planId: string): Promise<void> {
     try {
@@ -223,12 +223,12 @@ export class InvitationsComponent implements OnInit {
       });
       Swal.fire({
         icon: 'success',
-        title: 'Invitaciones enviadas',
-        text: 'Todas las invitaciones se enviaron correctamente.',
+        title: 'Invitations sent',
+        text: 'All invitations were sent successfully.',
       });
     } catch (error) {
       this.responseMessage =
-        (error as any)?.error?.message || 'Error desconocido';
+        (error as any)?.error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -238,9 +238,9 @@ export class InvitationsComponent implements OnInit {
   }
 
   /**
-   * función para responder una invitación a un plan estratégico
-   * @param decision aceptar o rechazar la invitación
-   * @param planId id del plan estratégico al que se responde
+   * Method to respond to an invitation to a strategic plan
+   * @param decision accept or decline the invitation
+   * @param planId ID of the strategic plan being responded to
    */
   async responseInvitation(decision: boolean, planId: string): Promise<void> {
     try {
@@ -252,7 +252,7 @@ export class InvitationsComponent implements OnInit {
 
       await this.invitationsService.deleteInvitation(this.activeUserID, planId);
 
-      // Actualizar el conteo de invitaciones después de responder
+      // Update the invitation count after responding
       this.invitationsService
         .getPendingInvitationsCount(this.activeUserID)
         .subscribe((count) => {
@@ -261,13 +261,13 @@ export class InvitationsComponent implements OnInit {
 
       Swal.fire({
         icon: 'success',
-        title: 'Respuesta enviada',
+        title: 'Response sent',
         text: responseMessage,
       });
       this.loadData();
     } catch (error) {
       this.responseMessage =
-        (error as any)?.error?.message || 'Error desconocido';
+        (error as any)?.error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',

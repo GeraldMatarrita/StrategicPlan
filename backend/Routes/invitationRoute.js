@@ -1,9 +1,20 @@
 const router = require("express").Router();
+const nodemailer = require("nodemailer");
 const {
   StrategicPlan,
   validateStrategicPlan,
 } = require("../Models/StrategicPlanModel"); // Importa el modelo StrategicPlanModel
 const { User, validateUser } = require("../Models/UserModel"); // Ajusta la ruta según la ubicación de tu archivo de modelo
+
+// Configure nodemailer
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
 
 /**
  * función que obtiene las invitaciones de un usuario por su ID
@@ -212,6 +223,33 @@ router.post("/create", async (req, res) => {
 
     await user.save();
 
+    // URL de la invitación (diferente entre DEV y PROD)
+    const invitationUrl =
+      process.env.TARGET === "DEV"
+        ? process.env.INVITATION_DEV_URL
+        : process.env.INVITATION_PROD_URL;
+
+    const emailContent = `
+        <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; border-radius: 5px;">
+          <h2 style="color: #333;">New Strategic Plan Invitation</h2>
+          <p>You have been invited to join the strategic plan: <strong>${plan.name}</strong></p>
+          <p>Click the button below to view and manage your invitations:</p>
+          <a href="${invitationUrl}" style="background-color: #28a745; color: #fff; padding: 10px 15px; text-decoration: none; border-radius: 5px;">View Invitations</a>
+          <p style="margin-top: 20px;">Remember that you must to be logged to see your invitations.</p>
+        </div>
+      `;
+
+    // Opciones del correo
+    const mailOptions = {
+      from: process.env.SMTP_USER,
+      to: user.email,
+      subject: "Strategic Plan Invitation",
+      html: emailContent,
+    };
+
+    // Enviar el correo
+    await transporter.sendMail(mailOptions);
+
     res.status(200).json({
       message: "Invitation added successfully.",
     });
@@ -298,20 +336,22 @@ router.post("/response", async (req, res) => {
       message: "Internal Server Error",
     });
   }
-  
-  router.delete('/deleteInvitation/:userId/:planId', async (req, res) => {
+
+  router.delete("/deleteInvitation/:userId/:planId", async (req, res) => {
     const { userId, planId } = req.params;
     try {
       const user = await User.findById(userId);
-      if (!user) return res.status(404).send('User not found');
+      if (!user) return res.status(404).send("User not found");
 
       // Filtrar las invitaciones del usuario y eliminar la del plan
-      user.invitations = user.invitations.filter(inv => inv.planId.toString() !== planId.toString());
+      user.invitations = user.invitations.filter(
+        (inv) => inv.planId.toString() !== planId.toString()
+      );
 
       await user.save();
       res.status(200).json({ message: "Invitation deleted successfully" });
     } catch (err) {
-      res.status(500).send('Error deleting invitation');
+      res.status(500).send("Error deleting invitation");
     }
   });
 });
