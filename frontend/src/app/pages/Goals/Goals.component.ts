@@ -212,6 +212,7 @@ export class GoalsComponent implements OnInit {
    */
   async updateGoal(): Promise<void> {
     try {
+      delete this.formGoal.value.objectiveIdSelectedForm;
       const cleanedData = this.cleanFormData();
 
       this.responseMessage = await this.goalsService.updateGoal(

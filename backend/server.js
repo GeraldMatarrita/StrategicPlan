@@ -119,7 +119,7 @@ app.use("/api/invitations", Invitations);
 const Objective = require("./Routes/objectiveRoute");
 app.use("/api/objective", Objective);
 
-const Goals = require("./Routes/goalsRoute");
+const Goals = require("./Routes/goalRoute");
 app.use("/api/goals", Goals);
 
 // --------------------------------------------------------------------------------

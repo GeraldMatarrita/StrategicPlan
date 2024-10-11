@@ -29,8 +29,9 @@
           >
             <div>
               <h2>Goal</h2>
-              <div>
-                <select formControlName="objectiveIdSelectedForm">
+              <div class="form1-group">
+                <label for="objectiveIdSelectedForm">Objective</label>
+                <select formControlName="objectiveIdSelectedForm" id="objectiveIdSelectedForm">
                   <option
                     *ngFor="let objective of objectiveData"
                     [value]="objective._id"
@@ -40,7 +41,8 @@
                 </select>
               </div>
 
-              <div>
+              <div class="form1-group">
+                <label for="description">Description</label>
                 <textarea
                   placeholder="description"
                   type="text"

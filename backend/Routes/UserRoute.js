@@ -35,8 +35,8 @@ router.post("/forgot-password", async (req, res) => {
     // Send email
     const resetUrl =
       process.env.TARGET === "DEV"
-        ? (resetUrl = `${process.env.RESET_PASSWORD_DEV_URL}/${resetToken}`)
-        : (resetUrl = `${process.env.RESET_PASSWORD_PROD_URL}/${resetToken}`);
+        ? `${process.env.RESET_PASSWORD_DEV_URL}/${resetToken}`
+        : `${process.env.RESET_PASSWORD_PROD_URL}/${resetToken}`;
 
     const mailOptions = {
       from: process.env.SMTP_USER,

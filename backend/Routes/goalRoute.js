@@ -134,4 +134,64 @@ router.post("/create/:objectiveId", async (req, res) => {
   }
 });
 
+/**
+ * función que actualiza una meta (goal)
+ * @param {String} goalId - ID de la meta
+ * @returns {Object} - Mensaje de éxito o error
+ * @throws {Object} - Mensaje de error
+ */
+router.put("/update/:goalId", async (req, res) => {
+  try {
+    // Validar los datos de la meta que se quieren actualizar
+    const { error } = validateGoal(req.body);
+    if (error) {
+      return res
+        .status(400)
+        .json({ message: error.details[0].message || "Datos inválidos" });
+    }
+
+    const { goalId } = req.params;
+
+    // Buscar la meta (goal) por su ID
+    const goal = await GoalModel.findById(goalId);
+    if (!goal) {
+      return res.status(404).json({
+        message: "Goal not found.",
+      });
+    }
+
+    // Actualizar la meta con los nuevos datos
+    await GoalModel.updateOne({ _id: goalId }, req.body);
+
+    // Si se modifican actividades completadas o totales, también puede ser necesario actualizar el objetivo padre
+    const { totalActivities, completedActivities } = req.body;
+    if (totalActivities !== undefined || completedActivities !== undefined) {
+      // Encontrar el objetivo asociado a la meta
+      const objective = await ObjectiveModel.findOne({ goals_ListIDS: goalId });
+      if (objective) {
+        // Actualizar el total y las actividades completadas
+        const updatedObjective = {
+          totalGoals: objective.goals_ListIDS.length,
+          completedGoals: await GoalModel.countDocuments({
+            _id: { $in: objective.goals_ListIDS },
+            completedActivities: { $gte: totalActivities },
+          }),
+        };
+
+        // Aplicar la actualización al objetivo
+        await ObjectiveModel.updateOne({ _id: objective._id }, updatedObjective);
+      }
+    }
+
+    res.status(200).json({
+      message: "Goal updated successfully.",
+    });
+  } catch (error) {
+    console.error("Error updating goal:", error);
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+});
+
 module.exports = router;
