@@ -3,9 +3,13 @@ const mongoose = require("mongoose");
 
 const {
   StrategicPlan,
-  validateStrategicPlan,
+  validateStrategicPlan
 } = require("../Models/StrategicPlanModel"); // Importa el modelo StrategicPlanModel
 const { User, validateUser } = require("../Models/UserModel"); // Ajusta la ruta según la ubicación de tu archivo de modelo
+
+const SWOT = require("../Models/swot");
+const CAME = require("../Models/came");
+
 
 /**
  * función que obtiene todos los planes estratégicos
@@ -224,9 +228,29 @@ router.post("/create/:userId", async (req, res) => {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    // Crear un nuevo plan estratégico
+    // Crear un nuevo plan estratégico con FODA y MECA vacios
     const newStrategicPlan = new StrategicPlan(req.body);
-    await newStrategicPlan.save();
+    
+      
+    const newSWOT = new SWOT({
+        strengths:[],
+        weaknesses:[],
+        opportunities:[],
+        threats:[]
+    });
+    const newCAME = new CAME({
+          correct: [],
+          afront: [],
+          maintain: [],
+          explore: []
+        }
+      );
+    await newSWOT.save()
+    await newCAME.save()
+    newStrategicPlan.SWOT = newSWOT._id
+    newStrategicPlan.CAME = newCAME._id
+    console.log(newStrategicPlan)
+    await newStrategicPlan.save()
 
     // Asociar el plan al usuario
     await User.updateOne(
@@ -262,7 +286,7 @@ router.post("/create/:userId", async (req, res) => {
  * @param req.body datos a actualizar del Foda Meca del plan estratégico
  * @returns {Object} - Mensaje de confirmación
  * @throws {Object} - Mensaje de error
- */
+ 
 router.put("/FodaMeca/:id", async (req, res) => {
   // Mapeo de los datos recibidos en el cuerpo de la solicitud
   const {
@@ -324,7 +348,7 @@ router.put("/FodaMeca/:id", async (req, res) => {
       .status(500)
       .sjon({ message: "Error al actualizar el plan estratégico" });
   }
-});
+});*/
 
 /**
  * función que actualiza un plan estratégico por su ID

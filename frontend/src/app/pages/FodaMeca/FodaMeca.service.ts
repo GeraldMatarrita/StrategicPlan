@@ -1,54 +1,45 @@
-import { Injectable } from '@angular/core';
+import { ApplicationRef, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_ROUTES } from '../../config/api.routes';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class FodaMecaService {
+export class SwotService {
+    // Cambia la URL según tu backend
+
   constructor(private http: HttpClient) {}
 
-  getFodaMecaData(planId: string): Observable<any[]> {
-    return this.http.get<any[]>(
-      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_ById_StrategicPlan}/${planId}`
-    );
+  getSwotAnalysis(id: any): Observable<any> {
+
+    return this.http.get(`${API_ROUTES.BASE_URL}/swotAnalysis/allAnalisis/${id}`);
   }
 
-  /**
-   * @param url to update data
-   * @param id id data to update
-   * @param data data to update
-   * @returns
-   */
-  updateData(url: string, id: string, data: any): Observable<any> {
-    console.log('update id', id);
-    console.log('update data', data);
-    console.log('update url', url);
-    return this.http.put<any>(`${url}/${id}`, data);
+  getCameAnalysis(id: any): Observable<any> {
+
+    return this.http.get(`${API_ROUTES.BASE_URL}/cameAnalysis/allAnalisis/${id}`);
   }
 
-  /**
-   * función para actualizar los datos de fodaMeca
-   * @param id del plan estratégico a actualizar
-   * @param data datos a enviar para actualizar
-   * @returns promesa con el mensaje de respuesta
-   */
-  updateFodaMeca(id: string, data: any): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.updateData(
-        `${API_ROUTES.BASE_URL}${API_ROUTES.Update_FodaMeca_StrategicPlan}`,
-        id,
-        data
-      ).subscribe(
-        (response: any) => {
-          resolve(response.message);
-        },
-        (error: any) => {
-          console.error('Error al actualizar los datos:', error);
-          reject(error);
-        }
-      );
-    });
+  addSwotCard(type: string, id: any, card: any): Observable<any> {
+    return this.http.post(`${API_ROUTES.BASE_URL}/swotAnalysis/${type}/addCardAnalysis/${id}`, card);
+  }
+
+  deleteSwotCard(type: string, id: any, card: any): Observable<any> {
+
+    return this.http.post(`${API_ROUTES.BASE_URL}/swotAnalysis/${type}/deleteCard/${id}`, card);
+  }
+
+  addCameCard(type: string, id: any, card: any): Observable<any> {
+    return this.http.post(`${API_ROUTES.BASE_URL}/cameAnalysis/${type}/addCardAnalysis/${id}`, card);
+  }
+
+  deleteCameCard(type: string, id: any, card: any): Observable<any> {
+
+    return this.http.post(`${API_ROUTES.BASE_URL}/cameAnalysis/${type}/deleteCard/${id}`, card);
+  }
+
+  updateCard(card:any):Observable<any>{
+    return this.http.put(`${API_ROUTES.BASE_URL}/cardAnalysis/updateCard/${card._id}`,card)
   }
 }

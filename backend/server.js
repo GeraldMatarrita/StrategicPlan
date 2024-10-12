@@ -122,6 +122,20 @@ app.use("/api/objective", Objective);
 const Goals = require("./Routes/goalRoute");
 app.use("/api/goals", Goals);
 
+const Objective = require("./Routes/objectiveRoute");
+app.use("/api/objective", Objective);
+
+const Goals = require("./Routes/goalRoute");
+app.use("/api/goals", Goals);
+
+const CameAnalysis = require("./Routes/cameAnalysisRoute")
+app.use("/api/cameAnalysis",CameAnalysis)
+
+const SwotAnalysis = require("./Routes/swotAnalysisRoute")
+app.use("/api/swotAnalysis",SwotAnalysis)
+
+const CardAnalysis = require("./Routes/cardAnalysisRoute")
+app.use("/api/cardAnalysis",CardAnalysis)
 // --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
 // al finalizar borrar esta ya que es solo de pruebas

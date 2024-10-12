@@ -1,21 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
-// Esquema FODA
-const fodaSchema = new mongoose.Schema({
-  strengths: { type: String },
-  opportunities: { type: String },
-  weaknesses: { type: String },
-  threats: { type: String },
-});
 
-// Esquema MECA
-const mecaSchema = new mongoose.Schema({
-  correct: { type: String },
-  adapt: { type: String },
-  maintain: { type: String },
-  explore: { type: String },
-});
 
 // Esquema del plan estratégico
 const strategicPlanSchema = new mongoose.Schema(
@@ -26,11 +12,9 @@ const strategicPlanSchema = new mongoose.Schema(
     startDate: { type: Date, default: Date.now, required: true },
     endDate: { type: Date, required: true },
     name: { type: String, required: true },
-    FODA: fodaSchema,
-    MECA: mecaSchema,
-    members_ListIDS: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Referencia directa
-    ],
+    SWOT : {type:mongoose.Schema.Types.ObjectId,ref: "SWOT"},
+    CAME : {type:mongoose.Schema.Types.ObjectId,ref: "CAME"},
+    members_ListIDS:[{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     objective_ListIDS: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Objective" }, // Referencia directa
     ],
@@ -41,21 +25,6 @@ const strategicPlanSchema = new mongoose.Schema(
   { strict: "throw" }
 );
 
-// Esquema de validación Joi para FODA
-const fodaValidationSchema = Joi.object({
-  strengths: Joi.string().optional(),
-  opportunities: Joi.string().optional(),
-  weaknesses: Joi.string().optional(),
-  threats: Joi.string().optional(),
-}).optional();
-
-// Esquema de validación Joi para MECA
-const mecaValidationSchema = Joi.object({
-  correct: Joi.string().optional(),
-  adapt: Joi.string().optional(),
-  maintain: Joi.string().optional(),
-  explore: Joi.string().optional(),
-}).optional();
 
 // Función de validación de datos de planes estratégicos
 const validateStrategicPlan = (data) => {
@@ -66,8 +35,7 @@ const validateStrategicPlan = (data) => {
     startDate: Joi.date().label("Start Date"),
     endDate: Joi.date().required().label("End Date"),
     name: Joi.string().min(1).max(255).required().label("Name"),
-    FODA: fodaValidationSchema,
-    MECA: mecaValidationSchema,
+
     members_ListIDS: Joi.array()
       .items(Joi.string().length(24).label("Member ID"))
       .optional()
