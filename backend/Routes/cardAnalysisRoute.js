@@ -21,7 +21,6 @@ router.get("/getCard/:id",async (req,res)=>{
 router.put("/updateCard/:id", async (req,res)=>{
     try {
         const { id } = req.params;
-        console.log(id)
         const updatedCardData = req.body;
 
 

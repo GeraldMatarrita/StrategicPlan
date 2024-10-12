@@ -8,17 +8,13 @@ const {StrategicPlan} = require("../Models/StrategicPlanModel"); // Importa el m
 router.post("/strengths/addCardAnalysis/:id",async (req,res)=> {
     try {
         const { id } = req.params; // Obtener el ID del parámetro de la URL
-        console.log(id)
         const strategicPlan = await StrategicPlan.findById(id)
-        console.log(strategicPlan)
         if (!strategicPlan) {
           return res
             .status(500)
             .json({ message: "StrategicPlanModel no encontrado" });
         }
-        console.log(strategicPlan.SWOT)
         const swotAnalisis = await SWOT.findById(strategicPlan.SWOT)
-        console.log(swotAnalisis)
         if(!swotAnalisis){
           return res.status(500).json({message:"Analisis FODA no encontrado"})
         }
@@ -55,17 +51,13 @@ router.post("/strengths/addCardAnalysis/:id",async (req,res)=> {
 router.post("/weaknesses/addCardAnalysis/:id",async (req,res)=> {
   try {
     const { id } = req.params; // Obtener el ID del parámetro de la URL
-    console.log(id)
     const strategicPlan = await StrategicPlan.findById(id)
-    console.log(strategicPlan)
     if (!strategicPlan) {
       return res
         .status(500)
         .json({ message: "StrategicPlanModel no encontrado" });
     }
-    console.log(strategicPlan.SWOT)
     const swotAnalisis = await SWOT.findById(strategicPlan.SWOT)
-    console.log(swotAnalisis)
     if(!swotAnalisis){
       return res.status(500).json({message:"Analisis FODA no encontrado"})
     }
@@ -102,17 +94,13 @@ router.post("/weaknesses/addCardAnalysis/:id",async (req,res)=> {
 router.post("/opportunities/addCardAnalysis/:id",async (req,res)=> {
   try {
     const { id } = req.params; // Obtener el ID del parámetro de la URL
-    console.log(id)
     const strategicPlan = await StrategicPlan.findById(id)
-    console.log(strategicPlan)
     if (!strategicPlan) {
       return res
         .status(500)
         .json({ message: "StrategicPlanModel no encontrado" });
     }
-    console.log(strategicPlan.SWOT)
     const swotAnalisis = await SWOT.findById(strategicPlan.SWOT)
-    console.log(swotAnalisis)
     if(!swotAnalisis){
       return res.status(500).json({message:"Analisis FODA no encontrado"})
     }
@@ -209,7 +197,6 @@ router.get("/allAnalisis/:id",async (req,res)=>{
             .populate('threats')
             .then(
               swot =>{
-                console.log(swot)
                 res.json(swot)
                 } 
               )
