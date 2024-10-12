@@ -122,12 +122,6 @@ app.use("/api/objective", Objective);
 const Goals = require("./Routes/goalRoute");
 app.use("/api/goals", Goals);
 
-const Objective = require("./Routes/objectiveRoute");
-app.use("/api/objective", Objective);
-
-const Goals = require("./Routes/goalRoute");
-app.use("/api/goals", Goals);
-
 const CameAnalysis = require("./Routes/cameAnalysisRoute")
 app.use("/api/cameAnalysis",CameAnalysis)
 
