@@ -476,7 +476,7 @@ button:active {
   color: black;
 }
 
-.form1 input, .inputReset {
+.form1 input, .form1-group input {
   background-color: transparent;
   color: white;
   border-radius: 25px;
@@ -497,19 +497,19 @@ button:active {
 }
 
 .form1 input::placeholder {
-  color: rgb(194, 170, 170);
+  color: rgb(189, 189, 189);
 }
 
 .form1 input:focus::placeholder {
   color: rgb(255, 255, 255);
 }
 
-.form1 textarea {
+.form1 textarea, .form1-group textarea {
   background-color: transparent;
   color: white;
   padding: 15px;
   margin-bottom: 1em;
-  width: 80%;
+  width: 100%;
   max-width: 400px;
   height: 100px;
   border: 1px solid black;
@@ -533,7 +533,7 @@ button:active {
 
 .form1 h2 {
   text-align: center;
-  margin: 2em;
+  margin: 1em;
   color: rgb(250, 232, 232);
   font-size: 1.5em;
   font-weight: bold;
@@ -588,6 +588,11 @@ button:active {
 .form1-group label {
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+.form1-group input {
+  width: 100%;
+  max-width: 400px;
 }
 
 /* ----------------------------------------------------- */
@@ -713,6 +718,98 @@ button:active {
   font-weight: bold;       /* Para que el número sea más visible */
   top: 0px;              /* Ajusta la posición vertical si es necesario */
   left: 0px;             /* Mueve el dot a la izquierda */
+}
+
+.custom-li {
+  list-style: none; /* Elimina la viñeta por defecto */
+  padding-left: 20px; /* Añade espacio a la izquierda del contenido del <li> */
+  position: relative; /* Necesario para la pseudo-clase ::before */
+}
+
+.custom-li::before {
+  content: ''; /* Pseudo-elemento antes del contenido del <li> */
+  position: absolute;
+  left: 0; /* Posiciona el ícono SVG a la izquierda del <li> */
+  top: 20%; /* Centra verticalmente el ícono */
+  transform: translateY(-50%); /* Ajuste fino para centrar mejor */
+  width: 16px; /* Tamaño del ícono */
+  height: 16px; /* Tamaño del ícono */
+  background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20fill%3D%22none%22%20viewBox%3D%22-0.5%20-0.5%2016%2016%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke%3D%22%23ff00ff%22%20id%3D%22Chevron-Double-Right--Streamline-Mynaui%22%20height%3D%2216%22%20width%3D%2216%22%3E%3Cpath%20d%3D%22m7.5%2011.25%203.75%20-3.75%20-3.75%20-3.75M3.75%2011.25l3.75%20-3.75%20-3.75%20-3.75%22%20stroke-width%3D%221%22%3E%3C/path%3E%3C/svg%3E');
+  background-size: contain; /* Ajusta el tamaño del ícono al contenedor */
+  background-repeat: no-repeat; /* Asegura que el ícono no se repita */
+}
+
+/* Estilo para select */
+
+.selectGroup {
+  display: flex;
+  flex-direction: column;
+  margin: 0 10px;
+  padding: 2px 0;
+}
+
+.selectGroup label {
+  color: white;
+  font-size: 0.8em;
+  margin-left: 25px; /* Espaciado entre el label y el select */
+  margin-bottom: 0; /* Alinear con el select */
+  white-space: nowrap; /* Evita que el texto del label se divida en varias líneas */
+}
+
+.selectGroup select {
+  background-color: transparent;
+  color: white;
+  border-radius: 25px;
+  padding: 5px 15px;
+  font-size: 1em;
+  max-width: 200px; /* Establecer ancho máximo */
+  width: 100%; /* Ocupar el 100% del ancho disponible dentro de max-width */
+  border: 1px solid var(--color2_purple);
+  box-shadow: inset 0 0 10px var(--color2_purple);
+  appearance: none;
+  white-space: nowrap; /* Evitar que el texto se divida en varias líneas */
+  overflow: hidden; /* Ocultar el texto desbordado */
+  text-overflow: ellipsis; /* Mostrar puntos suspensivos si el texto es demasiado largo */
+}
+
+.selectGroup select:focus {
+  outline: none; /* Quita el borde al enfocar */
+}
+
+.selectGroup select:hover {
+  cursor: pointer; /* Cambia el cursor al pasar el mouse */
+  box-shadow: var(--color3_pink) 0 0 10px; /* Sombra al pasar el mouse */
+}
+
+/* Opciones del select */
+.selectGroup select option {
+  color: var(--text_color); /* Color de texto para las opciones */
+  background-color: var(--gray_middle_dark); /* Fondo de las opciones */
+  padding: 10px; /* Espaciado interno de las opciones */
+}
+
+/* Hover y selección de las opciones */
+.selectGroup select option:hover {
+  background-color: var(--color2_purple); /* Fondo al pasar el mouse */
+  color: var(--text_color); /* Color de texto al pasar el mouse */
+  cursor: pointer; /* Cambia el cursor al pasar el mouse */
+}
+
+.my-custom-container {
+  --custom-gutter-x: 1.5rem; /* Ajusta según lo que necesites */
+  --custom-gutter-y: 0;
+  width: 100%; /* Mantiene el ancho completo */
+  padding-right: calc(var(--custom-gutter-x) * 0.5);
+  padding-left: calc(var(--custom-gutter-x) * 0.5);
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 30px;
+  min-height: 80vh; /* Ajusta la altura mínima */
+  max-width: 1550px; /* Puedes personalizar el ancho máximo */
+  background-color: var(
+    --gray_middle_dark
+  ); /* Color de fondo para hacerla visible */
+  overflow: visible; /* Control de overflow si es necesario */
 }
 
 /* 

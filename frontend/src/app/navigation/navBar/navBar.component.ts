@@ -98,7 +98,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
   private async loadActiveUserName(): Promise<void> {
     const userName = await this.authService.getActiveUserName();
     if (userName) {
-      console.log('Active user name:', userName);
       this.activeUserName = userName; // Asigna el nombre del usuario
       this.cdr.detectChanges(); // Fuerza la detección de cambios
     }
@@ -154,7 +153,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   navigateToStrategicPlan() {
-    this.router.navigate([NAVIGATIONS_ROUTES.STRATEGIC_PLAN]);
+    this.router.navigate([NAVIGATIONS_ROUTES.SELECT_STRATEGIC_PLAN]);
   }
 
   navigateToInvitations() {

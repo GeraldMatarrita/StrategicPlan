@@ -227,9 +227,9 @@ export class AuthComponent {
         <div>
           <p>We will send you an email with a link to reset your password.</p>
           <br>
-          <label style="margin-bottom:6px" for="email">Email:</label>
-          <br>
-          <input class="inputReset" id="email" type="email" placeholder="Enter your email" class="swal2-input" />
+          <div class="form1-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Email">
         </div>
       </form>
     `,

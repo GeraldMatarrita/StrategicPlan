@@ -4,6 +4,7 @@
 
 .StrategicPlanStyle {
   padding: 10px 10px 50px 10px; /* top right bottom left */
+  margin-top: 52px;
 }
 .StrategicPlanStyle h2 {
   color: var(--text_color);

@@ -5,6 +5,7 @@
 .StrategicPlanStyle {
   padding: 10px 0px 50px 0px; /* top right bottom left */
   color: var(--text_color);
+  margin-top: 52px;
 }
 /* ----------------------------------------------------- */
 /* card perzonalizada numero 1 Varation */
@@ -97,7 +98,7 @@
 /* ------------------------------ */
 
 #section2 {
-  min-height: 600px;
+  min-height: 400px;
   background-color: var(--gray_high_dark);
 }
 
@@ -107,7 +108,7 @@
   padding: 25px 20px;
   font-size: 2.5rem;
   font-weight: bold;
-  margin-left: 10%;
+  margin-left: 6%;
 }
 
 #section2Value {
@@ -119,21 +120,58 @@
 /* ------------------------------ */
 
 #section3 {
-  min-height: 600px;
+  min-height: 400px;
   background: linear-gradient(190deg, var(--color1_blue), var(--color2_purple));
 }
 
-#section3Title {
+#section3Title, #objectiveTitle {
   border: 2px solid var(--color3_pink);
   border-radius: 22px;
   padding: 25px 20px;
   font-size: 2.5rem;
   font-weight: bold;
   margin-left: 10%;
+  display: inline-block;
 }
 
-#section3Value {
-  padding: 0 10%;
+#objectiveTitle {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  word-break: keep-all;
+}
+
+#objectiveTitle:hover {
+  display: inline-block;
+  color: rgb(187, 178, 178);
+  cursor: pointer;
+  border: 2px solid #c401c4;
+  transform: scale(1.1); 
+}
+
+#objectiveList {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  word-wrap: break-word; 
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+#objectiveList:hover {
+  display: inline-block;
+  color: rgb(187, 178, 178);
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+#section3Value, #objectiveValue {
+  padding: 0 9%;
+}
+
+#objectives {
+  min-height: 350px;
+  max-width: 1;
+  background: linear-gradient(190deg, var(--color1_blue), var(--color2_purple));
 }
 
 /* ------------------------------ */
@@ -141,7 +179,7 @@
 /* ------------------------------ */
 
 #section4 {
-  min-height: 600px;
+  min-height: 400px;
   background-color: #111010;
 }
 

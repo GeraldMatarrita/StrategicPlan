@@ -30,7 +30,7 @@ router.get("/getObjectiveGoals/:objectiveId", async (req, res) => {
 
     // Buscar los goals del objetivo
     const goals = await GoalModel.find({
-      _id: { $in: objective.goal_ListIDS },
+      _id: { $in: objective.goals_ListIDS },
     });
 
     res.status(200).json(goals);

@@ -164,7 +164,7 @@ router.post("/create", async (req, res) => {
     // Check if the name is already registered
     const nameExists = await UserModel.findOne({ name });
     if (nameExists) {
-      return res.status(400).json({ message: "Name is already registered" });
+      return res.status(400).json({ message: "Username is already registered" });
     }
 
     // Create new user
