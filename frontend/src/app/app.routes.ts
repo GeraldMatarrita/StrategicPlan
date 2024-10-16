@@ -9,6 +9,7 @@ import { StrategicPlanToSelect } from './pages/StrategicPlanToSelect/StrategicPl
 import { ObjectivesComponent } from './pages/Objectives/Objectives.component';
 import { ResetPasswordComponent } from './pages/ResetPassword/ResetPassword.component';
 import { GoalsComponent } from './pages/Goals/Goals.component';
+import { ProfileComponent } from './pages/Profile/profile.component';
 
 export const routes: Routes = [
   { path: 'Basico', component: BasicoComponent },
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'Objectives', component: ObjectivesComponent },
   { path: 'reset-password/:token', component: ResetPasswordComponent },
   { path: 'Goals', component: GoalsComponent },
+  { path: 'Profile', component: ProfileComponent},
   { path: '', component: StrategicPlanToSelect }, // Redirige la ruta si no hay nada
   { path: '**', component: NotFoundComponent }, // Redirige cualquier otra ruta a /notfound
 ];

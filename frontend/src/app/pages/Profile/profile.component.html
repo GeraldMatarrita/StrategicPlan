@@ -1,0 +1,45 @@
+<div class="profile-card">
+  <h2>User Profile</h2>
+
+  <form [formGroup]="profileForm" (ngSubmit)="updateUserProfile()">
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input class="input" id="name" type="text" formControlName="name" placeholder="Enter your name" />
+      <div *ngIf="profileForm.get('name')?.invalid && profileForm.get('name')?.touched" class="error">
+        <p *ngIf="profileForm.get('name')?.errors?.['required']">Name is required</p>
+        <p *ngIf="profileForm.get('name')?.errors?.['minlength']">Name must be at least 3 characters</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input class="input" id="email" type="email" formControlName="email" placeholder="Enter your email" />
+      <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="error">
+        <p *ngIf="profileForm.get('email')?.errors?.['required']">Email is required</p>
+        <p *ngIf="profileForm.get('email')?.errors?.['email']">Email is invalid</p>
+      </div>
+    </div>
+
+    <div *ngIf="isEditing">
+      <!-- Quitar el click aquí, solo usamos ngSubmit en el form -->
+      <button class="buttonCreate" [disabled]="profileForm.invalid" type="submit">Save Changes</button>
+      <button type="button" class="buttonDelete m-4" (click)="cancelEdit()">Cancel</button>
+    </div>
+  </form>
+
+  <div *ngIf="!isEditing">
+    <button class="buttonCreate" (click)="enableEdit()">Edit Profile</button>
+  </div>
+
+  <h3>Associated Strategic Plans</h3>
+  <ul *ngIf="userProfile && strategicPlans.length > 0">
+    <li *ngFor="let plan of strategicPlans">
+      {{ plan.name }} ({{ plan.startDate | date:'dd/MM/yyyy' }} - {{ plan.endDate | date:'dd/MM/yyyy' }})
+    </li>
+  </ul>
+  <ng-template #noPlans>
+    <p>You are not assigned to any strategic plans yet.</p>
+  </ng-template>
+
+  <button (click)="navigateBack()">Back to Dashboard</button>
+</div>

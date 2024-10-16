@@ -182,6 +182,51 @@ router.post("/create", async (req, res) => {
     });
   }
 });
+/**
+ * Function to update a user
+ * @param req.body - User data to update
+ * @param req.params - ID of user
+ * @returns {Object} - Confirmation message
+ * @throws {Object} - Error message
+ */
+router.put("/update/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Desestructurar los campos name y email de req.body
+    const { name, email } = req.body;
+    // Verificar que ambos campos existan en la solicitud
+    if (!name || !email) {
+      return res.status(400).json({
+        message: "Name and email are required.",
+      });
+    }
+
+    // Actualizar solo name y email
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      id,
+      { name, email },
+      { new: true, runValidators: true }
+    );
+    console.log(updatedUser)
+    if (!updatedUser) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.status(201).json({
+      message: "User updated successfully",
+      user: updatedUser, // Devuelve el usuario actualizado si es necesario
+    });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({
+      message: "Failed to update user",
+      error,
+    });
+  }
+});
 
 /**
  * Function to log in to the application

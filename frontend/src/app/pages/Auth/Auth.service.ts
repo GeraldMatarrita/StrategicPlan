@@ -172,6 +172,35 @@ export class AuthService {
       );
     });
   }
+    // Método para actualizar los datos del usuario activo
+    updateActiveUser(updatedUser: any): void {
+      this.activeUser = updatedUser;
+      this.activeUserID = updatedUser._id;
+  
+      // Guardar los nuevos datos en localStorage
+      localStorage.setItem('token', JSON.stringify(updatedUser));
+  
+      // Actualizar los observables si es necesario
+      this.userNameSubject.next(updatedUser.name);
+    }
+  
+    // Método para manejar el update de los datos del usuario en el backend
+    updateUserInBackend(userID: string, data: any): Promise<{ message: string; user: any }> {
+      return new Promise((resolve, reject) => {
+        this.http.put<{ message: string; user: any }>(`${API_ROUTES.BASE_URL}${API_ROUTES.Update_User}/${userID}`, data)
+          .subscribe(
+            (response) => {
+              // Actualiza el usuario activo
+              this.updateActiveUser(response.user);
+              resolve(response);
+            },
+            (error) => {
+              console.error('Error updating user in backend:', error);
+              reject(error);
+            }
+          );
+      });
+    }
 
   async getActiveUserName(): Promise<{ name: string }> {
     // Retornar el usuario activo desde tu lógica
