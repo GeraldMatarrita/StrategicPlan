@@ -40,20 +40,25 @@ export class SideNavComponent {
   }
 
   navigateToStrategicPlan() {
+    this.toggleSidenav();
     this.router.navigate([NAVIGATIONS_ROUTES.STRATEGIC_PLAN]);
   }
 
   navigateToObjective() {
+    this.toggleSidenav();
     this.router.navigate([NAVIGATIONS_ROUTES.OBJECTIVE]);
   }
 
   navigateToGoals() {
+    this.toggleSidenav();
     this.router.navigate([NAVIGATIONS_ROUTES.GOALS]);
   }
   navigateToProfile() {
+    this.toggleSidenav();
     this.router.navigate([NAVIGATIONS_ROUTES.PROFILE]);
   }
   navigateToNotFound() {
+    this.toggleSidenav();
     this.router.navigate([NAVIGATIONS_ROUTES.NOT_FOUND]);
   }
 }

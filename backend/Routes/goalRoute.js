@@ -194,4 +194,28 @@ router.put("/update/:goalId", async (req, res) => {
   }
 });
 
+/**
+ * Función para eliminar un goal y actualizar la lista de goals en el objetivo
+ * @param {String} goalId - ID de la meta (goal)
+ * @returns {Object} - Mensaje de éxito o error
+ * @throws {Object} - Mensaje de error
+ */
+router.delete("/delete/:goalId", async (req, res) => {
+  try {
+    const { goalId } = req.params;
+    
+    // Eliminar el goal del sistema
+    await GoalModel.findByIdAndDelete(goalId);
+
+    res.status(200).json({
+      message: "Goal deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Error deleting goal:", error);
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+});
+
 module.exports = router;

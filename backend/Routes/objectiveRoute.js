@@ -117,12 +117,6 @@ router.post("/create/:planId", async (req, res) => {
  */
 router.put("/update/:objectiveId", async (req, res) => {
   try {
-    const { error } = validateObjective(req.body);
-    if (error) {
-      return res
-        .status(400)
-        .json({ message: error.details[0].message || "Datos inválidos" });
-    }
 
     const { objectiveId } = req.params;
 

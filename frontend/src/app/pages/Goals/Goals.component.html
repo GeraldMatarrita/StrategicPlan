@@ -30,7 +30,7 @@
         </select>
       </div>
     </div>
-    <div class="form1-group" style="margin-right: 260px;">
+    <div class="form1-group" style="margin-right: 260px">
       <label
         style="margin-right: 80px; color: white; font-size: 1.5em"
         for="objectiveTitle"
@@ -57,7 +57,14 @@
             </div>
           </div>
           <div class="right-section">
-            <h6>Progress</h6>
+            <div class="btn-container">
+              <h6 id="progressTitle">Progress</h6>
+              <button
+                class="btn-delete" style="margin-left: 100px;"
+                title="Delete"
+                (click)="deleteGoal(item._id, currentObjective._id)"
+              ></button>
+            </div>
 
             <!-- Primera barra de progreso con progreso actual y meta -->
             <label for="progress">Activity 1:</label>

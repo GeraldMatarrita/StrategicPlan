@@ -208,7 +208,7 @@ router.put("/update/:id", async (req, res) => {
       { name, email },
       { new: true, runValidators: true }
     );
-    console.log(updatedUser)
+
     if (!updatedUser) {
       return res.status(404).json({
         message: "User not found",

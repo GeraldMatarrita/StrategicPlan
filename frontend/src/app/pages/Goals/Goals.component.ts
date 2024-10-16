@@ -10,7 +10,7 @@ import { GoalsService } from './Goals.service';
 import { StrategicPlanService } from '../StrategicPlan/StrategicPlan.service';
 import { ObjectivesService } from '../Objectives/Objectives.service';
 
-import { FormsModule } from '@angular/forms'; // Importar FormsModule
+import { FormsModule } from '@angular/forms'; // Import FormsModule
 
 @Component({
   selector: 'app-goals',
@@ -20,24 +20,24 @@ import { FormsModule } from '@angular/forms'; // Importar FormsModule
   styleUrls: ['./Goals.component.css'],
 })
 export class GoalsComponent implements OnInit {
-  // Variable para almacenar el formulario
+  // Variable to store the form
   formGoal!: FormGroup;
 
-  currentPlanId: string = ''; // ID del plan actual a editar
-  activeUserID = ''; // ID del usuario activo
-  isEditing = false; // Controla si estás editando o creando
+  currentPlanId: string = ''; // ID of the current plan being edited
+  activeUserID = ''; // ID of the active user
+  isEditing = false; // Controls whether editing or creating
 
   objectiveData: any = {};
   objectiveIdSelected: string = '';
 
-  currentObjective: any = {}; // ID del objetivo actual a editar
+  currentObjective: any = {}; // ID of the current objective being edited
 
-  // Variable para almacenar el mensaje de respuesta
+  // Variable to store the response message
   responseMessage: string = '';
 
-  // Variables para almacenar los datos de los objetivos
+  // Variables to store the goals data
   goalsData: any = [];
-  plansData: any[] = []; // Para almacenar los planes estratégicos
+  plansData: any[] = []; // To store strategic plans
   goalsIdSelected: string = '';
 
   showModal: boolean = false;
@@ -52,9 +52,9 @@ export class GoalsComponent implements OnInit {
   ) {}
 
   /**
-   * Método que se ejecuta al iniciar el componente
-   * - Inicializar el formulario
-   * - Cargar los datos
+   * Method that runs when the component is initialized
+   * - Initialize the form
+   * - Load the data
    */
   ngOnInit(): void {
     this.initializeForm();
@@ -63,7 +63,7 @@ export class GoalsComponent implements OnInit {
   }
 
   /**
-   * Método para inicializar el formulario
+   * Method to initialize the form
    */
   initializeForm() {
     this.formGoal = this.formBuilder.group({
@@ -76,23 +76,23 @@ export class GoalsComponent implements OnInit {
   }
 
   /**
-   * Método para cargar los datos y usuario activo
+   * Method to load the data and active user
    */
   async loadData(): Promise<void> {
     try {
-      // Cargar siempre los planes estratégicos
+      // Always load the strategic plans
       this.activeUserID = await this.authService.getActiveUserID();
       this.strategicPlanService.getActivePlans(this.activeUserID).subscribe(
         (data: any[]) => {
           this.plansData = data;
 
-          // Verificar si hay un PlanID almacenado en localStorage
+          // Check if there is a stored PlanID in localStorage
           const storedPlanId = localStorage.getItem('PlanID');
           const storedObjectiveId = localStorage.getItem('ObjectiveID');
 
           if (storedPlanId) {
             this.currentPlanId = storedPlanId;
-            this.loadObjectives(); // Cargar objetivos del plan almacenado
+            this.loadObjectives(); // Load objectives from the stored plan
 
             if (storedObjectiveId) {
               this.objectiveIdSelected = storedObjectiveId;
@@ -103,24 +103,24 @@ export class GoalsComponent implements OnInit {
                     this.currentObjective = data;
                   },
                   (error: any) => {
-                    console.error('Error al obtener el objetivo:', error);
+                    console.error('Error getting the objective:', error);
                   }
                 );
               this.formGoal.patchValue({
                 objectiveIdSelectedForm: storedObjectiveId,
               });
-              this.loadGoalsByObjective(storedObjectiveId); // Cargar metas del objetivo almacenado
+              this.loadGoalsByObjective(storedObjectiveId); // Load goals from the stored objective
             }
           } else {
             this.clearSelections();
           }
         },
         (error: any) => {
-          console.error('Error al cargar los planes:', error);
+          console.error('Error loading the plans:', error);
         }
       );
     } catch (error) {
-      console.error('Error al cargar los datos:', error);
+      console.error('Error loading data:', error);
     }
   }
 
@@ -131,21 +131,7 @@ export class GoalsComponent implements OnInit {
   }
 
   /**
-   * Método para cargar los objetivos del plan actual
-   */
-  async loadGoals(): Promise<void> {
-    this.goalsService.getGoalsByPlanId(this.currentPlanId).subscribe(
-      (data: any[]) => {
-        this.goalsData = data;
-      },
-      (error: any) => {
-        console.error('Error al obtener el plan:', error);
-      }
-    );
-  }
-
-  /**
-   * Método para cargar los objetivos del plan actual
+   * Method to load the objectives of the current plan
    */
   async loadObjectives(): Promise<void> {
     this.objectivesService.getObjectivesByPlanId(this.currentPlanId).subscribe(
@@ -153,53 +139,53 @@ export class GoalsComponent implements OnInit {
         this.objectiveData = data;
       },
       (error: any) => {
-        console.error('Error al obtener el plan:', error);
+        console.error('Error getting the plan:', error);
       }
     );
   }
 
   /**
-   * Método para crear un objetivo
+   * Method to create a goal
    */
   async createGoal(): Promise<void> {
     try {
-      // Obtener el ObjectiveID desde localStorage
+      // Get the ObjectiveID from localStorage
       const storedObjectiveId = localStorage.getItem('ObjectiveID');
 
-      // Validar que no sea null o vacío
+      // Validate that it is not null or empty
       if (!storedObjectiveId) {
-        throw new Error('El ID del objetivo no está disponible.');
+        throw new Error('Objective ID is not available.');
       }
 
       this.objectiveIdSelected = storedObjectiveId;
 
-      // Limpiar el formulario antes de enviarlo
+      // Clear the form before submitting
       this.formGoal.value.objectiveIdSelectedForm = undefined;
       const cleanedData = this.cleanFormData();
 
-      // Crear el Goal con el ObjectiveID seleccionado
+      // Create the goal with the selected ObjectiveID
       this.responseMessage = await this.goalsService.createGoal(
         cleanedData,
         this.objectiveIdSelected
       );
 
-      // Mostrar mensaje de éxito
+      // Show success message
       Swal.fire({
         icon: 'success',
-        title: 'Meta creada',
+        title: 'Goal created',
       });
 
-      // Recargar los Goals
+      // Reload the goals
       this.loadGoalsByObjective(this.objectiveIdSelected);
 
-      // Ocultar el modal y limpiar el formulario
+      // Hide modal and reset the form
       this.toogleShowModal();
       this.formGoal.reset();
     } catch (error) {
-      // Manejo de errores y mostrar mensaje al usuario
-      console.error('Error al crear la meta:', error);
+      // Error handling and showing message to the user
+      console.error('Error creating the goal:', error);
       this.responseMessage =
-        (error as any).message || 'Error desconocido al crear la meta';
+        (error as any).message || 'Unknown error creating the goal';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -209,44 +195,58 @@ export class GoalsComponent implements OnInit {
   }
 
   /**
-   * Método para eliminar un objetivo
+   * Method to delete a goal
    */
-  // async deleteGoal(): Promise<void> {
-  //   try {
-  //     const result = await Swal.fire({
-  //       title: '¿Estás seguro?',
-  //       text: 'No podrás revertir esto',
-  //       icon: 'warning',
-  //       showCancelButton: true,
-  //       confirmButtonText: 'Sí, eliminar',
-  //       cancelButtonColor: '#f52d0a',
-  //     });
-  //     if (result.isConfirmed) {
-  //       this.responseMessage = await this.goalsService.deleteG(
-  //         this.goalsIdSelected,
-  //         this.currentPlanId
-  //       );
-  //       Swal.fire({
-  //         icon: 'success',
-  //         title: 'Eliminado',
-  //         text: this.responseMessage,
-  //       });
-  //       this.loadGoals();
-  //       this.toogleShowModal();
-  //     }
-  //   } catch (error) {
-  //     this.responseMessage =
-  //       (error as any).error?.message || 'Error desconocido';
-  //     Swal.fire({
-  //       icon: 'error',
-  //       title: 'Error',
-  //       text: this.responseMessage,
-  //     });
-  //   }
-  // }
+  async deleteGoal(goalId: string, objectiveId: string): Promise<void> {
+    try {
+      // Step 1: Get the Objective by ID
+      const objective = await this.objectivesService
+        .getObjectiveById(objectiveId)
+        .toPromise();
+
+      if (!objective) {
+        throw new Error('Objective not found');
+      }
+
+      // Step 2: Remove the goalId from the goals_ListIDS of the Objective
+      const updatedGoalsList = objective.goals_ListIDS.filter(
+        (id: string) => id !== goalId
+      );
+
+      // Check if the goal exists in the objective
+      if (updatedGoalsList.length === objective.goals_ListIDS.length) {
+        throw new Error('Goal not found in the objective');
+      }
+
+      // Step 3: Update only the goals list of the Objective
+      await this.objectivesService.updateObjective(objectiveId, {
+        goals_ListIDS: updatedGoalsList,
+      });
+
+      // Step 4: Delete the Goal from the system
+      const responseMessage = await this.goalsService.deleteGoal(goalId);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Deleted',
+        text: responseMessage,
+      });
+
+      this.loadGoalsByObjective(objectiveId); // Load updated goals
+    } catch (error) {
+      console.error('Error deleting the goal:', error);
+      this.responseMessage =
+        (error as any).message || 'Unknown error deleting the goal';
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: this.responseMessage,
+      });
+    }
+  }
 
   /**
-   * Método para actualizar un Goals
+   * Method to update a goal
    */
   async updateGoal(): Promise<void> {
     try {
@@ -259,14 +259,14 @@ export class GoalsComponent implements OnInit {
       );
       Swal.fire({
         icon: 'success',
-        title: 'Actualizado',
-        text: this.responseMessage,
+        title: 'Updated',
+        text: 'The goal has been updated successfully',
       });
-      this.loadGoals();
+      this.loadGoalsByObjective(this.objectiveIdSelected);
       this.toogleShowModal();
     } catch (error) {
       this.responseMessage =
-        (error as any).error?.message || 'Error desconocido';
+        (error as any).error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -274,14 +274,15 @@ export class GoalsComponent implements OnInit {
       });
     }
   }
+
   /**
-   * función para limpiar los campos vacíos del formulario
-   * @returns objeto con los datos limpios
+   * Function to clean empty fields from the form
+   * @returns object with clean data
    */
   private cleanFormData(): any {
-    const formData = { ...this.formGoal.value }; // Crear una copia del objeto
+    const formData = { ...this.formGoal.value }; // Create a copy of the object
 
-    // Filtrar los campos vacíos y null
+    // Filter out empty and null fields
     Object.keys(formData).forEach((key) => {
       if (formData[key] === '' || formData[key] === null) {
         delete formData[key];
@@ -292,18 +293,17 @@ export class GoalsComponent implements OnInit {
   }
 
   /**
-   * Método para mostrar u ocultar el modal
+   * Method to toggle show/hide the modal
    */
   toogleShowModal(): void {
     this.showModal = !this.showModal;
   }
 
   /**
-   * Método para cuando se hace click en el botón de agregar objetivo
-   * - Cambiar el estado de edición
-   * - Mostrar el modal
-   * - Limpiar el formulario
-   * - Cambiar el estado de edición
+   * Method for clicking on the add goal button
+   * - Switch the editing state
+   * - Show the modal
+   * - Reset the form
    */
   onClickAddGoal(): void {
     this.isEditing = false;
@@ -312,7 +312,7 @@ export class GoalsComponent implements OnInit {
   }
 
   /**
-   * Método para cuando se hace click en un objetivo
+   * Method triggered when a goal is clicked
    */
   onClickGoal(goal: any): void {
     this.goalsIdSelected = goal._id;
@@ -322,7 +322,7 @@ export class GoalsComponent implements OnInit {
   }
 
   /**
-   * función para cargar navegar a seleccionar un plan
+   * Function to navigate to select a plan
    */
   navigateToSelectPlan(): void {
     const SELECT_PLAN: string = `${NAVIGATIONS_ROUTES.SELECT_STRATEGIC_PLAN}`;
@@ -331,22 +331,22 @@ export class GoalsComponent implements OnInit {
 
   async loadGoalsByObjective(objectiveId: string | null): Promise<void> {
     if (objectiveId) {
-      // Filtrar los Goals por el Objective seleccionado
+      // Filter Goals by the selected Objective
       this.objectivesService.getGoalsByObjectiveId(objectiveId).subscribe(
         (data: any[]) => {
           this.goalsData = data;
         },
         (error: any) => {
-          console.error('Error al obtener los Goals:', error);
+          console.error('Error retrieving Goals:', error);
         }
       );
     } else {
-      // Si no hay ningún Objective seleccionado, limpiar Goals
+      // If no Objective is selected, clear the Goals
       this.goalsData = [];
     }
   }
 
-  // Método para manejar el cambio de objetivo seleccionado
+  // Method to handle the change of the selected objective
   onObjectiveChange(): void {
     if (this.objectiveIdSelected) {
       this.loadGoalsByObjective(this.objectiveIdSelected);
@@ -358,11 +358,11 @@ export class GoalsComponent implements OnInit {
             this.currentObjective = data;
           },
           (error: any) => {
-            console.error('Error al obtener el objetivo:', error);
+            console.error('Error retrieving the objective:', error);
           }
         );
     } else {
-      // Si no hay un objetivo seleccionado, limpiar Goals
+      // If no objective is selected, clear the Goals
       this.goalsData = [];
       localStorage.removeItem('ObjectiveID');
     }
@@ -374,24 +374,24 @@ export class GoalsComponent implements OnInit {
   }
 
   onPlanChange(): void {
-    this.goalsData = []; // Limpiar las metas al cambiar de plan
-    this.objectiveIdSelected = ''; // Limpiar el objetivo seleccionado al cambiar de plan
-    this.loadObjectives(); // Cargar los objetivos del plan seleccionado
-    localStorage.setItem('PlanID', this.currentPlanId); // Actualizar el PlanID en localStorage
-    localStorage.removeItem('ObjectiveID'); // Limpiar ObjectiveID cuando se cambia el plan
+    this.goalsData = []; // Clear the goals when changing the plan
+    this.objectiveIdSelected = ''; // Clear the selected objective when changing the plan
+    this.loadObjectives(); // Load the objectives for the selected plan
+    localStorage.setItem('PlanID', this.currentPlanId); // Update PlanID in localStorage
+    localStorage.removeItem('ObjectiveID'); // Clear ObjectiveID when the plan changes
   }
 
   getProgressColor(value: number): string {
     if (value >= 100) {
-      return '#a4fba6'; // Verde claro para 100
+      return '#a4fba6'; // Light green for 100
     } else if (value >= 75) {
-      return '#71e48b'; // Verde más claro para 75-99
+      return '#71e48b'; // Lighter green for 75-99
     } else if (value >= 50) {
-      return '#3ac778'; // Verde oscuro para 50-74
+      return '#3ac778'; // Dark green for 50-74
     } else if (value >= 25) {
-      return '#ff9933'; // Naranja para 25-49
+      return '#ff9933'; // Orange for 25-49
     } else {
-      return '#ff3300'; // Rojo para 0-24
+      return '#ff3300'; // Red for 0-24
     }
   }
 }

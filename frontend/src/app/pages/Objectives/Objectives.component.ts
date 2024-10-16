@@ -238,6 +238,11 @@ export class ObjectivesComponent implements OnInit {
 
       this.objectivesService.updateObjective(this.selectedObjective._id, updatedObjective)
         .then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Objective updated',
+            text: 'The objective has been updated successfully',
+          });
           this.toogleShowModal(); // Close the modal after updating
           // Here you can add additional logic, like updating the objectives list
           this.loadObjectives(); // Assume you have a method to reload the objectives list

@@ -3,7 +3,7 @@
 }
 
 .LoginStyle {
-  margin-top: 52px;
+  
   background-color: var(--basicBackground);
   color: white;
   min-height: calc(100vh - 52px);
