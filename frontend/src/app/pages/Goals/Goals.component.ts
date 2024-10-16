@@ -208,6 +208,19 @@ export class GoalsComponent implements OnInit {
         throw new Error('Objective not found');
       }
 
+      const result = await Swal.fire({
+        title: '¿Are you sure?',
+        text: 'You are about to delete this goal. This action cannot be undone.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete',
+        cancelButtonColor: '#f52d0a',
+      });
+
+      if (!result.isConfirmed) {
+        return;
+      }
+
       // Step 2: Remove the goalId from the goals_ListIDS of the Objective
       const updatedGoalsList = objective.goals_ListIDS.filter(
         (id: string) => id !== goalId
@@ -229,7 +242,7 @@ export class GoalsComponent implements OnInit {
       Swal.fire({
         icon: 'success',
         title: 'Deleted',
-        text: responseMessage,
+        text: "The goal has been deleted successfully",
       });
 
       this.loadGoalsByObjective(objectiveId); // Load updated goals

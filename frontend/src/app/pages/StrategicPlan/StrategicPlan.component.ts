@@ -17,22 +17,22 @@ import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
   styleUrls: ['./StrategicPlan.component.css'],
 })
 export class StrategicPlanComponent implements OnInit {
-  // Variable para almacenar el formulario
+  // Variable to store the form
   formStrategicPlan!: FormGroup;
   minEndDate: string = '';
   isFormVisible: boolean = false;
 
-  // Variable para almacenar el mensaje de respuesta
+  // Variable to store the response message
   responseMessage: string = '';
-  // Variables para almacenar los datos de los planes estratégicos
+  // Variables to store the strategic plan data
   strategicPlanData: any[] = [];
   members: any[] = [];
 
   objectivesData: any[] = [];
 
-  currentPlanId: string = ''; // ID del plan actual a editar
+  currentPlanId: string = ''; // ID of the current plan to edit
 
-  // Variable para almacenar el ID del usuario activo
+  // Variable to store the ID of the active user
   activeUserID: string = '';
 
   constructor(
@@ -44,9 +44,9 @@ export class StrategicPlanComponent implements OnInit {
   ) {}
 
   /**
-   * Método que se ejecuta al iniciar el componente
-   * - Inicializar el formulario
-   * - Cargar los datos de los planes activos
+   * Method executed when the component is initialized
+   * - Initialize the form
+   * - Load active plan data
    */
   ngOnInit(): void {
     this.initializeForm();
@@ -57,44 +57,43 @@ export class StrategicPlanComponent implements OnInit {
     try {
       this.activeUserID = await this.authService.getActiveUserID();
   
-      // Obtener la lista de planes del usuario
+      // Get the list of user's plans
       const userPlans = await this.strategicPlanService.getActivePlans(this.activeUserID).toPromise();
   
       if (userPlans && userPlans.length > 0) {
-        // Verificar si hay un PlanID almacenado en localStorage
+        // Check if a PlanID is stored in localStorage
         const storedPlanId = localStorage.getItem('PlanID');
         if (storedPlanId && userPlans.some(plan => plan._id === storedPlanId)) {
-          // Si hay un PlanID almacenado y es válido, cargar el plan correspondiente
+          // If there's a valid stored PlanID, load the corresponding plan
           this.currentPlanId = storedPlanId;
           this.loadObjectives();
           this.loadPlanById(this.currentPlanId);
         } else {
-          // Si no hay un PlanID almacenado o no es válido, redirigir
+          // If no valid PlanID is stored, redirect
           this.navigateToSelectPlan();
         }
       } else {
-        // Si el usuario no tiene planes, redirigir a la selección de plan´
+        // If the user has no plans, redirect to plan selection
         localStorage.removeItem('PlanID');
         this.navigateToSelectPlan();
       }
     } catch (error) {
-      console.error('Error al cargar los datos:', error);
+      console.error('Error loading data:', error);
     }
   }
   
   /**
-   * Método para enviar los datos del formulario
+   * Method to send the form data
    */
   sendData(): void {
     this.updatePlan();
   }
 
   /**
-   * Método para inicializar el formulario
-   * - Inicializar los campos del formulario
-   * - Obtener la fecha actual y sumar para el mínimo de la fecha de fin
+   * Method to initialize the form
+   * - Initialize form fields
+   * - Get the current date and add to set the minimum end date
    */
-
   initializeForm() {
     this.formStrategicPlan = this.formBuilder.group({
       mission: [''],
@@ -110,8 +109,8 @@ export class StrategicPlanComponent implements OnInit {
   }
 
   /**
-   *  Método para cargar los datos de un plan por su ID
-   * @param planId ID del plan a cargar
+   *  Method to load plan data by its ID
+   * @param planId ID of the plan to load
    */
   loadPlanById(planId: string): void {
     this.strategicPlanService.getPlanByID(planId).subscribe(
@@ -128,7 +127,7 @@ export class StrategicPlanComponent implements OnInit {
           },
         ];
 
-        // Asignar datos de members_ListIDS a members como un array de objetos
+        // Assign members_ListIDS data to members as an array of objects
         if (Array.isArray(data.members_ListIDS)) {
           this.members = data.members_ListIDS.map((member: any) => ({
             id: member._id,
@@ -138,21 +137,21 @@ export class StrategicPlanComponent implements OnInit {
         this.formStrategicPlan.patchValue(data);
       },
       (error: any) => {
-        console.error('Error al obtener el plan:', error);
+        console.error('Error loading the plan:', error);
       }
     );
   }
 
   /**
-   * función para mostrar u ocultar el formulario
+   * Function to show or hide the form
    */
   setFormVisibility(): void {
     this.isFormVisible = !this.isFormVisible;
   }
 
   /**
-   * función para actualizar un plan
-   * @returns promesa con el mensaje de respuesta
+   * Function to update a plan
+   * @returns promise with the response message
    */
   async updatePlan(): Promise<void> {
     try {
@@ -164,14 +163,14 @@ export class StrategicPlanComponent implements OnInit {
         );
       Swal.fire({
         icon: 'success',
-        title: 'Actualizado',
+        title: 'Updated',
         text: this.responseMessage,
       });
       this.loadPlanById(this.currentPlanId);
       this.setFormVisibility();
     } catch (error) {
       this.responseMessage =
-        (error as any).error?.message || 'Error desconocido';
+        (error as any).error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -181,19 +180,19 @@ export class StrategicPlanComponent implements OnInit {
   }
 
   /**
-   * función para salir de un plan
-   * @param planID del plan a salir
-   * @returns promesa con el mensaje de respuesta
+   * Function to exit a plan
+   * @param planID of the plan to exit
+   * @returns promise with the response message
    */
   async outPlan(planID: string): Promise<void> {
 
     try {
       const result = await Swal.fire({
-        title: '¿Estás seguro?',
-        text: 'No podrás revertir esto',
+        title: 'Are you sure?',
+        text: 'You are about to leave this plan, this action cannot be undone.',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Sí, eliminar',
+        confirmButtonText: 'Yes, I\'m sure',
         cancelButtonColor: '#f52d0a',
       });
       if (result.isConfirmed) {
@@ -203,8 +202,8 @@ export class StrategicPlanComponent implements OnInit {
         );
         Swal.fire({
           icon: 'success',
-          title: 'Eliminado',
-          text: this.responseMessage,
+          title: 'Deleted',
+          text: "You've left the plan",
         });
         localStorage.removeItem('PlanID');
         localStorage.removeItem('selectedPlan');
@@ -212,7 +211,7 @@ export class StrategicPlanComponent implements OnInit {
       }
     } catch (error) {
       this.responseMessage =
-        (error as any).error?.message || 'Error desconocido';
+        (error as any).error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -222,13 +221,13 @@ export class StrategicPlanComponent implements OnInit {
   }
 
   /**
-   * función para limpiar los campos vacíos del formulario
-   * @returns objeto con los datos limpios
+   * Function to clean empty fields from the form
+   * @returns object with cleaned data
    */
   private cleanFormData(): any {
-    const formData = { ...this.formStrategicPlan.value }; // Crear una copia del objeto
+    const formData = { ...this.formStrategicPlan.value }; // Create a copy of the object
 
-    // Filtrar los campos vacíos y null
+    // Filter out empty and null fields
     Object.keys(formData).forEach((key) => {
       if (formData[key] === '' || formData[key] === null) {
         delete formData[key];
@@ -239,7 +238,7 @@ export class StrategicPlanComponent implements OnInit {
   }
 
   /**
-   * función para navegar a la página de FODAMECA
+   * Function to navigate to the FODAMECA page
    */
   navigateToFodaMeca(): void {
     const FODAMECA: string = `${NAVIGATIONS_ROUTES.FODAMECA}`;
@@ -247,7 +246,7 @@ export class StrategicPlanComponent implements OnInit {
   }
 
   /**
-   * función para cargar navegar a seleccionar un plan
+   * Function to navigate to select a plan
    */
   navigateToSelectPlan(): void {
     const SELECT_PLAN: string = `${NAVIGATIONS_ROUTES.SELECT_STRATEGIC_PLAN}`;
@@ -257,27 +256,27 @@ export class StrategicPlanComponent implements OnInit {
   }
 
   navigateToInvitations(): void {
-    // Verificar si hay un PlanID en el localStorage
+    // Check if there is a PlanID in localStorage
     const selectedPlanId = localStorage.getItem('PlanID') || '';
     localStorage.setItem("planToInvite", selectedPlanId);
     
     if (selectedPlanId) {
-      // Redirigir a la página de invitaciones
+      // Redirect to the invitations page
       this.router.navigate([NAVIGATIONS_ROUTES.INVITATIONS]);
     } else {
-      // Si no hay un plan seleccionado, mostrar una alerta
+      // If no plan is selected, show an alert
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'No se ha seleccionado ningún plan.',
+        text: 'No plan has been selected.',
       });
     }
   }
 
   /**
-   * Método para verificar si el plan ha expirado
-   * @param endDate La fecha de finalización del plan
-   * @returns true si el plan ha expirado, false en caso contrario
+   * Method to check if the plan has expired
+   * @param endDate The plan's end date
+   * @returns true if the plan has expired, false otherwise
    */
   isPlanExpired(endDate: Date): boolean {
     const currentDate = new Date();
@@ -285,7 +284,7 @@ export class StrategicPlanComponent implements OnInit {
   }
 
   /**
-   * Método para cancelar la edicion de un plan
+   * Method to cancel plan editing
    */
   cancelEdit(): void {
     this.setFormVisibility();
@@ -298,14 +297,14 @@ export class StrategicPlanComponent implements OnInit {
         .getObjectivesByPlanId(this.currentPlanId)
         .subscribe(
           (data: any[]) => {
-            this.objectivesData = data; // Asigna los datos a objectivesData
+            this.objectivesData = data; // Assign data to objectivesData
           },
           (error: any) => {
-            console.error('Error al cargar los objetivos', error);
+            console.error('Error loading objectives:', error);
           }
         );
     } catch (error) {
-      console.error('Error al cargar los objetivos', error);
+      console.error('Error loading objectives:', error);
     }
   }
 

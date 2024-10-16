@@ -34,13 +34,13 @@ export class StrategicPlanService {
   }
 
   // --------------------------------------------
-  // Métodos para la API
+  // Methods for the API
   // --------------------------------------------
 
   /**
-   * función para craer los datos de StrategicPlan
-   * @param data datos a enviar
-   * @returns promesa con el mensaje de respuesta
+   * Function to create StrategicPlan data
+   * @param data data to send
+   * @returns promise with the response message
    */
   createStrategicPlan(data: any, userId: string): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -52,7 +52,7 @@ export class StrategicPlanService {
           resolve(response.message);
         },
         (error: any) => {
-          console.error('Error al enviar los datos:', error);
+          console.error('Error sending the data:', error);
           reject(error);
         }
       );
@@ -60,10 +60,10 @@ export class StrategicPlanService {
   }
 
   /**
-   * función para salir de un StrategicPlan con un usuario
-   * @param planId del plan a eliminar
-   * @param userId del user a eliminar
-   * @returns promesa con el mensaje de respuesta
+   * Function to leave a StrategicPlan with a user
+   * @param planId of the plan to remove
+   * @param userId of the user to remove
+   * @returns promise with the response message
    */
   outStrategicPlan(planId: string, userId: string): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -75,7 +75,7 @@ export class StrategicPlanService {
           resolve(response.message);
         },
         (error: any) => {
-          console.error('Error al  los datos:', error);
+          console.error('Error sending the data:', error);
           reject(error);
         }
       );
@@ -83,10 +83,10 @@ export class StrategicPlanService {
   }
 
   /**
-   * función para actualizar los datos de StrategicPlan
-   * @param id del dato a actualizar
-   * @param data datos a enviar para actualizar
-   * @returns promesa con el mensaje de respuesta
+   * Function to update StrategicPlan data
+   * @param id of the data to update
+   * @param data data to send for updating
+   * @returns promise with the response message
    */
   updateStrategicPlan(id: string, data: any): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -99,7 +99,7 @@ export class StrategicPlanService {
           resolve(response.message);
         },
         (error: any) => {
-          console.error('Error al actualizar los datos:', error);
+          console.error('Error updating the data:', error);
           reject(error);
         }
       );
@@ -107,9 +107,9 @@ export class StrategicPlanService {
   }
 
   /**
-   * funcion para obtener los datos de StrategicPlan por id
-   * @param planId del strategicPlan a buscar
-   * @returns Observable con los datos del plan activo
+   * Function to get StrategicPlan data by id
+   * @param planId of the strategic plan to fetch
+   * @returns Observable with the data of the active plan
    */
   getPlanByID(planId: string): Observable<any> {
     return this.http.get<any>(
@@ -118,8 +118,8 @@ export class StrategicPlanService {
   }
 
   /**
-   * función para obtener todos los StrategicPlan
-   * @returns promesa con los datos de StrategicPlan
+   * Function to get all StrategicPlans
+   * @returns Observable with StrategicPlan data
    */
   getStrategicPlans(): Observable<any[]> {
     return this.http.get<any[]>(
@@ -128,9 +128,9 @@ export class StrategicPlanService {
   }
 
   /**
-   * Método para obtener planes activos de un usuario
-   * @param userId ID del usuario
-   * @returns Observable con los datos de los planes activos
+   * Method to get active plans of a user
+   * @param userId ID of the user
+   * @returns Observable with active plans data
    */
   getActivePlans(userId: string): Observable<any[]> {
     return this.http.get<any[]>(
@@ -139,9 +139,9 @@ export class StrategicPlanService {
   }
 
   /**
-   * Método para obtener planes finalizados de un usuario
-   * @param userId ID del usuario
-   * @returns Observable con los datos de los planes finalizados
+   * Method to get finished plans of a user
+   * @param userId ID of the user
+   * @returns Observable with finished plans data
    */
   getFinishedPlans(userId: string): Observable<any[]> {
     return this.http.get<any[]>(
