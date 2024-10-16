@@ -368,9 +368,8 @@ export class GoalsComponent implements OnInit {
     }
   }
 
-  navigateToSelectedPlan(): void {
-    const SELECT_PLAN: string = `${NAVIGATIONS_ROUTES.STRATEGIC_PLAN}`;
-    this.router.navigate([SELECT_PLAN]);
+  navigateToObjectives(): void {
+    this.router.navigate([NAVIGATIONS_ROUTES.OBJECTIVE]);
   }
 
   onPlanChange(): void {
