@@ -46,10 +46,6 @@ export class AppComponent implements OnInit {
       } else {
         this.sidenav.mode = 'side';
         this.router.events.subscribe((event) => {
-          if (event instanceof NavigationEnd) {
-            // Detecta cuando la navegación termina
-            this.checkRouteAndToggleSidenav(event.urlAfterRedirects); // Usa la URL final
-          }
         });
       }
     });
@@ -59,15 +55,5 @@ export class AppComponent implements OnInit {
     this.sidenav.toggle();
   }
 
-  checkRouteAndToggleSidenav(url: string): void {
-    console.log('ruta', url); // Imprime la ruta actual
-    if (
-      url.includes(NAVIGATIONS_ROUTES.OBJECTIVE) ||
-      url.includes(NAVIGATIONS_ROUTES.GOALS)
-    ) {
-      this.sidenav.open(); // Abre el sidenav si la ruta es una pensada para dejarlo abierto
-    } else {
-      this.sidenav.close();
-    }
-  }
+
 }

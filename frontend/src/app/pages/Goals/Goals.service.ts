@@ -67,7 +67,7 @@ export class GoalsService {
   createGoal(data: any, objectiveId: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.postData(
-        `${API_ROUTES.BASE_URL}${API_ROUTES.Create_Goals}/${objectiveId}`,
+        `${API_ROUTES.BASE_URL}${API_ROUTES.Create_Goal}/${objectiveId}`,
         data
       ).subscribe(
         (response) => {
@@ -89,9 +89,24 @@ export class GoalsService {
   updateGoal(goalId: string, data: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.updateData(
-        `${API_ROUTES.BASE_URL}${API_ROUTES.Update_Goals}`,
+        `${API_ROUTES.BASE_URL}${API_ROUTES.Update_Goal}`,
         goalId,
         data
+      ).subscribe(
+        (response) => {
+          resolve(response);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+  }
+
+  deleteGoal(goalId: string, objectiveID: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.deleteData(
+        `${API_ROUTES.BASE_URL}${API_ROUTES.Delete_Goal}/${goalId}`
       ).subscribe(
         (response) => {
           resolve(response);

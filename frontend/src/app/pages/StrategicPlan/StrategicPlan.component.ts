@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { StrategicPlanService } from './StrategicPlan.service';
 import { AuthService } from '../Auth/Auth.service';
+import { ObjectivesService } from '../Objectives/Objectives.service';
 import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 
 @Component({
@@ -27,6 +28,8 @@ export class StrategicPlanComponent implements OnInit {
   strategicPlanData: any[] = [];
   members: any[] = [];
 
+  objectivesData: any[] = [];
+
   currentPlanId: string = ''; // ID del plan actual a editar
 
   // Variable para almacenar el ID del usuario activo
@@ -36,7 +39,8 @@ export class StrategicPlanComponent implements OnInit {
     private formBuilder: FormBuilder,
     private strategicPlanService: StrategicPlanService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private objectivesService: ObjectivesService
   ) {}
 
   /**
@@ -62,6 +66,7 @@ export class StrategicPlanComponent implements OnInit {
         if (storedPlanId && userPlans.some(plan => plan._id === storedPlanId)) {
           // Si hay un PlanID almacenado y es válido, cargar el plan correspondiente
           this.currentPlanId = storedPlanId;
+          this.loadObjectives();
           this.loadPlanById(this.currentPlanId);
         } else {
           // Si no hay un PlanID almacenado o no es válido, redirigir
@@ -246,6 +251,8 @@ export class StrategicPlanComponent implements OnInit {
    */
   navigateToSelectPlan(): void {
     const SELECT_PLAN: string = `${NAVIGATIONS_ROUTES.SELECT_STRATEGIC_PLAN}`;
+    localStorage.removeItem('PlanID');
+    localStorage.removeItem('ObjectiveID');
     this.router.navigate([SELECT_PLAN]);
   }
 
@@ -283,5 +290,32 @@ export class StrategicPlanComponent implements OnInit {
   cancelEdit(): void {
     this.setFormVisibility();
     this.loadPlanById(this.currentPlanId);
+  }
+
+  async loadObjectives() {
+    try {
+      this.objectivesService
+        .getObjectivesByPlanId(this.currentPlanId)
+        .subscribe(
+          (data: any[]) => {
+            this.objectivesData = data; // Asigna los datos a objectivesData
+          },
+          (error: any) => {
+            console.error('Error al cargar los objetivos', error);
+          }
+        );
+    } catch (error) {
+      console.error('Error al cargar los objetivos', error);
+    }
+  }
+
+  navigateToObjective(): void {
+    localStorage.setItem('PlanID', this.currentPlanId);
+    this.router.navigate([NAVIGATIONS_ROUTES.OBJECTIVE]);
+  }
+
+  navigateToGoals(ObjectiveID: string): void {
+    localStorage.setItem('ObjectiveID', ObjectiveID);
+    this.router.navigate([NAVIGATIONS_ROUTES.GOALS]);
   }
 }

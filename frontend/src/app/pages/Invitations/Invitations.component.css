@@ -6,6 +6,7 @@
   padding: 10px 10px 50px 10px; /* top right bottom left */
   color: var(--text_color);
   text-align: center;
+  margin-top: 52px;
 }
 
 h2 {

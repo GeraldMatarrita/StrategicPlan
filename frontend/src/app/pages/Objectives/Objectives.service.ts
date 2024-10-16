@@ -20,18 +20,6 @@ export class ObjectivesService {
     return this.http.post<any>(url, data);
   }
 
-  /**
-   * @param url to update data
-   * @param id id data to update
-   * @param data data to update
-   * @returns
-   */
-  updateData(url: string, id: string, data: any): Observable<any> {
-    console.log('update id', id);
-    console.log('update data', data);
-    console.log('update url', url);
-    return this.http.put<any>(`${url}/${id}`, data);
-  }
 
   /**
    * @param url to delete data
@@ -58,6 +46,12 @@ export class ObjectivesService {
     );
   }
 
+  getObjectiveById(objectiveId: string): Observable<any> {
+    return this.http.get<any>(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_Objective}/${objectiveId}`
+    );
+  }
+
   /**
    * función para crear un Objetivo
    * @param data datos del objetivo a enviar
@@ -81,48 +75,38 @@ export class ObjectivesService {
     });
   }
 
-  /**
-   * función para actualizar un Objetivo
-   * @param data datos del objetivo a enviar
-   * @param objectiveId id del objetivo a actualizar
-   * @returns promesa con el mensaje de respuesta
-   */
-  updateObjective(data: any, objectiveId: string): Promise<string> {
+  deleteObjective(objectiveId: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.updateData(
-        `${API_ROUTES.BASE_URL}${API_ROUTES.Update_Objective}`,
-        objectiveId,
-        data
-      ).subscribe(
+      this.http.delete(`${API_ROUTES.BASE_URL}${API_ROUTES.Delete_Objective}/${objectiveId}`).subscribe(
         (response: any) => {
           resolve(response.message);
         },
         (error: any) => {
-          console.error('Error al enviar los datos:', error);
+          console.error('Error al eliminar el objetivo:', error);
           reject(error);
         }
       );
     });
   }
 
-  /**
-   * función para eliminar un Objetivo
-   * @param objectiveId id del objetivo a eliminar
-   * @param planId id del plan al que pertenece el objetivo
-   */
-  deleteObjective(objectiveId: string, planId: string): Promise<string> {
+  updateObjective(objectiveId: string, data: any): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.deleteData(
-        `${API_ROUTES.BASE_URL}${API_ROUTES.Delete_Objective}/${objectiveId}`
-      ).subscribe(
+      console.log('data', data);
+      this.http.put(`${API_ROUTES.BASE_URL}${API_ROUTES.Update_Objective}/${objectiveId}`, data).subscribe(
         (response: any) => {
           resolve(response.message);
         },
         (error: any) => {
-          console.error('Error al enviar los datos:', error);
+          console.error('Error al actualizar el objetivo:', error);
           reject(error);
         }
       );
     });
+  }
+
+  getGoalsByObjectiveId(objectiveId: string): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_ByObjectiveID_Goals}/${objectiveId}`
+    );
   }
 }

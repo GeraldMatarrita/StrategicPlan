@@ -1,261 +1,282 @@
 <div class="wrapper">
+  <button class="buttonBack" (click)="navigateToPlan()">Go Back</button>
   <div class="container FodaStyle">
-    <div>
-      <button class="buttonBack" (click)="navigateToPlan()">
-        Go Back
-      </button>
-    <div>
-    <h5>SWOT Analysis</h5>
-    <div class="row container justify-content d-flex">
-
-      <!-- Strengths Column -->
-      <div class="col-md-3 mb-4 strengths-column">
-        <div>
-          <!-- Convertimos el título en un botón -->
-          <h5> Add Card Analysis</h5>
-          <button class="buttonAdd" (click)="addCard('strengths')">
-            Strengths
-          </button>
-
-          <div *ngIf="swot.strengths.length > 0;">
-            <div *ngFor="let card of swot.strengths" class="card mb-2">
-              <div class="p-3">
-                <h5>Card Analysis</h5>
-                <div>
-                  <span>Title: </span>
-                  <span>{{ card.title || 'No Title' }}</span>
+    <div class="main">
+      <h5>SWOT Analysis</h5>
+      <div class="row container justify-content d-flex">
+        <!-- Strengths Column -->
+        <div class="col-md-3 mb-4 strengths-column">
+          <div>
+            <!-- Convertimos el título en un botón -->
+            <h6>Strenghts</h6>
+            <div *ngIf="swot.strengths.length > 0">
+              <div *ngFor="let card of swot.strengths" class="card mb-2">
+                <div class="p-3">
+                  <h6>{{ card.title || "No Title" }}</h6>
+                  <div>
+                    <span>Description: </span>
+                    <span>{{ card.description || "No Description" }}</span>
+                  </div>
                 </div>
-                <div>
-                  <span>Description: </span>
-                  <span>{{ card.description || 'No Description' }}</span>
+                <div class="btn-container">
+                  <button
+                    class="btn-edit"
+                    (click)="updateCardAnalysis(card)"
+                  >
+                  </button>
+                  <button
+                    class="btn-delete"
+                    (click)="deleteCard('strengths', card)"
+                  >
+                  </button>
                 </div>
               </div>
-              <div class="button-group">
-                <button class="buttonEdit m-4" (click)="updateCardAnalysis(card)">Edit</button>
-                <button class="buttonDelete m-4" (click)="deleteCard('strengths', card)">Delete</button>
+            </div>
+            <button class="buttonAdd" (click)="addCard('strengths')">
+              New Strenght
+            </button>
+          </div>
+        </div>
+
+        <!-- Weaknesses Column -->
+        <div class="col-md-3 mb-4 weaknesses-column">
+          <div>
+            <h6>Weaknesses</h6>
+            <div *ngIf="swot.weaknesses.length > 0">
+              <div *ngFor="let card of swot.weaknesses" class="card mb-2">
+                <div class="p-3">
+                  <h6>{{ card.title || "No Title" }}</h6>
+                  <div>
+                    <span>Description: </span>
+                    <span>{{ card.description || "No Description" }}</span>
+                  </div>
+                </div>
+                <div class="btn-container">
+                  <button
+                    class="btn-edit"
+                    (click)="updateCardAnalysis(card)"
+                  >
+                  </button>
+                  <button
+                    class="btn-delete"
+                    (click)="deleteCard('weaknesses', card)"
+                  >
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button class="buttonAdd" (click)="addCard('weaknesses')">
+              New Weakness
+            </button>
+          </div>
+        </div>
+
+        <!-- Opportunities Column -->
+        <div class="col-md-3 mb-4 opportunities-column">
+          <div>
+            <h6>Opportunities</h6>
+            <div *ngIf="swot.opportunities.length > 0">
+              <div *ngFor="let card of swot.opportunities" class="card mb-2">
+                <div class="p-3">
+                  <h6>{{ card.title || "No Title" }}</h6>
+                  <div>
+                    <span>Description:</span>
+                    <span>{{ card.description || "No Description" }}</span>
+                  </div>
+                </div>
+                <div class="btn-container">
+                  <button
+                    class="btn-edit"
+                    id="opportunityBtn"
+                    (click)="updateCardAnalysis(card)"
+                  >
+                  </button>
+                  <button
+                    class="btn-delete"
+                    (click)="deleteCard('opportunities', card)"
+                  >
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Weaknesses Column -->
-      <div class="col-md-3 mb-4 weaknesses-column">
-        <div class="">
-          <h5> Add Card Analysis</h5>
-          <button class="buttonAdd" (click)="addCard('weaknesses')">
-            Weaknesses
-          </button>
-          <div *ngIf="swot.weaknesses.length > 0;">
-            <div *ngFor="let card of swot.weaknesses" class="card mb-2">
-              <div class="p-3">
-                <h5>Card Analysis</h5>
-                <div>
-                  <span>Title: </span>
-                  <span>{{ card.title || 'No Title' }}</span>
-                </div>
-                <div>
-                  <span>Description: </span>
-                  <span>{{ card.description || 'No Description' }}</span>
-                </div>
-              </div>
-              <div class="button-group">
-                <button class="buttonEdit m-4" (click)="updateCardAnalysis(card)">Edit</button>
-                <button class="buttonDelete m-4" (click)="deleteCard('weaknesses', card)">Delete</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Opportunities Column -->
-      <div class="col-md-3 mb-4 opportunities-column">
-        <div class="">
-          <h5> Add Card Analysis</h5>
           <button class="buttonAdd" (click)="addCard('opportunities')">
-            Opportunities
+            New Opportunity
           </button>
+        </div>
 
-          <div *ngIf="swot.opportunities.length > 0;">
-            <div *ngFor="let card of swot.opportunities" class="card mb-2">
-              <div class="p-3">
-               <h5>Card Analysis</h5>
-                <div>
-                  <span>Title: </span>
-                  <span>{{ card.title || 'No Title' }}</span>
+        <!-- Threats Column -->
+        <div class="col-md-3 mb-4 threats-column">
+          <div class="">
+            <h6>Threats</h6>
+            <div *ngIf="swot.threats.length > 0">
+              <div *ngFor="let card of swot.threats" class="card mb-2">
+                <div class="p-3">
+                  <h6>{{ card.title || "No Title" }}</h6>
+                  <div>
+                    <span>Description: </span>
+                    <span>{{ card.description || "No Description" }}</span>
+                  </div>
                 </div>
-                <div>
-                  <span>Description:</span>
-                  <span>{{ card.description || 'No Description' }}</span>
+                <div class="btn-container">
+                  <button
+                    class="btn-edit"
+                    (click)="updateCardAnalysis(card)"
+                  >
+                  </button>
+                  <button
+                    class="btn-delete"
+                    (click)="deleteCard('threats', card)"
+                  >
+                  </button>
                 </div>
-              </div>
-              <div class="button-group">
-                <button class="buttonEdit m-4" (click)="updateCardAnalysis(card)">Edit</button>
-                <button class="buttonDelete m-4" (click)="deleteCard('opportunities', card)">Delete</button>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Threats Column -->
-      <div class="col-md-3 mb-4 threats-column">
-        <div class="">
-          <h5> Add Card Analysis</h5>
           <button class="buttonAdd" (click)="addCard('threats')">
-            Threats
+            New Threat
           </button>
+        </div>
 
-          <div *ngIf="swot.threats.length > 0;">
-            <div *ngFor="let card of swot.threats" class="card mb-2">
-              <div class="p-3">
-                <h5>Card Analisys</h5>
-                <div>
-                  <span>Title: </span>
-                  <span>{{ card.title || 'No Title' }}</span>
-                </div>
-                <div>
-                  <span>Description: </span>
-                  <span>{{ card.description || 'No Description' }}</span>
+        <div>
+          <h5>CAME Analysis</h5>
+          <div class="row container justify-content d-flex">
+            <!-- Correct Column -->
+            <div class="col-md-3 mb-4 strengths-column">
+              <div>
+                <!-- Convertimos el título en un botón -->
+                <h6>Correct</h6>
+                <div *ngIf="came.correct.length > 0">
+                  <div *ngFor="let card of came.correct" class="card mb-2">
+                    <div class="p-3">
+                      <h6>{{ card.title || "No Title" }}</h6>
+                      <div>
+                        <span>Description: </span>
+                        <span>{{ card.description || "No Description" }}</span>
+                      </div>
+                    </div>
+                    <div class="btn-container">
+                      <button
+                        class="btn-edit"
+                        (click)="updateCardAnalysis(card)"
+                      >
+                      </button>
+                      <button
+                        class="btn-delete"
+                        (click)="deleteCameCard('correct', card)"
+                      >
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="button-group">
-                <button class="buttonEdit m-4" (click)="updateCardAnalysis(card)">Edit</button>
-                <button class="buttonDelete m-4" (click)="deleteCard('threats', card)">Delete</button>
+              <button class="buttonAdd" (click)="addCameCard('correct')">
+                New Correct
+              </button>
+            </div>
+
+            <!-- Afront Column -->
+            <div class="col-md-3 mb-4 weaknesses-column">
+              <div class="">
+                <h6>Afront</h6>
+                <div *ngIf="came.afront.length > 0">
+                  <div *ngFor="let card of came.afront" class="card mb-2">
+                    <div class="p-3">
+                      <h6>{{ card.title || "No Title" }}</h6>
+                      <div>
+                        <span>Description: </span>
+                        <span>{{ card.description || "No Description" }}</span>
+                      </div>
+                    </div>
+                    <div class="btn-container">
+                      <button
+                        class="btn-edit"
+                        (click)="updateCardAnalysis(card)"
+                      >
+                      </button>
+                      <button
+                        class="btn-delete"
+                        (click)="deleteCameCard('afront', card)"
+                      >
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
+              <button class="buttonAdd" (click)="addCameCard('afront')">
+                New Afront
+              </button>
+            </div>
+
+            <!-- Maintain Column -->
+            <div class="col-md-3 mb-4 opportunities-column">
+              <div>
+                <h6>Maintain</h6>
+                <div *ngIf="came.maintain.length > 0">
+                  <div *ngFor="let card of came.maintain" class="card mb-2">
+                    <div class="p-3">
+                      <h6>{{ card.title || "No Title" }}</h6>
+                      <div>
+                        <span>Description:</span>
+                        <span>{{ card.description || "No Description" }}</span>
+                      </div>
+                    </div>
+                    <div class="btn-container">
+                      <button
+                        class="btn-edit"
+                        id="maintainBtn"
+                        (click)="updateCardAnalysis(card)"
+                      >
+                      </button>
+                      <button
+                        class="btn-delete"
+                        (click)="deleteCameCard('maintain', card)"
+                      >
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button class="buttonAdd" (click)="addCameCard('maintain')">
+                New Maintain
+              </button>
+            </div>
+
+            <!-- Explore Column -->
+            <div class="col-md-3 mb-4 threats-column">
+              <div>
+                <h6>Explore</h6>
+                <div *ngIf="came.explore.length > 0">
+                  <div *ngFor="let card of came.explore" class="card mb-2">
+                    <div class="p-3">
+                      <h6>{{ card.title || "No Title" }}</h6>
+                      <div>
+                        <span>Description: </span>
+                        <span>{{ card.description || "No Description" }}</span>
+                      </div>
+                    </div>
+                    <div class="btn-container">
+                      <button
+                        class="btn-edit"
+                        (click)="updateCardAnalysis(card)"
+                      >
+                      </button>
+                      <button
+                        class="btn-delete"
+                        (click)="deleteCameCard('explore', card)"
+                      >
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button class="buttonAdd" (click)="addCameCard('explore')">
+                New Explore
+              </button>
             </div>
           </div>
         </div>
       </div>
-
-      <div>
-        <h5>CAME Analysis</h5>
-        <div class="row container justify-content d-flex">
-    
-          <!-- Correct Column -->
-          <div class="col-md-3 mb-4 strengths-column">
-            <div>
-              <!-- Convertimos el título en un botón -->
-              <h5> Add Card Analysis</h5>
-              <button class="buttonAdd" (click)="addCameCard('correct')">
-                Correct
-              </button>
-    
-              <div *ngIf="came.correct.length > 0;">
-                <div *ngFor="let card of came.correct" class="card mb-2">
-                  <div class="p-3">
-                    <h5>Card Analysis</h5>
-                    <div>
-                      <span>Title: </span>
-                      <span>{{ card.title || 'No Title' }}</span>
-                    </div>
-                    <div>
-                      <span>Description: </span>
-                      <span>{{ card.description || 'No Description' }}</span>
-                    </div>
-                  </div>
-                  <div class="button-group">
-                    <button class="buttonEdit m-4" (click)="updateCardAnalysis(card)">Edit</button>
-                    <button class="buttonDelete m-4" (click)="deleteCameCard('correct', card)">Delete</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-    
-          <!-- Afront Column -->
-          <div class="col-md-3 mb-4 weaknesses-column">
-            <div class="">
-              <h5> Add Card Analysis</h5>
-              <button class="buttonAdd" (click)="addCameCard('afront')">
-                Afront
-              </button>
-              <div *ngIf="came.afront.length > 0;">
-                <div *ngFor="let card of came.afront" class="card mb-2">
-                  <div class="p-3">
-                    <h5>Card Analysis</h5>
-                    <div>
-                      <span>Title: </span>
-                      <span>{{ card.title || 'No Title' }}</span>
-                    </div>
-                    <div>
-                      <span>Description: </span>
-                      <span>{{ card.description || 'No Description' }}</span>
-                    </div>
-                  </div>
-                  <div class="button-group">
-                    <button class="buttonEdit m-4" (click)="updateCardAnalysis(card)">Edit</button>
-                    <button class="buttonDelete m-4" (click)="deleteCameCard('afront', card)">Delete</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-    
-          <!-- Maintain Column -->
-          <div class="col-md-3 mb-4 opportunities-column">
-            <div class="">
-              <h5> Add Card Analysis</h5>
-              <button class="buttonAdd" (click)="addCameCard('maintain')">
-                Maintain
-              </button>
-    
-              <div *ngIf="came.maintain.length > 0;">
-                <div *ngFor="let card of came.maintain" class="card mb-2">
-                  <div class="p-3">
-                   <h5>Card Analysis</h5>
-                    <div>
-                      <span>Title: </span>
-                      <span>{{ card.title || 'No Title' }}</span>
-                    </div>
-                    <div>
-                      <span>Description:</span>
-                      <span>{{ card.description || 'No Description' }}</span>
-                    </div>
-                  </div>
-                  <div class="button-group">
-                    <button class="buttonEdit m-4" (click)="updateCardAnalysis(card)">Edit</button>
-                    <button class="buttonDelete m-4" (click)="deleteCameCard('maintain', card)">Delete</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-    
-          <!-- Explore Column -->
-          <div class="col-md-3 mb-4 threats-column">
-            <div class="">
-              <h5> Add Card Analysis</h5>
-              <button class="buttonAdd" (click)="addCameCard('explore')">
-                Explore
-              </button>
-    
-              <div *ngIf="came.explore.length > 0;">
-                <div *ngFor="let card of came.explore" class="card mb-2">
-                  <div class="p-3">
-                    <h5>Card Analysis</h5>
-                    <div>
-                      <span>Title: </span>
-                      <span>{{ card.title || 'No Title' }}</span>
-                    </div>
-                    <div>
-                      <span>Description: </span>
-                      <span>{{ card.description || 'No Description' }}</span>
-                    </div>
-                  </div>
-                  <div class="button-group">
-                    <button class="buttonEdit m-4" (click)="updateCardAnalysis(card)">Edit</button>
-                    <button class="buttonDelete m-4" (click)="deleteCameCard('explore', card)">Delete</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-    
-        </div>
-    </div>
-    
-
     </div>
   </div>
 </div>

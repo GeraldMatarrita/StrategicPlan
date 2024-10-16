@@ -76,6 +76,8 @@ export class StrategicPlanToSelect implements OnInit {
    */
   async loadData(): Promise<void> {
     try {
+      localStorage.removeItem('PlanID');
+      localStorage.removeItem('ObjectiveID');
       this.activeUserID = await this.authService.getActiveUserID();
       this.loadActivePlans();
     } catch (error) {

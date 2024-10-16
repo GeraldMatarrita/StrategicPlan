@@ -90,6 +90,7 @@ export class StrategicPlanService {
    * @returns promesa con el mensaje de respuesta
    */
   updateStrategicPlan(id: string, data: any): Promise<string> {
+
     return new Promise((resolve, reject) => {
       this.updateData(
         `${API_ROUTES.BASE_URL}${API_ROUTES.Update_StrategicPlan}`,

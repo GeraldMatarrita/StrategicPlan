@@ -7,6 +7,7 @@ const Joi = require("joi");
 const objectiveSchema = new mongoose.Schema(
   {
     startDate: { type: Date, default: Date.now },
+    title: { type: String, required: true }, // Nuevo campo 'title' requerido
     description: { type: String, required: true },
     totalGoals: { type: Number, default: 0 }, // Asegúrate de que tenga un valor predeterminado
     completedGoals: { type: Number, default: 0 }, // Igualmente aquí
@@ -24,8 +25,9 @@ const objectiveSchema = new mongoose.Schema(
 const validateObjective = (data) => {
   const schema = Joi.object({
     startDate: Joi.date().optional().label("Start Date"), // No es requerido
-    description: Joi.string().min(3).max(255).required().label("Description"), // Solo description es requerido
-    totalGoals: Joi.number().integer().min(1).optional().label("Total Goals"),
+    title: Joi.string().min(3).max(255).required().label("Title"), // Validación para el nuevo campo 'title'
+    description: Joi.string().min(3).required().label("Description"), // Solo description es requerido
+    totalGoals: Joi.number().integer().optional().label("Total Goals"),
     completedGoals: Joi.number()
       .integer()
       .min(0)

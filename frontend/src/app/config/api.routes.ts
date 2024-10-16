@@ -68,13 +68,16 @@ export const API_ROUTES = {
   Create_Objective: '/objective/create', // POST
   Update_Objective: '/objective/update', // PUT + "/StrategicPlanId"
   Delete_Objective: '/objective/delete', // DELETE + "/StrategicPlanId"
+  Get_Objective: '/objective/getObjective', // GET + "/ObjectiveId"
 
   // -------------------------------------------------------------
   // Para los Goals - Metas
   // -------------------------------------------------------------
   Get_ByPlanID_Goals: '/goals/getPlanGoals', // GET + "/StrategicPlanId"
-  Create_Goals: '/goals/create', // POST + "/ObjectiveId"
-  Update_Goals: '/goals/update', // PUT
+  Get_ByObjectiveID_Goals: '/goals/getObjectiveGoals', // GET + "/ObjectiveId"
+  Create_Goal: '/goals/create', // POST + "/ObjectiveId"
+  Update_Goal: '/goals/update', // PUT
+  Delete_Goal: '/goals/delete', // DELETE + "/GoalId"
 
   // --------------------------------------------------------------------------------
   // --------------------------------------------------------------------------------

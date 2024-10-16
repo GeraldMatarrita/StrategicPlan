@@ -1,6 +1,6 @@
 <div class="StrategicPlanStyle">
   <button (click)="navigateToSelectPlan()" class="buttonBack m-3">
-    Back to plans
+    Back to Select Plan
   </button>
 
   <!-- Formulario esta visible porque se esta creando un plan o se edita uno -->
@@ -153,17 +153,14 @@
                 Edit
               </button>
               <button (click)="navigateToFodaMeca()" class="buttonCreate m-4">
-                Foda Meca
+                Swot/Came
               </button>
             </div>
             <div>
               <button (click)="outPlan(item.id)" class="buttonDelete m-4">
                 Out Plan
               </button>
-              <button
-                (click)="navigateToInvitations()"
-                id="inviteButton"
-              >
+              <button (click)="navigateToInvitations()" id="inviteButton">
                 Invite +
               </button>
             </div>
@@ -205,9 +202,27 @@
             <span id="section4Title">Values</span>
           </div>
         </span>
+        <span
+        *ngIf="objectivesData.length > 0"
+        id="objectives"
+        class="row d-flex align-items-center justify-content-center"
+      >
+        <div class="col-12 col-md-3 text-end">
+          <span title="Navigate to Objectives" id="objectiveTitle" (click)="navigateToObjective()">Objectives</span>
+        </div>
+        <div id="objectiveValue" class="col-12 col-md-6 text-center">
+          <ul>
+            <li id="objectiveList" class="custom-li" *ngFor="let objective of objectivesData" (click)="navigateToGoals(objective._id)">
+              {{ objective.title }}
+            </li>
+          </ul>
+        </div>
+      </span>
       </div>
     </div>
   </div>
+
+
 
   <div *ngIf="members" class="members">
     <span id="memberTitle">Members</span>
@@ -215,4 +230,5 @@
       <li *ngFor="let item of members">{{ item.name }}</li>
     </ul>
   </div>
+
 </div>

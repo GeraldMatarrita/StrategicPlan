@@ -9,8 +9,28 @@ const {
   validateStrategicPlan,
 } = require("../Models/StrategicPlanModel");
 
+router.get("/getObjective/:objectiveId", async (req, res) => {
+  try {
+    const { objectiveId } = req.params;
+
+    const objective = await ObjectiveModel.findById(objectiveId);
+    if (!objective) {
+      return res.status(404).json({
+        message: "Objective not found.",
+      });
+    }
+
+    res.status(200).json(objective);
+  } catch (error) {
+    console.error("Error getting objective:", error);
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+});
+
 /**
- * funcion que trae todos los objetivos de un plan estratégico
+ * función que trae todos los objetivos de un plan estratégico
  * @param {String} planId - ID del plan estratégico
  * @returns {Object} - Lista de objetivos
  * @throws {Object} - Mensaje de error
@@ -91,7 +111,7 @@ router.post("/create/:planId", async (req, res) => {
 /**
  * función que actualiza un objetivo
  * @param {Object} req - Request object
- * @param {String} objectiveId - ID del objetive
+ * @param {String} objectiveId - ID del objetivo
  * @returns {Object} - Mensaje de éxito o error
  * @throws {Object} - Mensaje de error
  */
@@ -134,40 +154,25 @@ router.put("/update/:objectiveId", async (req, res) => {
  * @returns {Object} - Mensaje de éxito o error
  * @throws {Object} - Mensaje de error
  */
-router.delete("/delete/:objectiveId", async (req, res) => {
+router.delete('/delete/:id', async (req, res) => {
   try {
-    const { objectiveId } = req.params;
-    // Buscar el objetivo
-    const objective = await ObjectiveModel.findById(objectiveId);
-    if (!objective) {
-      return res.status(404).json({
-        message: "Objective not found.",
-      });
+    const { id } = req.params;
+
+    // Busca y elimina el objetivo por su ID
+    const deletedObjective = await ObjectiveModel.findByIdAndDelete(id);
+
+    if (!deletedObjective) {
+      return res.status(404).json({ message: "Objective not found" });
     }
 
-    // const strategicPlan = await StrategicPlan.findById(planId);
-    // if (!strategicPlan) {
-    //   return res.status(404).json({
-    //     message: "Strategic Plan not found.",
-    //   });
-    // }
-
-    // // Eliminar el objetivo del plan estratégico
-    // await StrategicPlan.updateOne(
-    //   { _id: planId },
-    //   { $pull: { objective_ListIDS: objectiveId } }
-    // );
-
-    // Eliminar el objetivo
-    await ObjectiveModel.deleteOne({ _id: objectiveId });
-
     res.status(200).json({
-      message: "Objective deleted successfully.",
+      message: "Objective successfully deleted",
+      data: deletedObjective,
     });
   } catch (error) {
-    console.error("Error deleting objective:", error);
+    console.error("Error deleting the objective:", error);
     res.status(500).json({
-      message: "Internal Server Error",
+      message: "Error deleting the objective from the database",
     });
   }
 });

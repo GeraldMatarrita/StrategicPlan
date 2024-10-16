@@ -1,18 +1,104 @@
 <div class="goalsStyle">
   <div class="goalsMenu">
-    <button class="buttonAdd m-3" (click)="onClickAddGoal()">Add</button>
-    <p>Plan: {{ planData?.name }}</p>
+    <div class="bothSelects">
+      <div class="selectGroup">
+        <label for="strategicPlan">Select a Strategic Plan:</label>
+        <select
+          id="strategicPlan"
+          [(ngModel)]="currentPlanId"
+          (change)="onPlanChange()"
+        >
+          <option *ngFor="let plan of plansData" [value]="plan._id">
+            {{ plan.name }}
+          </option>
+        </select>
+      </div>
+      <div class="selectGroup" id="selectObjective">
+        <label for="objectiveSelect">Select an Objective:</label>
+        <select
+          [(ngModel)]="objectiveIdSelected"
+          id="objectiveSelect"
+          (change)="onObjectiveChange()"
+        >
+          <!-- Agregar esta opción por defecto -->
+          <option
+            *ngFor="let objective of objectiveData"
+            [value]="objective._id"
+          >
+            {{ objective.title }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="form1-group" style="margin-right: 260px;">
+      <label
+        style="margin-right: 80px; color: white; font-size: 1.5em"
+        for="objectiveTitle"
+        >Goals for Objective:</label
+      >
+      <p id="objectiveTitle">{{ currentObjective.title }}</p>
+    </div>
+
+    <button class="buttonAdd m-3" (click)="onClickAddGoal()">Add a Goal</button>
   </div>
-  <div class="container">
+  <button (click)="navigateToSelectedPlan()" class="buttonBack m-3">
+    Back to Plan
+  </button>
+  <div class="my-custom-container">
     <div *ngIf="goalsData.length > 0">
       <div class="card-container">
         <div *ngFor="let item of goalsData" class="card-Objective-container">
           <div class="card-Objective" (click)="onClickGoal(item)">
             <div class="content-wrapper">
-              <span class="title">Description:</span>
+              <h6 class="goal-h6">Description:</h6>
               <div class="value-container">
                 <span class="value">{{ item.description }}</span>
               </div>
+            </div>
+          </div>
+          <div class="right-section">
+            <h6>Progress</h6>
+
+            <!-- Primera barra de progreso con progreso actual y meta -->
+            <label for="progress">Activity 1:</label>
+            <div class="progress-container">
+              <span class="progress-current">1</span>
+              <!-- Progreso actual -->
+              <progress [value]="25" max="100"></progress>
+              <span class="progress-goal">4</span>
+              <!-- Progreso meta -->
+            </div>
+
+            <!-- Segunda barra de progreso con progreso actual y meta -->
+            <label for="progress">Activity 2:</label>
+            <div class="progress-container">
+              <span class="progress-current">10</span>
+              <progress [value]="50" max="100"></progress>
+              <span class="progress-goal">20</span>
+            </div>
+
+            <!-- Tercera barra de progreso con progreso actual y meta -->
+            <label for="progress">Activity 3:</label>
+            <div class="progress-container">
+              <span class="progress-current">75</span>
+              <progress [value]="75" max="100"></progress>
+              <span class="progress-goal">100</span>
+            </div>
+
+            <!-- Cuarta barra de progreso con progreso actual y meta -->
+            <label for="progress">Activity 4:</label>
+            <div class="progress-container">
+              <span class="progress-current">8</span>
+              <progress [value]="100" max="100"></progress>
+              <span class="progress-goal">8</span>
+            </div>
+
+            <!-- Barra de progreso general -->
+            <label for="progress">General Progress:</label>
+            <div class="progress-container">
+              <span class="progress-current">1</span>
+              <progress [value]="62" max="100"></progress>
+              <span class="progress-goal">100</span>
             </div>
           </div>
         </div>
@@ -31,20 +117,24 @@
               <h2>Goal</h2>
               <div class="form1-group">
                 <label for="objectiveIdSelectedForm">Objective</label>
-                <select formControlName="objectiveIdSelectedForm" id="objectiveIdSelectedForm">
-                  <option
-                    *ngFor="let objective of objectiveData"
-                    [value]="objective._id"
+                <!-- <select
+                    formControlName="objectiveIdSelectedForm"
+                    id="objectiveIdSelectedForm"
                   >
-                    {{ objective.description }}
-                  </option>
-                </select>
+                    <option
+                      *ngFor="let objective of objectiveData"
+                      [value]="objective._id"
+                    >
+                      {{ objective.title }}
+                    </option>
+                  </select> -->
+                <label style="margin: 5px"> {{ currentObjective.title }}</label>
               </div>
 
               <div class="form1-group">
                 <label for="description">Description</label>
                 <textarea
-                  placeholder="description"
+                  placeholder="Description"
                   type="text"
                   id="description"
                   formControlName="description"

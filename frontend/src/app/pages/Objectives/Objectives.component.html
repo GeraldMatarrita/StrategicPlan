@@ -1,24 +1,62 @@
 <div class="ObjectiveStyle">
   <div class="objectiveMenu">
-    <button class="buttonAdd m-3" (click)="onClickAddObjective()">Add</button>
-    <p>Plan: {{ planData?.name }}</p>
+    <div class="selectGroup">
+      <label for="strategicPlan">Select a Strategic Plan:</label>
+      <select
+        id="strategicPlan"
+        [(ngModel)]="currentPlanId"
+        (change)="onPlanChange()"
+      >
+        <option *ngFor="let plan of plansData" [value]="plan._id">
+          {{ plan.name }}
+        </option>
+      </select>
+    </div>
+    <p *ngIf="currentPlan" id="planTitle">{{ currentPlan?.name }}</p>
+    <p *ngIf="!currentPlan.name" id="selectPlan">Select a Strategic Plan</p>
+    <button class="buttonAdd m-3" (click)="onClickAddObjective()">
+      Add an Objective
+    </button>
   </div>
-  <div class="container">
+  <button (click)="navigateToSelectedPlan()" class="buttonBack m-3">
+    Back to Plan
+  </button>
+  <div class="my-custom-container">
     <div *ngIf="objectivesData.length > 0">
       <div class="card-container">
         <div
           *ngFor="let item of objectivesData"
           class="card-Objective-container"
         >
-          <div class="card-Objective" (click)="onClickObjective(item)">
+          <div class="card-Objective">
+            <div class="btn-container">
+              <button
+                class="btn-edit"
+                title="Edit"
+                (click)="onClickObjective(item)"
+              ></button>
+              <button
+                class="btn-delete"
+                title="Delete"
+                (click)="deleteObjective(item._id, currentPlanId)"
+              ></button>
+              <button
+                class="btn-goals"
+                title="View Goals"
+                (click)="handleRedirectToGoals(item._id)"
+              ></button>
+            </div>
             <div class="content-wrapper">
-              <span class="title">Description:</span>
+              <span (click)="onViewObjective(item)" class="title">{{
+                item.title
+              }}</span>
               <div class="value-container">
                 <span class="value">{{ item.description }}</span>
               </div>
-              <div>
-                <span class="startDate"
-                  >Goals: {{ item.completedGoals}} / {{ item.totalGoals}}</span
+              <div style="margin-left: 5px">
+                <span class="remainingGoals"
+                  >Completed Goals: {{ item.completedGoals }} /
+                  {{ item.totalGoals }}</span
                 >
                 <span class="startDate"
                   >Start Date: {{ item.startDate | date : "dd/MM/yyyy" }}</span
@@ -30,21 +68,90 @@
       </div>
     </div>
 
+    <!-- Modal de lectura -->
+    <div *ngIf="showReadModal" class="modal-background">
+      <div class="modal-content">
+        <div class="form1-card">
+          <div id="form1-see" class="form1">
+            <div>
+              <div id="container-see" class="btn-container">
+                <div class="info-objective">
+                  <span class="remainingGoals"
+                    >Completed Goals: {{ selectedObjective?.completedGoals }} /
+                    {{ selectedObjective?.totalGoals }}</span
+                  >
+                  <span class="startDate"
+                    >Start Date:
+                    {{
+                      selectedObjective?.startDate | date : "dd/MM/yyyy"
+                    }}</span
+                  >
+                </div>
+                <button class="btn-exit" (click)="toogleReadModal()"></button>
+              </div>
+            </div>
+            <h2 id="see-title">{{ selectedObjective?.title }}</h2>
+            <div class="description-container">
+              <p id="p-description">{{ selectedObjective?.description }}</p>
+            </div>
+            <h2 id="see-goals" (click)="handleRedirectToGoals(selectedObjective._id)">Metas Asociadas:</h2>
+            <div *ngIf="objectiveGoals.length > 0" class="goals-list-container">
+              <ul>
+                <li class="custom-li" *ngFor="let goal of objectiveGoals">
+                  {{ goal.description }}
+                </li>
+              </ul>
+            </div>
+            <div *ngIf="objectiveGoals.length === 0">
+              <p>No hay metas asociadas a este objetivo.</p>
+            </div>
+          </div>
+          <!-- Lista de metas asociadas -->
+        </div>
+      </div>
+    </div>
+
     <div *ngIf="showModal" class="modal-background">
       <div class="modal-content">
         <div class="form1-card">
-          <form
-            [formGroup]="formObjective"
-            (submit)="isEditing ? updateObjective() : createObjective()"
-            class="form1"
-          >
-            <div>
+          <div>
+            <form
+              [formGroup]="formObjective"
+              (submit)="isEditing ? updateObjective() : createObjective()"
+              class="form1"
+            >
               <h2>Objective</h2>
+
+              <div class="form1-group">
+                <label for="title">Title:</label>
+                <input
+                  type="text"
+                  id="title"
+                  placeholder="Title"
+                  formControlName="title"
+                />
+                <div
+                  *ngIf="
+                    formObjective.get('title')?.invalid &&
+                    (formObjective.get('title')?.dirty ||
+                      formObjective.get('title')?.touched)
+                  "
+                  class="error"
+                >
+                  <p
+                    *ngIf="
+                      formObjective.get('title')?.errors?.['required']
+                    "
+                  >
+                    Title is required.
+                  </p>
+                </div>
+              </div>
 
               <div class="form1-group">
                 <label for="description">Description:</label>
                 <textarea
-                  placeholder="description"
+                  placeholder="Description"
                   type="text"
                   id="description"
                   formControlName="description"
@@ -59,8 +166,8 @@
                 >
                   <p
                     *ngIf="
-                    formObjective.get('description')?.errors?.['required']
-                      "
+                      formObjective.get('description')?.errors?.['required']
+                    "
                   >
                     Description is required.
                   </p>
@@ -78,23 +185,14 @@
                 </button>
                 <button
                   type="button"
-                  class="btnCancel m-3"
+                  class="buttonDelete m-3"
                   (click)="toogleShowModal()"
                 >
                   Cancel
                 </button>
               </div>
-              <div>
-                <button
-                  type="button"
-                  class="buttonDelete m-3"
-                  (click)="deleteObjective()"
-                >
-                  Borrar
-                </button>
-              </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>

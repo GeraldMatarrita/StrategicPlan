@@ -3,13 +3,18 @@
 }
 
 .goalsStyle {
+  margin-top: 52px;
   padding: 0px 0px 50px 0px; /* top right bottom left */
   color: var(--text_color);
 }
 
 .goalsMenu {
   display: flex;
-  align-items: center;
+  justify-content: space-between; /* Distribuye el espacio entre los elementos */
+  align-items: center; /* Alinear verticalmente */
+  padding-bottom: 5px;
+  padding-top: 10px;
+  margin-right: 5px;
   margin-bottom: 20px;
   background: linear-gradient(
     to bottom right,
@@ -22,6 +27,26 @@
   margin: 0;
   padding: 0;
   color: var(--text_color);
+  flex: 1; /* Esto permite que el título ocupe el espacio disponible */
+  text-align: center; /* Asegúrate de que el texto esté centrado */
+}
+
+.selectGroup {
+  left: 20px;
+  margin-right: 0px;
+}
+
+.selectGroup label {
+  width: 200px; /* Ancho del label */
+}
+
+.bothSelects {
+  display: flex;
+  align-items: center; /* Alinear verticalmente */
+}
+
+.buttonAdd {
+  border: 2px solid var(--color2_purple);
 }
 
 /* ----------------------------------------------------- */
@@ -81,7 +106,6 @@
 
 /* Estilo para cada tarjeta */
 .card-Objective-container {
-  width: 350px;
   height: 150px;
   background-image: linear-gradient(
     163deg,
@@ -90,6 +114,10 @@
   );
   border-radius: 20px;
   display: flex;
+  flex-direction: row;
+  justify-content: space-between; /* Distribuye espacio entre la tarjeta y .right-section */
+  align-items: center; /* Alinea verticalmente los elementos */
+  width: 100%; /* Asegura que la tarjeta ocupe todo el espacio disponible */
 }
 
 .card-Objective-container:hover {
@@ -98,9 +126,35 @@
   cursor: pointer;
 }
 
+
+.card-container {
+  display: flex; /* Organiza los elementos hijos en una fila */
+  background-color: var(--gray_middle_dark);
+  flex-wrap: wrap; /* Permite que los elementos salten a la siguiente línea si no caben en una fila */
+  gap: 25px; /* Espacio entre las tarjetas */
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 /* Estilo para el contenido dentro de la tarjeta */
 .card-Objective {
-  width: 100%;
+  width: 100%; /* Asegúrate de que ocupe todo el ancho del contenedor padre */
+  height: auto; /* Ajusta la altura según el contenido */
+  padding: 1em 2em 1em 2em;
+  background-color: var(--gray_middle_dark);
+  border-radius: 30px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilo para el contenido dentro de la tarjeta */
+.card-Objective {
+  width: 330px;
   height: 100%;
   padding: 2em;
   background-color: var(--gray_middle_dark);
@@ -108,6 +162,108 @@
   color: white;
   display: flex;
   flex-direction: column;
+}
+
+.card-Objective-container {
+  margin: 5px; /* Espacio entre las tarjetas */
+  flex-basis: calc(50% - 25px); /* Ajuste para que ocupen la mitad del ancho menos el espacio del gap */
+  max-width: calc(48% - 25px); /* Limita el ancho máximo para evitar desbordes */
+  height: auto; /* Deja que la altura se ajuste automáticamente */
+  background-image: linear-gradient(
+    163deg,
+    var(--color3_pink) 0%,
+    var(--color1_blue) 100%
+  );
+  border-radius: 20px;
+  display: flex;
+  
+}
+
+.right-section {
+  flex: 1; /* Ocupar el espacio disponible */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 70%;                 /* Asegura que tome el espacio necesario */
+  height: auto;                /* Permite ajustar la altura según las barras */
+  padding: 10px;
+}
+
+.right-section label {
+  font-size: 0.8em;
+  color: var(--text_color); /* Ajusta el color según tu preferencia */
+  border-top: 1px solid white;
+  width: 100%;
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px; /* Espacio entre los elementos */
+  width: 90%;
+}
+
+.progress-current, .progress-goal {
+  flex-shrink: 0; /* Evita que el texto se encoja */
+  width: 30px; /* Asigna un tamaño fijo para el texto */
+  text-align: center; /* Centra el texto numérico */
+  position: relative;
+  top: -5px;
+}
+
+.right-section progress {
+  flex-grow: 1; /* Asegura que la barra de progreso ocupe el espacio disponible */
+  height: 10px; /* Ajusta la altura de la barra de progreso */
+  width: auto;
+}
+
+/* Color de la barra de progreso general */
+.right-section progress[value] {
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  background-color: lightgray;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+/* Fondo de la barra */
+.right-section progress::-webkit-progress-bar {
+  background-color: lightgray;
+  border-radius: 10px;
+}
+
+/* Rango del color basado en el valor */
+.right-section progress[value]::-webkit-progress-value {
+  border-radius: 10px;
+}
+
+progress[value="100"]::-webkit-progress-value {
+  background-color: #0e6410; /* Verde claro para 100 */
+}
+
+progress[value][value^="7"]::-webkit-progress-value,
+progress[value][value^="8"],
+progress[value][value^="9"] {
+  background-color: #12b137; /* Verde más claro para 75-99 */
+}
+
+progress[value][value^="5"]::-webkit-progress-value,
+progress[value][value^="6"] {
+  background-color: #c1f561; /* Verde oscuro para 50-74 */
+}
+
+progress[value][value^="2"]::-webkit-progress-value,
+progress[value][value^="3"]::-webkit-progress-value,
+progress[value="4"] {
+  background-color: #ff9933; /* Naranja para 25-49 */
+}
+
+progress[value^="0"]::-webkit-progress-value,
+progress[value^="1"] {
+  background-color: #ff3300; /* Rojo para 0-24 */
 }
 
 .content-wrapper {
@@ -124,14 +280,33 @@
 
 .value-container {
   flex-grow: 1;
-  overflow: hidden;
+  overflow: visible;
+}
+
+.goal-h6 {
+  color: white; 
+  width: 100%; 
+  border-bottom: 1px solid white;
 }
 
 .value {
   font-size: 0.95em;
   display: -webkit-box;
   -webkit-line-clamp: 3; /* Número de líneas antes de truncar */
+  line-clamp: 3; /* Número de líneas antes de truncar */
   -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: visible;
+}
+
+#objectiveTitle {
+  font-size: 1em;             /* Tamaño de fuente */         /* Negrita */
+  margin-bottom: 0.5em;         /* Margen inferior */
+  max-width: 500px;
+  color: white;
+  text-align: center;              /* Ancho máximo del contenedor */
+  overflow-wrap: break-word;    /* Permitir saltos de línea dentro de las palabras */
+  white-space: normal;          /* Permitir que el texto haga saltos de línea */
+  text-overflow: ellipsis;      /* Agregar puntos suspensivos si el texto es demasiado largo (opcional) */
+  flex: 15;
+  padding-right: 80px;
 }

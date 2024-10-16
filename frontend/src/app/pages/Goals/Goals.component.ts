@@ -23,19 +23,21 @@ export class GoalsComponent implements OnInit {
   // Variable para almacenar el formulario
   formGoal!: FormGroup;
 
-  activeUserID = '';
   currentPlanId: string = ''; // ID del plan actual a editar
-  planData: any = {};
+  activeUserID = ''; // ID del usuario activo
   isEditing = false; // Controla si estás editando o creando
 
   objectiveData: any = {};
   objectiveIdSelected: string = '';
+
+  currentObjective: any = {}; // ID del objetivo actual a editar
 
   // Variable para almacenar el mensaje de respuesta
   responseMessage: string = '';
 
   // Variables para almacenar los datos de los objetivos
   goalsData: any = [];
+  plansData: any[] = []; // Para almacenar los planes estratégicos
   goalsIdSelected: string = '';
 
   showModal: boolean = false;
@@ -57,6 +59,7 @@ export class GoalsComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForm();
     this.loadData();
+    window.scrollTo(0, 0);
   }
 
   /**
@@ -77,45 +80,63 @@ export class GoalsComponent implements OnInit {
    */
   async loadData(): Promise<void> {
     try {
+      // Cargar siempre los planes estratégicos
       this.activeUserID = await this.authService.getActiveUserID();
+      this.strategicPlanService.getActivePlans(this.activeUserID).subscribe(
+        (data: any[]) => {
+          this.plansData = data;
 
-      // Verificar si hay un PlanID almacenado en localStorage
-      const storedPlanId = localStorage.getItem('PlanID');
-      if (storedPlanId) {
-        // Si hay un PlanID almacenado, cargar el plan correspondiente
-        this.currentPlanId = storedPlanId;
-      } else {
-        // Si no
-        this.navigateToSelectPlan();
-      }
+          // Verificar si hay un PlanID almacenado en localStorage
+          const storedPlanId = localStorage.getItem('PlanID');
+          const storedObjectiveId = localStorage.getItem('ObjectiveID');
 
-      this.loadGoals();
-      this.loadStrategicPlan();
-      this.loadObjectives();
+          if (storedPlanId) {
+            this.currentPlanId = storedPlanId;
+            this.loadObjectives(); // Cargar objetivos del plan almacenado
+
+            if (storedObjectiveId) {
+              this.objectiveIdSelected = storedObjectiveId;
+              this.objectivesService
+                .getObjectiveById(storedObjectiveId)
+                .subscribe(
+                  (data: any) => {
+                    this.currentObjective = data;
+                  },
+                  (error: any) => {
+                    console.error('Error al obtener el objetivo:', error);
+                  }
+                );
+              this.formGoal.patchValue({
+                objectiveIdSelectedForm: storedObjectiveId,
+              });
+              this.loadGoalsByObjective(storedObjectiveId); // Cargar metas del objetivo almacenado
+            }
+          } else {
+            this.clearSelections();
+          }
+        },
+        (error: any) => {
+          console.error('Error al cargar los planes:', error);
+        }
+      );
     } catch (error) {
       console.error('Error al cargar los datos:', error);
     }
   }
 
-  loadStrategicPlan(): void {
-    this.strategicPlanService.getPlanByID(this.currentPlanId).subscribe(
-      (data: any) => {
-        this.planData = data;
-      },
-      (error: any) => {
-        console.error('Error al obtener el plan:', error);
-      }
-    );
+  clearSelections(): void {
+    this.currentPlanId = '';
+    this.objectiveIdSelected = '';
+    this.goalsData = [];
   }
 
   /**
    * Método para cargar los objetivos del plan actual
    */
-  loadGoals(): void {
+  async loadGoals(): Promise<void> {
     this.goalsService.getGoalsByPlanId(this.currentPlanId).subscribe(
       (data: any[]) => {
         this.goalsData = data;
-        console.log('goals', data);
       },
       (error: any) => {
         console.error('Error al obtener el plan:', error);
@@ -126,11 +147,10 @@ export class GoalsComponent implements OnInit {
   /**
    * Método para cargar los objetivos del plan actual
    */
-  loadObjectives(): void {
+  async loadObjectives(): Promise<void> {
     this.objectivesService.getObjectivesByPlanId(this.currentPlanId).subscribe(
       (data: any[]) => {
         this.objectiveData = data;
-        console.log('objectives', this.objectiveData);
       },
       (error: any) => {
         console.error('Error al obtener el plan:', error);
@@ -143,25 +163,43 @@ export class GoalsComponent implements OnInit {
    */
   async createGoal(): Promise<void> {
     try {
-      this.objectiveIdSelected = this.formGoal.value.objectiveIdSelectedForm;
+      // Obtener el ObjectiveID desde localStorage
+      const storedObjectiveId = localStorage.getItem('ObjectiveID');
+
+      // Validar que no sea null o vacío
+      if (!storedObjectiveId) {
+        throw new Error('El ID del objetivo no está disponible.');
+      }
+
+      this.objectiveIdSelected = storedObjectiveId;
+
+      // Limpiar el formulario antes de enviarlo
       this.formGoal.value.objectiveIdSelectedForm = undefined;
       const cleanedData = this.cleanFormData();
 
+      // Crear el Goal con el ObjectiveID seleccionado
       this.responseMessage = await this.goalsService.createGoal(
         cleanedData,
         this.objectiveIdSelected
       );
+
+      // Mostrar mensaje de éxito
       Swal.fire({
         icon: 'success',
-        title: 'Creado',
-        text: this.responseMessage,
+        title: 'Meta creada',
       });
-      this.loadGoals();
+
+      // Recargar los Goals
+      this.loadGoalsByObjective(this.objectiveIdSelected);
+
+      // Ocultar el modal y limpiar el formulario
       this.toogleShowModal();
       this.formGoal.reset();
     } catch (error) {
+      // Manejo de errores y mostrar mensaje al usuario
+      console.error('Error al crear la meta:', error);
       this.responseMessage =
-        (error as any).error?.message || 'Error desconocido';
+        (error as any).message || 'Error desconocido al crear la meta';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -289,5 +327,71 @@ export class GoalsComponent implements OnInit {
   navigateToSelectPlan(): void {
     const SELECT_PLAN: string = `${NAVIGATIONS_ROUTES.SELECT_STRATEGIC_PLAN}`;
     this.router.navigate([SELECT_PLAN]);
+  }
+
+  async loadGoalsByObjective(objectiveId: string | null): Promise<void> {
+    if (objectiveId) {
+      // Filtrar los Goals por el Objective seleccionado
+      this.objectivesService.getGoalsByObjectiveId(objectiveId).subscribe(
+        (data: any[]) => {
+          this.goalsData = data;
+        },
+        (error: any) => {
+          console.error('Error al obtener los Goals:', error);
+        }
+      );
+    } else {
+      // Si no hay ningún Objective seleccionado, limpiar Goals
+      this.goalsData = [];
+    }
+  }
+
+  // Método para manejar el cambio de objetivo seleccionado
+  onObjectiveChange(): void {
+    if (this.objectiveIdSelected) {
+      this.loadGoalsByObjective(this.objectiveIdSelected);
+      localStorage.setItem('ObjectiveID', this.objectiveIdSelected);
+      this.objectivesService
+        .getObjectiveById(this.objectiveIdSelected)
+        .subscribe(
+          (data: any) => {
+            this.currentObjective = data;
+          },
+          (error: any) => {
+            console.error('Error al obtener el objetivo:', error);
+          }
+        );
+    } else {
+      // Si no hay un objetivo seleccionado, limpiar Goals
+      this.goalsData = [];
+      localStorage.removeItem('ObjectiveID');
+    }
+  }
+
+  navigateToSelectedPlan(): void {
+    const SELECT_PLAN: string = `${NAVIGATIONS_ROUTES.STRATEGIC_PLAN}`;
+    this.router.navigate([SELECT_PLAN]);
+  }
+
+  onPlanChange(): void {
+    this.goalsData = []; // Limpiar las metas al cambiar de plan
+    this.objectiveIdSelected = ''; // Limpiar el objetivo seleccionado al cambiar de plan
+    this.loadObjectives(); // Cargar los objetivos del plan seleccionado
+    localStorage.setItem('PlanID', this.currentPlanId); // Actualizar el PlanID en localStorage
+    localStorage.removeItem('ObjectiveID'); // Limpiar ObjectiveID cuando se cambia el plan
+  }
+
+  getProgressColor(value: number): string {
+    if (value >= 100) {
+      return '#a4fba6'; // Verde claro para 100
+    } else if (value >= 75) {
+      return '#71e48b'; // Verde más claro para 75-99
+    } else if (value >= 50) {
+      return '#3ac778'; // Verde oscuro para 50-74
+    } else if (value >= 25) {
+      return '#ff9933'; // Naranja para 25-49
+    } else {
+      return '#ff3300'; // Rojo para 0-24
+    }
   }
 }
