@@ -13,7 +13,6 @@ import { AuthService } from '../Auth/Auth.service';
 import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 import { ObjectivesService } from './Objectives.service';
 import { StrategicPlanService } from '../StrategicPlan/StrategicPlan.service';
-import { AppComponent } from '../../app.component';
 
 @Component({
   selector: 'app-objectives',
@@ -23,23 +22,23 @@ import { AppComponent } from '../../app.component';
   styleUrls: ['./Objectives.component.css'],
 })
 export class ObjectivesComponent implements OnInit {
-  // Variable para almacenar el formulario
+  // Variable to store the form
   formObjective!: FormGroup;
   activeUserID = '';
-  currentPlanId: string = ''; // ID del plan actual a editar
+  currentPlanId: string = ''; // ID of the current plan to edit
   currentPlan: any = {};
-  isEditing = false; // Controla si estás editando o creando
-  plansData: any[] = []; // Para almacenar los planes estratégicos
+  isEditing = false; // Controls whether you are editing or creating
+  plansData: any[] = []; // To store strategic plans
 
-  showReadModal: boolean = false; // Para controlar el modal de solo lectura
-  selectedObjective: any = {}; // Para almacenar el objetivo seleccionado
+  showReadModal: boolean = false; // To control the read-only modal
+  selectedObjective: any = {}; // To store the selected objective
 
-  objectiveGoals: any[] = []; // Para almacenar los objetivos del plan
+  objectiveGoals: any[] = []; // To store the goals of the plan
 
-  // Variable para almacenar el mensaje de respuesta
+  // Variable to store the response message
   responseMessage: string = '';
 
-  // Variables para almacenar los datos de los objetivos
+  // Variables to store objective data
   objectivesData: any[] = [];
   objectiveIdSelected: string = '';
 
@@ -54,9 +53,9 @@ export class ObjectivesComponent implements OnInit {
   ) {}
 
   /**
-   * Método que se ejecuta al iniciar el componente
-   * - Inicializar el formulario
-   * - Cargar los datos
+   * Method that runs when the component initializes
+   * - Initialize the form
+   * - Load the data
    */
   ngOnInit(): void {
     this.initializeForm();
@@ -65,11 +64,11 @@ export class ObjectivesComponent implements OnInit {
   }
 
   /**
-   * Método para inicializar el formulario
+   * Method to initialize the form
    */
   initializeForm() {
     this.formObjective = this.formBuilder.group({
-      title: ['', [Validators.required]], // Agregar este campo
+      title: ['', [Validators.required]], // Add this field
       description: ['', [Validators.required]],
       totalGoals: [''],
       completedGoals: [''],
@@ -77,7 +76,7 @@ export class ObjectivesComponent implements OnInit {
   }
 
   /**
-   * Método para cargar los datos y usuario activo
+   * Method to load the data and active user
    */
   async loadData(): Promise<void> {
     try {
@@ -86,26 +85,26 @@ export class ObjectivesComponent implements OnInit {
       this.strategicPlanService
         .getActivePlans(this.activeUserID)
         .subscribe((data: any[]) => {
-          this.plansData = data; // Guardar los planes en la propiedad
+          this.plansData = data; // Store the plans in the property
         });
 
-      // Verificar si hay un PlanID almacenado en localStorage
+      // Check if there is a PlanID stored in localStorage
       const storedPlanId = localStorage.getItem('PlanID');
 
       if (storedPlanId) {
-        // Si hay un PlanID almacenado, cargar el plan correspondiente
+        // If there is a stored PlanID, load the corresponding plan
         this.currentPlanId = storedPlanId;
         await this.loadObjectives();
         this.loadStrategicPlan();
       }
     } catch (error) {
-      console.error('Error al cargar los datos:', error);
+      console.error('Error loading data:', error);
     }
   }
 
   onPlanChange(): void {
-    this.loadObjectives(); // Cargar los objetivos del plan seleccionado
-    localStorage.setItem('PlanID', this.currentPlanId); // Actualizar el PlanID en localStorage
+    this.loadObjectives(); // Load the objectives of the selected plan
+    localStorage.setItem('PlanID', this.currentPlanId); // Update the PlanID in localStorage
     this.currentPlan = this.plansData.find(
       (plan) => plan._id === this.currentPlanId
     );
@@ -117,13 +116,13 @@ export class ObjectivesComponent implements OnInit {
         this.currentPlan = data;
       },
       (error: any) => {
-        console.error('Error al obtener el plan:', error);
+        console.error('Error getting the plan:', error);
       }
     );
   }
 
   /**
-   * Método para cargar los objetivos del plan actual
+   * Method to load the objectives of the current plan
    */
   async loadObjectives() {
     try {
@@ -131,19 +130,19 @@ export class ObjectivesComponent implements OnInit {
         .getObjectivesByPlanId(this.currentPlanId)
         .subscribe(
           (data: any[]) => {
-            this.objectivesData = data; // Asigna los datos a objectivesData
+            this.objectivesData = data; // Assign the data to objectivesData
           },
           (error: any) => {
-            console.error('Error al cargar los objetivos', error);
+            console.error('Error loading objectives', error);
           }
         );
     } catch (error) {
-      console.error('Error al cargar los objetivos', error);
+      console.error('Error loading objectives', error);
     }
   }
 
   /**
-   * Método para crear un objetivo
+   * Method to create an objective
    */
   async createObjective(): Promise<void> {
     try {
@@ -163,7 +162,7 @@ export class ObjectivesComponent implements OnInit {
       this.formObjective.reset();
     } catch (error) {
       this.responseMessage =
-        (error as any).error?.message || 'Error desconocido';
+        (error as any).error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -173,52 +172,52 @@ export class ObjectivesComponent implements OnInit {
   }
 
   /**
-   * Método para eliminar un objetivo
+   * Method to delete an objective
    */
   // Objectives.component.ts
   async deleteObjective(objectiveId: string, planId: string): Promise<void> {
     try {
       const result = await Swal.fire({
-        title: '¿Estás seguro?',
-        text: 'No podrás revertir esto',
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Sí, eliminar',
+        confirmButtonText: 'Yes, delete',
         cancelButtonColor: '#f52d0a',
       });
 
       if (result.isConfirmed) {
-        // Paso 1: Obtener el plan para eliminar la referencia
+        // Step 1: Get the plan to remove the reference
         const plan = await this.strategicPlanService
           .getPlanByID(planId)
           .toPromise();
 
-        // Eliminar la referencia del objetivo en el plan
+        // Remove the objective reference from the plan
         const updatedObjectiveList = plan.objective_ListIDS.filter(
           (objId: string) => objId !== objectiveId
-        )
+        );
 
-        // Paso 2: Actualizar el plan sin el objetivo
+        // Step 2: Update the plan without the objective
         await this.strategicPlanService.updateStrategicPlan(planId, {
           objective_ListIDS: updatedObjectiveList,
         });
 
-        // Paso 3: Eliminar el objetivo
+        // Step 3: Delete the objective
         const responseMessage = await this.objectivesService.deleteObjective(
           objectiveId
         );
 
         Swal.fire({
           icon: 'success',
-          title: 'Eliminado',
+          title: 'Deleted',
           text: responseMessage,
         });
 
-        this.loadObjectives(); // Carga de los objetivos actualizados
+        this.loadObjectives(); // Load the updated objectives
       }
     } catch (error) {
       const responseMessage =
-        (error as any).error?.message || 'Error desconocido';
+        (error as any).error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -228,7 +227,7 @@ export class ObjectivesComponent implements OnInit {
   }
 
   /**
-   * Método para actualizar un objetivo
+   * Method to update an objective
    */
   updateObjective() {
     if (this.formObjective.valid) {
@@ -239,9 +238,9 @@ export class ObjectivesComponent implements OnInit {
 
       this.objectivesService.updateObjective(this.selectedObjective._id, updatedObjective)
         .then(() => {
-          this.toogleShowModal(); // Cierra el modal después de actualizar
-          // Aquí puedes agregar lógica adicional, como actualizar la lista de objetivos
-          this.loadObjectives(); // Supón que tienes un método para recargar la lista de objetivos
+          this.toogleShowModal(); // Close the modal after updating
+          // Here you can add additional logic, like updating the objectives list
+          this.loadObjectives(); // Assume you have a method to reload the objectives list
         })
         .catch(error => {
           console.error('Error updating objective:', error);
@@ -250,13 +249,13 @@ export class ObjectivesComponent implements OnInit {
   }
   
   /**
-   * función para limpiar los campos vacíos del formulario
-   * @returns objeto con los datos limpios
+   * Function to clean empty fields from the form
+   * @returns object with cleaned data
    */
   private cleanFormData(): any {
-    const formData = { ...this.formObjective.value }; // Crear una copia del objeto
+    const formData = { ...this.formObjective.value }; // Create a copy of the object
 
-    // Filtrar los campos vacíos y null
+    // Filter out empty and null fields
     Object.keys(formData).forEach((key) => {
       if (formData[key] === '' || formData[key] === null) {
         delete formData[key];
@@ -267,7 +266,7 @@ export class ObjectivesComponent implements OnInit {
   }
 
   /**
-   * función para cargar navegar a seleccionar un plan
+   * Function to navigate to select a plan
    */
   navigateToSelectPlan(): void {
     const SELECT_PLAN: string = `${NAVIGATIONS_ROUTES.SELECT_STRATEGIC_PLAN}`;
@@ -285,24 +284,24 @@ export class ObjectivesComponent implements OnInit {
         this.objectiveGoals = data;
       },
       (error: any) => {
-        console.error('Error al obtener los objetivos:', error);
+        console.error('Error obtaining the goals:', error);
       }
     );
   }
 
   /**
-   * Método para mostrar u ocultar el modal
+   * Method to show or hide the modal
    */
   toogleShowModal(): void {
     this.showModal = !this.showModal;
   }
 
   /**
-   * Método para cuando se hace click en el botón de agregar objetivo
-   * - Cambiar el estado de edición
-   * - Mostrar el modal
-   * - Limpiar el formulario
-   * - Cambiar el estado de edición
+   * Method for when the add objective button is clicked
+   * - Change the editing state
+   * - Show the modal
+   * - Clear the form
+   * - Change the editing state
    */
   onClickAddObjective(): void {
     this.isEditing = false;
