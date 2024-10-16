@@ -48,7 +48,7 @@
     <div *ngIf="goalsData.length > 0">
       <div class="card-container">
         <div *ngFor="let item of goalsData" class="card-Objective-container">
-          <div class="card-Objective" (click)="onClickGoal(item)">
+          <div class="card-Objective">
             <div class="content-wrapper">
               <h6 class="goal-h6">Description:</h6>
               <div class="value-container">
@@ -59,6 +59,11 @@
           <div class="right-section">
             <div class="btn-container">
               <h6 id="progressTitle">Progress</h6>
+              <button
+                class="btn-edit" style="position: absolute; margin-right: 35px;"
+                title="Edit"
+                (click)="editGoal(item)"
+              ></button>
               <button
                 class="btn-delete" style="margin-left: 100px;"
                 title="Delete"

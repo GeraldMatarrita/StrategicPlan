@@ -317,7 +317,7 @@ export class ObjectivesComponent implements OnInit {
   /**
    * Método para cuando se hace click en un objetivo
    */
-  onClickObjective(objective: any): void {
+  editObjective(objective: any): void {
     this.formObjective.patchValue(objective);
     this.selectedObjective = objective;
     this.isEditing = true;

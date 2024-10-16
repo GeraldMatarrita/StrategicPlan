@@ -197,33 +197,6 @@
   font-size: 0.8rem;
 }
 
-.btn-container {
-  top: 0;
-  display: flex;
-  justify-content: right;
-  gap: 10px; /* Espacio entre los botones */
-}
-
-.btn-edit,
-.btn-delete,
-.btn-goals,
-.btn-exit {
-  display: inline-flex;
-  padding: 5px;
-  justify-content: center;
-  align-items: center;
-  width: 30px; /* Botones más pequeños */
-  height: 30px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.btn-edit {
-  background-color: var(--color2_purple); /* Verde */
-}
-
 #opportunityBtn,
 #maintainBtn {
   background-color: var(--color3_pink);
@@ -234,64 +207,6 @@
   background-color: #da13e0;
 }
 
-.btn-edit:hover {
-  background-color: #8900e4;
-}
-
-.btn-delete {
-  background-color: #f44336; /* Rojo */
-}
-
-.btn-delete:hover {
-  background-color: #d43230; /* Rojo más oscuro al pasar el mouse */
-}
-
-.btn-goals {
-  background-color: #66a844;
-}
-
-.btn-goals:hover {
-  background-color: #468a2e;
-}
-
-.btn-exit {
-  background-color: #f44336;
-}
-
-.btn-exit:hover {
-  background-color: #d43230;
-}
-
-.btn-edit::before,
-.btn-delete::before,
-.btn-goals::before,
-.btn-exit::before {
-  content: "";
-  display: inline-block;
-  width: 16px; /* Tamaño del ícono más pequeño */
-  height: 16px;
-  background-size: contain;
-}
-
-.btn-edit::before {
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="%23ffffff"><path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"/></svg>')
-    no-repeat center center;
-}
-
-/* Ícono de eliminar */
-.btn-delete::before {
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="-0.75 -0.75 16 16" stroke="%23ffffff" height="16" width="16"><path stroke-linecap="round" stroke-linejoin="round" d="m8.905416666666666 5.4375 -0.20904166666666663 5.4375m-2.89275 0L5.594583333333333 5.4375m6.022333333333333 -1.9393749999999998c0.206625 0.03141666666666666 0.4120416666666667 0.06464583333333333 0.6174583333333333 0.10029166666666667m-0.6174583333333333 -0.0996875L10.971666666666666 11.885770833333332a1.359375 1.359375 0 0 1 -1.35575 1.2548541666666666H4.884083333333333a1.359375 1.359375 0 0 1 -1.35575 -1.2548541666666666L2.8830833333333334 3.498125m8.733833333333333 0a29.065249999999995 29.065249999999995 0 0 0 -2.1012916666666666 -0.23985416666666667m-7.25 0.3395416666666667c0.20541666666666666 -0.03564583333333333 0.41083333333333333 -0.06887499999999999 0.6174583333333333 -0.0996875m0 0a29.06645833333333 29.06645833333333 0 0 1 2.1012916666666666 -0.23985416666666667m4.53125 0v-0.5534166666666667c0 -0.7129166666666665 -0.5497916666666667 -1.3074166666666667 -1.262708333333333 -1.3297708333333333a31.394916666666663 31.394916666666663 0 0 0 -2.005833333333333 0c-0.7129166666666665 0.022354166666666665 -1.262708333333333 0.6174583333333333 -1.262708333333333 1.3297708333333333v0.5534166666666667m4.53125 0a29.402979166666665 29.402979166666665 0 0 0 -4.53125 0" stroke-width="1.5"></path></svg>')
-    no-repeat center center;
-}
-
-.btn-goals::before {
-  background: url('data:image/svg+xml;utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="%23ffffff"%3E%3Cpath d="M4.4375 5.05c0-.338.274-.613.612-.613h4.9c.472 0 .766.51.531.918-.109.19-.312.306-.531.306H5.05c-.338 0-.612-.274-.612-.613Zm.612 3.063h4.9c.472 0 .766-.51.531-.919-.109-.189-.312-.306-.531-.306H5.05c-.472 0-.766.51-.531.919.109.189.312.306.531.306ZM7.5 9.338H5.05c-.472 0-.766.51-.531.919.109.189.312.306.531.306H7.5c.472 0 .766-.51.531-.919-.109-.189-.312-.306-.531-.306ZM14.85 1.375v8.322c.001.325-.128.637-.359.866l-3.928 3.928c-.229.231-.541.36-.866.359H1.375C.698 14.85.15 14.302.15 13.625V1.375C.15.698.698.15 1.375.15h12.25c.677 0 1.225.548 1.225 1.225ZM1.375 13.625h7.963v-3.675c0-.338.274-.613.613-.613h3.675V1.375H1.375Zm9.188-3.063v2.197l2.197-2.197Z"%2F%3E%3C%2Fsvg%3E') no-repeat center center;
-}
-
-.btn-exit::before {
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="-0.5 -0.5 16 16" stroke-linecap="round" stroke-linejoin="round" stroke="%23ffffff" stroke-width="1"><path d="M11.25 3.75 3.75 11.25M3.75 3.75l7.5 7.5"/></svg>')
-    no-repeat center center;
-}
 
 .info-objective {
   position: absolute;
@@ -345,3 +260,4 @@
   cursor: pointer;
   color: var(--text_color);
 }
+

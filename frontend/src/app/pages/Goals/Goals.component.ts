@@ -314,7 +314,7 @@ export class GoalsComponent implements OnInit {
   /**
    * Method triggered when a goal is clicked
    */
-  onClickGoal(goal: any): void {
+  editGoal(goal: any): void {
     this.goalsIdSelected = goal._id;
     this.formGoal.patchValue(goal);
     this.isEditing = true;

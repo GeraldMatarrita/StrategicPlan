@@ -60,9 +60,9 @@ export class AuthComponent {
           [
             Validators.required,
             Validators.minLength(6),
-            Validators.pattern(
-              /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/
-            ),
+            // Validators.pattern(
+              // /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/
+            // ),
           ],
         ],
         confirmPassword: ['', Validators.required],
