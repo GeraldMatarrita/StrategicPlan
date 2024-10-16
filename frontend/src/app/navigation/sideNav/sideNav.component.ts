@@ -50,7 +50,9 @@ export class SideNavComponent {
   navigateToGoals() {
     this.router.navigate([NAVIGATIONS_ROUTES.GOALS]);
   }
-
+  navigateToProfile() {
+    this.router.navigate([NAVIGATIONS_ROUTES.PROFILE]);
+  }
   navigateToNotFound() {
     this.router.navigate([NAVIGATIONS_ROUTES.NOT_FOUND]);
   }

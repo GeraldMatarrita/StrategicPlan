@@ -19,7 +19,7 @@ export const API_ROUTES = {
   Login_User: '/auth/login', // POST
   Forgot_Password: '/auth/forgot-password', // POST
   Reset_Password: '/auth/reset-password', // POST
-
+  Update_User: '/auth/update',
   // -------------------------------------------------------------
   // Para los planes estratégicos
   // -------------------------------------------------------------

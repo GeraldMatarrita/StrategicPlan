@@ -9,4 +9,5 @@ export const NAVIGATIONS_ROUTES = {
   SELECT_STRATEGIC_PLAN: '/SelectStrategicPlan',
   OBJECTIVE: '/Objectives',
   GOALS: '/Goals',
+  PROFILE:'/Profile',
 };
