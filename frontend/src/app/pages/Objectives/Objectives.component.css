@@ -132,7 +132,7 @@
 .card-Objective {
   width: 100%; /* Asegúrate de que ocupe todo el ancho del contenedor padre */
   height: auto; /* Ajusta la altura según el contenido */
-  padding: 1em 2em 1em 2em;
+  padding: 1em 2em 2em 2em;
   background-color: var(--gray_middle_dark);
   border-radius: 30px;
   color: white;
@@ -184,6 +184,14 @@
 
 .startDate {
   font-size: 0.8rem;
+  padding: 0 10px;
+}
+
+.responsible {
+  font-size: 0.8rem;
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: 1px solid var(--color3_pink);
 }
 
 .remainingGoals {
@@ -207,10 +215,24 @@
   background-color: #da13e0;
 }
 
+#container-see {
+  width: 100%;
+  padding: 10px 0;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
 .info-objective {
   position: absolute;
-  left: 12%;
+  left: 10%;
+}
+
+.btn-container {
+  gap: 10px; /* Espacio entre los botones */
+  margin: 0; /* Ajusta los márgenes si es necesario */
 }
 
 #p-description {
@@ -237,13 +259,14 @@
   font-weight: bold;
 }
 
-#container-see {
-  padding: 10px;
-  width: auto;
+#form1-see {
+  padding: 0 3em 3em 3em;
 }
 
-#form1-see {
-  padding: 0 1em 1em 1em;
+.btn-exit {
+  position: absolute;
+  right: -10px;
+  top: 72px;
 }
 
 #see-goals {

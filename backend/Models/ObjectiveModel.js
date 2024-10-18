@@ -11,7 +11,7 @@ const objectiveSchema = new mongoose.Schema(
     description: { type: String, required: true },
     totalGoals: { type: Number, default: 0 }, // Asegúrate de que tenga un valor predeterminado
     completedGoals: { type: Number, default: 0 }, // Igualmente aquí
-    responsible: { type: String },
+    responsible: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     goals_ListIDS: [{ type: mongoose.Schema.Types.ObjectId, ref: "Goals" }],
   },
   { strict: "throw" }

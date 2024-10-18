@@ -2,8 +2,15 @@
   <h2>User Profile</h2>
 
   <form [formGroup]="profileForm" (ngSubmit)="updateUserProfile()">
+
     <div class="form1-group">
-      <label for="realName">Name:</label>
+      <label for="realName" style="font-weight: bold;">Username:</label>
+      <p> {{ activeUser.name }} </p>
+    </div>
+
+    
+    <div class="form1-group">
+      <label for="realName" style="font-weight: bold;">Name:</label>
       <p *ngIf="!isEditing"> {{ userProfile?.realName }} </p>
       <input *ngIf="isEditing" id="realName" type="text" formControlName="realName" placeholder="Enter your name" />
       <div *ngIf="profileForm.get('realName')?.invalid && profileForm.get('realName')?.touched" class="error">
@@ -13,7 +20,7 @@
     </div>
 
     <div class="form1-group">
-      <label for="email">Email:</label>
+      <label for="email" style="font-weight: bold;">Email:</label>
       <p *ngIf="!isEditing"> {{ userProfile?.email }} </p>
       <input *ngIf="isEditing" id="email" type="email" formControlName="email" placeholder="Enter your email" />
       <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="error">
@@ -34,14 +41,14 @@
   </div>
 
   <h3 id="associatedPlans">Associated Strategic Plans</h3>
-  <ul *ngIf="userProfile && strategicPlans.length > 0">
-    <li *ngFor="let plan of strategicPlans">
-      {{ plan.name }} ({{ plan.startDate | date:'dd/MM/yyyy' }} - {{ plan.endDate | date:'dd/MM/yyyy' }})
+  <ul style="width: 100%; align-items: center; display: flex; flex-direction: column;" *ngIf="userProfile && strategicPlans.length > 0">
+    <li style="width: 80%;" *ngFor="let plan of strategicPlans">
+      <p style="font-weight: bold;">{{ plan.name }}</p> ({{ plan.startDate | date:'dd/MM/yyyy' }} - {{ plan.endDate | date:'dd/MM/yyyy' }})
     </li>
   </ul>
   <ng-template #noPlans>
     <p>You are not assigned to any strategic plans yet.</p>
   </ng-template>
 
-  <button (click)="navigateBack()">Back to Dashboard</button>
+  <button (click)="navigateStrategicPlans()">Strategic Plans</button>
 </div>

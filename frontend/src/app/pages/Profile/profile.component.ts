@@ -30,6 +30,7 @@ interface UserProfile {
 export class ProfileComponent implements OnInit {
   profileForm: FormGroup;
   activeUserID: string = '';
+  activeUser: any = {};
   userProfile: UserProfile | null = null;
   isEditing = false;  // Estado para controlar si estamos editando o no
   strategicPlans: StrategicPlan[] = [];
@@ -59,6 +60,7 @@ export class ProfileComponent implements OnInit {
       this.profileForm.patchValue({
         realName: profile.realName,
         email: profile.email,
+        username: profile.name,
       });
       this.disableForm();  // Asegurarse de que el formulario esté deshabilitado al cargar
       this.isEditing = false;  // Inicialmente no estamos en modo edición
@@ -66,7 +68,8 @@ export class ProfileComponent implements OnInit {
   }
 
   async loadUserProfileId() {
-    this.activeUserID = await this.authService.getActiveUserID();
+    this.activeUser = await this.authService.getActiveUser();
+    this.activeUserID = this.activeUser._id;
     this.loadStrategicPlans();
   }
 
@@ -132,7 +135,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  navigateBack() {
-    this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
+  navigateStrategicPlans() {
+    this.router.navigate([NAVIGATIONS_ROUTES.SELECT_STRATEGIC_PLAN]);
   }
 }

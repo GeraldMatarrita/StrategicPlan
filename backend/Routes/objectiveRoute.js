@@ -13,7 +13,10 @@ router.get("/getObjective/:objectiveId", async (req, res) => {
   try {
     const { objectiveId } = req.params;
 
-    const objective = await ObjectiveModel.findById(objectiveId);
+    const objective = await ObjectiveModel.findById(objectiveId).populate(
+      "responsible"
+    );
+
     if (!objective) {
       return res.status(404).json({
         message: "Objective not found.",
@@ -50,7 +53,7 @@ router.get("/getPlanObjectives/:planId", async (req, res) => {
     // Buscar los objetivos del plan estratégico
     const objectives = await ObjectiveModel.find({
       _id: { $in: strategicPlan.objective_ListIDS },
-    });
+    }).populate("responsible");
 
     res.status(200).json(objectives);
   } catch (error) {
@@ -74,7 +77,7 @@ router.post("/create/:planId", async (req, res) => {
     if (error) {
       return res
         .status(400)
-        .json({ message: error.details[0].message || "Datos inválidos" });
+        .json({ message: error.details[0].message || "Invalid Data" });
     }
 
     const { planId } = req.params;
@@ -117,7 +120,6 @@ router.post("/create/:planId", async (req, res) => {
  */
 router.put("/update/:objectiveId", async (req, res) => {
   try {
-
     const { objectiveId } = req.params;
 
     // Buscar el objetivo
@@ -148,7 +150,7 @@ router.put("/update/:objectiveId", async (req, res) => {
  * @returns {Object} - Mensaje de éxito o error
  * @throws {Object} - Mensaje de error
  */
-router.delete('/delete/:id', async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   try {
     const { id } = req.params;
 

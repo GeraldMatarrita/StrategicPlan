@@ -129,9 +129,11 @@ export class StrategicPlanComponent implements OnInit {
 
         // Assign members_ListIDS data to members as an array of objects
         if (Array.isArray(data.members_ListIDS)) {
+          console.log(data.members_ListIDS);
           this.members = data.members_ListIDS.map((member: any) => ({
             id: member._id,
             name: member.name,
+            realName: member.realName,
           }));
         }
         this.formStrategicPlan.patchValue(data);

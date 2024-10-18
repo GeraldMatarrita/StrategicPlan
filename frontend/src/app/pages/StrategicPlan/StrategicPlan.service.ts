@@ -89,6 +89,24 @@ export class StrategicPlanService {
    * @param data data to send for update
    * @returns promise with the response message
    */
+  updateObjectivesStrategicPlan(id: string, data: any): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.updateData(
+        `${API_ROUTES.BASE_URL}${API_ROUTES.UpdateObjective_StrategicPlan}`,
+        id,
+        data
+      ).subscribe(
+        (response: any) => {
+          resolve(response.message);
+        },
+        (error: any) => {
+          console.error('Error updating Strategic Plan:', error);
+          reject(error);
+        }
+      );
+    });
+  }
+
   updateStrategicPlan(id: string, data: any): Promise<string> {
     return new Promise((resolve, reject) => {
       this.updateData(
@@ -100,7 +118,7 @@ export class StrategicPlanService {
           resolve(response.message);
         },
         (error: any) => {
-          console.error('Error updating data:', error);
+          console.error('Error updating Strategic Plan:', error);
           reject(error);
         }
       );

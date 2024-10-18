@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 import { Router } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
@@ -42,6 +43,7 @@ export class InvitationsComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private invitationsService: InvitationsService,
+    private router: Router,
     private StrategicPlanService: StrategicPlanService,
     private authService: AuthService
   ) {}
@@ -237,6 +239,10 @@ export class InvitationsComponent implements OnInit {
     }
   }
 
+  getPlaceholderText(): string {
+    return this.invitationForm.get('users')?.value?.length ? '' : 'Select users';
+  }
+
   /**
    * Method to respond to an invitation to a strategic plan
    * @param decision accept or decline the invitation
@@ -274,5 +280,10 @@ export class InvitationsComponent implements OnInit {
         text: this.responseMessage,
       });
     }
+  }
+
+  navigateToSelectedPlan(): void {
+    const SELECTED_PLAN: string = `${NAVIGATIONS_ROUTES.STRATEGIC_PLAN}`;
+    this.router.navigate([SELECTED_PLAN]);
   }
 }

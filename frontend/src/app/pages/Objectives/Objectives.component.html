@@ -61,6 +61,9 @@
                 <span class="startDate"
                   >Start Date: {{ item.startDate | date : "dd/MM/yyyy" }}</span
                 >
+                <span class="responsible"
+                  >Responsible: {{ item.responsible.realName }}</span
+                >
               </div>
             </div>
           </div>
@@ -73,29 +76,67 @@
       <div class="modal-content">
         <div class="form1-card">
           <div id="form1-see" class="form1">
+            <div class="btn-container">
+              <button class="btn-exit" (click)="toogleReadModal()"></button>
+            </div>
             <div>
-              <div id="container-see" class="btn-container">
-                <div class="info-objective">
-                  <span class="remainingGoals"
-                    >Completed Goals: {{ selectedObjective?.completedGoals }} /
+              <div id="container-see">
+                <div
+                  class="remainingGoals"
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                >
+                  <span>Completed Goals:</span>
+                  <span>
+                    {{ selectedObjective?.completedGoals }} /
                     {{ selectedObjective?.totalGoals }}</span
                   >
-                  <span class="startDate"
-                    >Start Date:
+                </div>
+                <div
+                  class="startDate"
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                >
+                  <span> Start Date:</span>
+                  <span>
                     {{
                       selectedObjective?.startDate | date : "dd/MM/yyyy"
                     }}</span
                   >
                 </div>
-                <button class="btn-exit" (click)="toogleReadModal()"></button>
+                <div
+                  class="responsible"
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                >
+                  <span>Responsible:</span>
+                  <span>{{ selectedObjective.responsible.realName }}</span>
+                </div>
               </div>
             </div>
             <h2 id="see-title">{{ selectedObjective?.title }}</h2>
             <div class="description-container">
               <p id="p-description">{{ selectedObjective?.description }}</p>
             </div>
-            <h2 id="see-goals" (click)="handleRedirectToGoals(selectedObjective._id)">Metas Asociadas:</h2>
-            <div *ngIf="objectiveGoals.length > 0" class="goals-list-container">
+            <h2
+              id="see-goals"
+              (click)="handleRedirectToGoals(selectedObjective._id)"
+            >
+              Metas Asociadas:
+            </h2>
+            <div *ngIf="objectiveGoals.length > 0">
               <ul>
                 <li class="custom-li" *ngFor="let goal of objectiveGoals">
                   {{ goal.description }}
@@ -172,6 +213,19 @@
                     Description is required.
                   </p>
                 </div>
+              </div>
+
+              <div class="form1-group">
+                <label for="responsible">Responsible</label>
+                <select id="responsible" formControlName="responsible" required>
+                  <option
+                    class="selectGroup select option"
+                    *ngFor="let member of currentPlan.members_ListIDS"
+                    [value]="member._id"
+                  >
+                    {{ member.realName }}
+                  </option>
+                </select>
               </div>
 
               <div class="badInfo" *ngIf="!formObjective.valid">

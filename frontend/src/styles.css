@@ -98,6 +98,7 @@ button:active {
 .buttonCreate:hover, #inviteButton:hover {
   background-color: black;
   color: white;
+  cursor: pointer;
 }
 
 #inviteButton {

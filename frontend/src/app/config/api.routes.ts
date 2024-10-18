@@ -30,6 +30,7 @@ export const API_ROUTES = {
   Get_finishedByUserID_StrategicPlan: '/strategicPlan/finished', // GET + "/userId"
   Out_StrategicPlan: '/strategicPlan/out', // POST
   Create_StrategicPlan: '/strategicPlan/create', // POST + "/userId"
+  UpdateObjective_StrategicPlan: '/strategicPlan/updateObjectives',
   Update_StrategicPlan: '/strategicPlan/update',
   // -------------------------------------------------------------
   // Para los analisis de FODA y MECA de cada plan estratégico

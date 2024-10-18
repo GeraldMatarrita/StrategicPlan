@@ -62,5 +62,7 @@ button[disabled] {
 }
 
 #associatedPlans {
+  border-top: 1px solid #ccc;
+  padding: 20px 0 0 0;
   margin-top: 25px;
 }

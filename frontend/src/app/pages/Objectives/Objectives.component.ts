@@ -27,6 +27,7 @@ export class ObjectivesComponent implements OnInit {
   activeUserID = '';
   currentPlanId: string = ''; // ID of the current plan to edit
   currentPlan: any = {};
+  planMembers: any[] = []; // List of members for the current plan
   isEditing = false; // Controls whether you are editing or creating
   plansData: any[] = []; // To store strategic plans
 
@@ -72,6 +73,7 @@ export class ObjectivesComponent implements OnInit {
       description: ['', [Validators.required]],
       totalGoals: [''],
       completedGoals: [''],
+      responsible: ['', [Validators.required]],
     });
   }
 
@@ -95,7 +97,7 @@ export class ObjectivesComponent implements OnInit {
         // If there is a stored PlanID, load the corresponding plan
         this.currentPlanId = storedPlanId;
         await this.loadObjectives();
-        this.loadStrategicPlan();
+        await this.loadStrategicPlan();
       }
     } catch (error) {
       console.error('Error loading data:', error);
@@ -110,7 +112,7 @@ export class ObjectivesComponent implements OnInit {
     );
   }
 
-  loadStrategicPlan(): void {
+  async loadStrategicPlan(): Promise<void> {
     this.strategicPlanService.getPlanByID(this.currentPlanId).subscribe(
       (data: any) => {
         this.currentPlan = data;
@@ -131,6 +133,7 @@ export class ObjectivesComponent implements OnInit {
         .subscribe(
           (data: any[]) => {
             this.objectivesData = data; // Assign the data to objectivesData
+            console.log('Objectives:', this.objectivesData);
           },
           (error: any) => {
             console.error('Error loading objectives', error);
@@ -161,8 +164,7 @@ export class ObjectivesComponent implements OnInit {
       this.toogleShowModal();
       this.formObjective.reset();
     } catch (error) {
-      this.responseMessage =
-        (error as any).error?.message || 'Unknown error';
+      this.responseMessage = (error as any).error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -179,7 +181,7 @@ export class ObjectivesComponent implements OnInit {
     try {
       const result = await Swal.fire({
         title: 'Are you sure?',
-        text: 'You won\'t be able to revert this',
+        text: "You won't be able to revert this",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes, delete',
@@ -198,7 +200,7 @@ export class ObjectivesComponent implements OnInit {
         );
 
         // Step 2: Update the plan without the objective
-        await this.strategicPlanService.updateStrategicPlan(planId, {
+        await this.strategicPlanService.updateObjectivesStrategicPlan(planId, {
           objective_ListIDS: updatedObjectiveList,
         });
 
@@ -216,8 +218,7 @@ export class ObjectivesComponent implements OnInit {
         this.loadObjectives(); // Load the updated objectives
       }
     } catch (error) {
-      const responseMessage =
-        (error as any).error?.message || 'Unknown error';
+      const responseMessage = (error as any).error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -234,9 +235,11 @@ export class ObjectivesComponent implements OnInit {
       const updatedObjective = {
         title: this.formObjective.value.title,
         description: this.formObjective.value.description,
+        responsible: this.formObjective.value.responsible,
       };
 
-      this.objectivesService.updateObjective(this.selectedObjective._id, updatedObjective)
+      this.objectivesService
+        .updateObjective(this.selectedObjective._id, updatedObjective)
         .then(() => {
           Swal.fire({
             icon: 'success',
@@ -247,12 +250,12 @@ export class ObjectivesComponent implements OnInit {
           // Here you can add additional logic, like updating the objectives list
           this.loadObjectives(); // Assume you have a method to reload the objectives list
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('Error updating objective:', error);
         });
     }
   }
-  
+
   /**
    * Function to clean empty fields from the form
    * @returns object with cleaned data
@@ -322,6 +325,13 @@ export class ObjectivesComponent implements OnInit {
     this.selectedObjective = objective;
     this.isEditing = true;
     this.showModal = true;
+
+    console.log('Objective:', objective);
+
+    // Establecer el responsable actual
+    if (objective.responsible) {
+      this.formObjective.patchValue({ responsible: objective.responsible._id });
+    }
   }
 
   /**

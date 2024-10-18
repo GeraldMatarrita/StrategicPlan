@@ -225,9 +225,9 @@
 
 
   <div *ngIf="members" class="members">
-    <span id="memberTitle">Members</span>
+    <span (click)="navigateToInvitations()" title="Add a new member" id="memberTitle">Members</span>
     <ul>
-      <li *ngFor="let item of members">{{ item.name }}</li>
+      <li *ngFor="let item of members">{{ item.name }} ({{item.realName}}) </li>
     </ul>
   </div>
 
