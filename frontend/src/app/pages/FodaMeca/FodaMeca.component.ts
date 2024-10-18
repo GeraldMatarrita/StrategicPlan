@@ -176,10 +176,10 @@ export class FodaMecaComponent implements OnInit {
       focusConfirm: false,
       preConfirm: () => {
         const title = (
-          document.getElementById('swal-input1') as HTMLInputElement
+          document.getElementById('title') as HTMLInputElement
         ).value;
         const description = (
-          document.getElementById('swal-input2') as HTMLTextAreaElement
+          document.getElementById('description') as HTMLTextAreaElement
         ).value;
         if (!title || !description) {
           Swal.showValidationMessage('Please enter both title and description');
