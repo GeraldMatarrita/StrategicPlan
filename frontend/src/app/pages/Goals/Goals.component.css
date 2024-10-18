@@ -291,8 +291,6 @@ progress[value^="1"] {
 .value {
   font-size: 0.95em;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Número de líneas antes de truncar */
-  line-clamp: 3; /* Número de líneas antes de truncar */
   -webkit-box-orient: vertical;
   overflow: visible;
 }
