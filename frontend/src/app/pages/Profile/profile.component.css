@@ -1,50 +1,66 @@
 .profile-card {
-    background-color: var(--basicBackground); /* Mismo estilo que en Login */
-    color: white;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 500px;
-    margin: auto;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .form-group label {
-    display: block;
-    font-weight: bold;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: none;
-    border-radius: 5px;
-  }
-  
-  .error {
-    color: #ff4d4f;
-    font-size: 12px;
-  }
-  
-  button {
-    background-color: #9900ff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  .input{
-    background-color: #fff;
-    color: #000000;
-  }
-  button[disabled] {
-    background-color: #666;
-    cursor: not-allowed;
-  }
-  
+  background-color: var(--basicBackground); /* Mismo estilo que en Login */
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: auto;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex; /* Add this line */
+  flex-direction: column; /* Add this line to stack items vertically */
+  justify-content: center; /* Add this line to center items horizontally */
+  align-items: center; /* Add this line to center items vertically */
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+}
+
+.buttonDelete {
+  background-color: #e74c3c;
+}
+
+.buttonDelete:hover {
+  background-color: black;
+  color: white;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 5px;
+}
+
+.error {
+  color: #ff4d4f;
+  font-size: 12px;
+}
+
+button {
+  background-color: #9900ff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.input {
+  background-color: #fff;
+  color: #000000;
+}
+button[disabled] {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+#associatedPlans {
+  margin-top: 25px;
+}

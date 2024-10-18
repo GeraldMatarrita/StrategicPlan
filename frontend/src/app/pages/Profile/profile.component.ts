@@ -115,21 +115,11 @@ export class ProfileComponent implements OnInit {
         });
         this.loadUserProfile();  // Recargar el perfil para reflejar los cambios
         this.cancelEdit();  // Salir del modo de edición
-      }, (error) => {
-        console.error('Error updating profile', error);
-        
-        Swal.fire({
-          title: 'Error!',
-          text: 'There was an issue updating your profile. Please try again later.',
-          icon: 'error',
-          confirmButtonText: 'OK'
-        });
       });
     } catch (error) {
-      console.error('Update failed:', error);
       Swal.fire({
-        title: 'Error!',
-        text: 'An unexpected error occurred.',
+        title: 'An unexpected error occurred',
+        text: (error as any).error.message,
         icon: 'error',
         confirmButtonText: 'OK'
       });

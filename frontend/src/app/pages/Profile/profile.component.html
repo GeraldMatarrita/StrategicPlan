@@ -2,18 +2,20 @@
   <h2>User Profile</h2>
 
   <form [formGroup]="profileForm" (ngSubmit)="updateUserProfile()">
-    <div class="form-group">
+    <div class="form1-group">
       <label for="realName">Name:</label>
-      <input class="input" id="realName" type="text" formControlName="realName" placeholder="Enter your name" />
+      <p *ngIf="!isEditing"> {{ userProfile?.realName }} </p>
+      <input *ngIf="isEditing" id="realName" type="text" formControlName="realName" placeholder="Enter your name" />
       <div *ngIf="profileForm.get('realName')?.invalid && profileForm.get('realName')?.touched" class="error">
         <p *ngIf="profileForm.get('realName')?.errors?.['required']">Name is required</p>
         <p *ngIf="profileForm.get('realName')?.errors?.['minlength']">Name must be at least 3 characters</p>
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="form1-group">
       <label for="email">Email:</label>
-      <input class="input" id="email" type="email" formControlName="email" placeholder="Enter your email" />
+      <p *ngIf="!isEditing"> {{ userProfile?.email }} </p>
+      <input *ngIf="isEditing" id="email" type="email" formControlName="email" placeholder="Enter your email" />
       <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="error">
         <p *ngIf="profileForm.get('email')?.errors?.['required']">Email is required</p>
         <p *ngIf="profileForm.get('email')?.errors?.['email']">Email is invalid</p>
@@ -31,7 +33,7 @@
     <button class="buttonCreate" (click)="enableEdit()">Edit Profile</button>
   </div>
 
-  <h3>Associated Strategic Plans</h3>
+  <h3 id="associatedPlans">Associated Strategic Plans</h3>
   <ul *ngIf="userProfile && strategicPlans.length > 0">
     <li *ngFor="let plan of strategicPlans">
       {{ plan.name }} ({{ plan.startDate | date:'dd/MM/yyyy' }} - {{ plan.endDate | date:'dd/MM/yyyy' }})
