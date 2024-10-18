@@ -6,9 +6,9 @@ const bcrypt = require("bcrypt");
  * Modelo de usuario.
  */
 const userSchema = new mongoose.Schema(
-  {
-    realname: { type: String, required: false, unique: true },
+  { 
     name: { type: String, required: true, unique: true },
+    realName: { type: String, required: true},
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     resetPasswordToken: { type: String },
@@ -50,8 +50,8 @@ userSchema.pre("save", async function (next) {
  */
 const validateUser = (data) => {
   const schema = Joi.object({
-    realname: Joi.string().min(3).max(50).optional().label("Real Name"),
     name: Joi.string().min(3).max(50).required().label("Name"),
+    realName: Joi.string().min(3).max(50).required().label("realName"),
     email: Joi.string().email().required().label("Email"),
     password: Joi.string().min(2).required().label("Password"),
     strategicPlans_ListIDS: Joi.array()

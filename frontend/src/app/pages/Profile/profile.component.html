@@ -1,13 +1,13 @@
-<div class="profile-card" style="margin-top: 52px;">
+<div class="profile-card">
   <h2>User Profile</h2>
 
   <form [formGroup]="profileForm" (ngSubmit)="updateUserProfile()">
     <div class="form-group">
-      <label for="name">Name:</label>
-      <input class="input" id="name" type="text" formControlName="name" placeholder="Enter your name" />
-      <div *ngIf="profileForm.get('name')?.invalid && profileForm.get('name')?.touched" class="error">
-        <p *ngIf="profileForm.get('name')?.errors?.['required']">Name is required</p>
-        <p *ngIf="profileForm.get('name')?.errors?.['minlength']">Name must be at least 3 characters</p>
+      <label for="realName">Name:</label>
+      <input class="input" id="realName" type="text" formControlName="realName" placeholder="Enter your name" />
+      <div *ngIf="profileForm.get('realName')?.invalid && profileForm.get('realName')?.touched" class="error">
+        <p *ngIf="profileForm.get('realName')?.errors?.['required']">Name is required</p>
+        <p *ngIf="profileForm.get('realName')?.errors?.['minlength']">Name must be at least 3 characters</p>
       </div>
     </div>
 

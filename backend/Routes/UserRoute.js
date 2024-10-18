@@ -2,7 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
-const { User: UserModel, validateUser } = require("../Models/UserModel"); // Import the User model
+const { User: UserModel, validateUser, User } = require("../Models/UserModel"); // Import the User model
 
 // Configure nodemailer
 const transporter = nodemailer.createTransport({
@@ -192,41 +192,54 @@ router.post("/create", async (req, res) => {
 router.put("/update/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    const { realName, email } = req.body;
 
-    // Desestructurar los campos name y email de req.body
-    const { name, email } = req.body;
-    // Verificar que ambos campos existan en la solicitud
-    if (!name || !email) {
+    // Check that both name and email are provided
+    if (!realName || !email) {
       return res.status(400).json({
         message: "Name and email are required.",
       });
     }
 
-    // Actualizar solo name y email
-    const updatedUser = await UserModel.findByIdAndUpdate(
-      id,
-      { name, email },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedUser) {
+    // Find the user by ID
+    const user = await UserModel.findById(id);
+    if (!user) {
       return res.status(404).json({
         message: "User not found",
       });
     }
 
-    res.status(201).json({
+    // Check if the email is being changed
+    if (user.email !== email) {
+      // Check if another user already has this email
+      const otherUser = await UserModel.findOne({ email });
+      if (otherUser) {
+        return res.status(409).json({
+          message: "Another user already has this email",
+        });
+      }
+    }
+
+    // Update the user fields
+    user.realName = realName;
+    user.email = email;
+    
+    // Save the updated user
+    await user.save();
+
+    res.status(200).json({
       message: "User updated successfully",
-      user: updatedUser, // Devuelve el usuario actualizado si es necesario
+      user, // Return the updated user
     });
   } catch (error) {
     console.error("Error updating user:", error);
     res.status(500).json({
       message: "Failed to update user",
-      error,
+      error: error.message,
     });
   }
 });
+
 
 /**
  * Function to log in to the application
