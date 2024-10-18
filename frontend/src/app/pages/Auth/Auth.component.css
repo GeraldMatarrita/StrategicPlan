@@ -7,5 +7,4 @@
   color: white;
   min-height: calc(100vh - 52px);
   padding: 10px 0px 50px 0px; /* top right bottom left */
-  margin-top: 52px auto auto auto;
 }
