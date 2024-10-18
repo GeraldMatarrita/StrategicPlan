@@ -146,4 +146,3 @@ export class ProfileComponent implements OnInit {
     this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
   }
 }
-
