@@ -267,3 +267,11 @@
   margin: 20px 0;
   padding: 0 10%;
 }
+
+#section2Value, #section3Value, #section4Value, #objectiveValue {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  white-space: pre-wrap; /* Respeta los espacios en blanco y saltos de línea */
+  overflow-wrap: break-word; /* Permite que las palabras largas se dividan y pasen a la siguiente línea */
+  word-break: normal;
+}
