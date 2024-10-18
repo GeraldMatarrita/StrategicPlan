@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../Auth/Auth.service';
 import { ProfileService } from './profile.service';
 import Swal from 'sweetalert2';
+import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 
 interface StrategicPlan {
   startDate: string | number | Date;
@@ -14,7 +15,7 @@ interface StrategicPlan {
 }
 
 interface UserProfile {
-  name: string;
+  realName: string;
   email: string;
   strategicPlans: StrategicPlan[];
 }
@@ -41,7 +42,7 @@ export class ProfileComponent implements OnInit {
     private profileService: ProfileService
   ) {
     this.profileForm = this.fb.group({
-      name: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(3)]],
+      realName: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(3)]],
       email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
     });
   }
@@ -56,7 +57,7 @@ export class ProfileComponent implements OnInit {
     await this.authService.getActiveUser().then((profile) => {
       this.userProfile = profile;
       this.profileForm.patchValue({
-        name: profile.name,
+        realName: profile.realName,
         email: profile.email,
       });
       this.disableForm();  // Asegurarse de que el formulario esté deshabilitado al cargar
@@ -72,13 +73,13 @@ export class ProfileComponent implements OnInit {
   // Habilitar los campos del formulario para edición
   enableEdit() {
     this.isEditing = true;
-    this.profileForm.get('name')?.enable();
+    this.profileForm.get('realName')?.enable();
     this.profileForm.get('email')?.enable();
   }
 
   // Deshabilitar los campos del formulario
   disableForm() {
-    this.profileForm.get('name')?.disable();
+    this.profileForm.get('realName')?.disable();
     this.profileForm.get('email')?.disable();
   }
 
@@ -86,7 +87,7 @@ export class ProfileComponent implements OnInit {
   cancelEdit() {
     this.isEditing = false;
     this.profileForm.patchValue({
-      name: this.userProfile?.name,
+      name: this.userProfile?.realName,
       email: this.userProfile?.email,
     });
     this.disableForm();  // Volver a deshabilitar los campos
@@ -99,7 +100,7 @@ export class ProfileComponent implements OnInit {
     }
 
     const updatedProfile = {
-      name: this.profileForm.get('name')?.value,
+      realName: this.profileForm.get('realName')?.value,
       email: this.profileForm.get('email')?.value,
     };
 
@@ -142,7 +143,7 @@ export class ProfileComponent implements OnInit {
   }
 
   navigateBack() {
-    this.router.navigate([]);
+    this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
   }
 }
 

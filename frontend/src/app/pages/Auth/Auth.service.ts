@@ -181,7 +181,7 @@ export class AuthService {
       localStorage.setItem('token', JSON.stringify(updatedUser));
   
       // Actualizar los observables si es necesario
-      this.userNameSubject.next(updatedUser.name);
+      this.userNameSubject.next(updatedUser.realName);
     }
   
     // Método para manejar el update de los datos del usuario en el backend
@@ -202,9 +202,9 @@ export class AuthService {
       });
     }
 
-  async getActiveUserName(): Promise<{ name: string }> {
+  async getActiveUserName(): Promise<{ realName: string }> {
     // Retornar el usuario activo desde tu lógica
-    return { name: this.userNameSubject.getValue() };
+    return { realName: this.userNameSubject.getValue() };
   }
 
   requestPasswordReset(data: { email: string }): Observable<any> {

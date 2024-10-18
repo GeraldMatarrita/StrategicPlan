@@ -54,6 +54,7 @@ export class AuthComponent {
     this.registerForm = this.formBuilder.group(
       {
         name: ['', Validators.required],
+        realName: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
         password: [
           '',
@@ -156,6 +157,7 @@ export class AuthComponent {
     try {
       const registerData = {
         name: this.registerForm.get('name')?.value,
+        realName: this.registerForm.get('realName')?.value,
         email: this.registerForm.get('email')?.value,
         password: this.registerForm.get('password')?.value,
       };
