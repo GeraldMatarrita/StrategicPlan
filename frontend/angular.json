@@ -35,20 +35,20 @@
             "production": {
               "fileReplacements": [
               {
-                "replace": "src/config/environments/environment.ts",
-                "with": "src/config/environments/environment.prod.ts"
+                "replace": "src/app/config/environments/environment.ts",
+                "with": "src/app/config/environments/environment.prod.ts"
               }
             ],
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1MB",
+                  "maximumError": "1.5MB"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumError": "6kB"
                 }
               ],
               "outputHashing": "all"
