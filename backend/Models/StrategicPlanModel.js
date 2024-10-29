@@ -3,7 +3,7 @@ const Joi = require("joi");
 
 
 
-// Esquema del plan estratégico
+// Definition of the StrategicPlan schema
 const strategicPlanSchema = new mongoose.Schema(
   {
     mission: { type: String },

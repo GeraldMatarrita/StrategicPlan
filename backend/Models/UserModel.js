@@ -3,12 +3,12 @@ const Joi = require("joi");
 const bcrypt = require("bcrypt");
 
 /**
- * Modelo de usuario.
+ * User Model.
  */
 const userSchema = new mongoose.Schema(
   { 
     name: { type: String, required: true, unique: true },
-    realName: { type: String, required: true},
+    realName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     resetPasswordToken: { type: String },
@@ -34,24 +34,24 @@ const userSchema = new mongoose.Schema(
   { strict: "throw" }
 );
 
-// Middleware para encriptar la contraseña antes de guardar el usuario
+// Middleware to hash the password before saving the user
 userSchema.pre("save", async function (next) {
   if (this.isModified("password") || this.isNew) {
-    const saltRounds = parseInt(process.env.SALT) || 10; // Número de rondas de sal
+    const saltRounds = parseInt(process.env.SALT) || 10; // Number of salt rounds
     this.password = await bcrypt.hash(this.password, saltRounds);
   }
   next();
 });
 
 /**
- * Función de validación de datos de usuario.
- * @param {Object} data - Datos a validar.
- * @returns {Object} - Objeto con los errores y el valor.
+ * Function to validate user data.
+ * @param {Object} data - Data to validate.
+ * @returns {Object} - Object with errors and the value.
  */
 const validateUser = (data) => {
   const schema = Joi.object({
     name: Joi.string().min(3).max(50).required().label("Name"),
-    realName: Joi.string().min(3).max(50).required().label("realName"),
+    realName: Joi.string().min(3).max(50).required().label("Real Name"),
     email: Joi.string().email().required().label("Email"),
     password: Joi.string().min(2).required().label("Password"),
     strategicPlans_ListIDS: Joi.array()
@@ -74,8 +74,8 @@ const validateUser = (data) => {
   return schema.validate(data);
 };
 
-// Definición del modelo de usuario
+// Definition of the User model
 const User = mongoose.model("User", userSchema);
 
-// Exportación del modelo y la función de validación
+// Exporting the model and the validation function
 module.exports = { User, validateUser };
