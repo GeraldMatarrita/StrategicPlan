@@ -11,16 +11,16 @@ const {
 } = require("../Models/ObjectiveModel");
 
 /**
- * funcion que trae todos los goals de un objetivo
- * @param {String} objectiveId - ID del objetivo
- * @returns {Object} - Lista de goals
- * @throws {Object} - Mensaje de error
+ * Function that retrieves all goals of an objective
+ * @param {String} objectiveId - Objective ID
+ * @returns {Object} - List of goals
+ * @throws {Object} - Error message
  */
 router.get("/getObjectiveGoals/:objectiveId", async (req, res) => {
   try {
     const { objectiveId } = req.params;
 
-    // Buscar el objetivo
+    // Find the objective
     const objective = await ObjectiveModel.findById(objectiveId);
     if (!objective) {
       return res.status(404).json({
@@ -28,7 +28,7 @@ router.get("/getObjectiveGoals/:objectiveId", async (req, res) => {
       });
     }
 
-    // Buscar los goals del objetivo
+    // Find the goals of the objective
     const goals = await GoalModel.find({
       _id: { $in: objective.goals_ListIDS },
     });
@@ -43,16 +43,16 @@ router.get("/getObjectiveGoals/:objectiveId", async (req, res) => {
 });
 
 /**
- * función para traer todos los goals de un plan estratégico
- * @param {String} planId - ID del plan estratégico
- * @returns {Object} - Lista de goals
- * @throws {Object} - Mensaje de error
+ * Function to retrieve all goals of a strategic plan
+ * @param {String} planId - Strategic plan ID
+ * @returns {Object} - List of goals
+ * @throws {Object} - Error message
  */
 router.get("/getPlanGoals/:planId", async (req, res) => {
   try {
     const { planId } = req.params;
 
-    // Buscar el plan estratégico
+    // Find the strategic plan
     const strategicPlan = await StrategicPlan.findById(planId);
     if (!strategicPlan) {
       return res.status(404).json({
@@ -60,15 +60,15 @@ router.get("/getPlanGoals/:planId", async (req, res) => {
       });
     }
 
-    // Buscar los objetivos del plan estratégico
+    // Find the objectives of the strategic plan
     const objectives = await ObjectiveModel.find({
       _id: { $in: strategicPlan.objective_ListIDS },
     });
 
-    // Extraer todos los IDs de goals de cada objective
+    // Extract all goal IDs from each objective
     const goalIds = objectives.flatMap((objective) => objective.goals_ListIDS);
 
-    // Buscar los goals de los objetivos del plan estratégico
+    // Find the goals of the strategic plan's objectives
     const goals = await GoalModel.find({
       _id: { $in: goalIds },
     });
@@ -83,11 +83,11 @@ router.get("/getPlanGoals/:planId", async (req, res) => {
 });
 
 /**
- * función para crear un goal y asociarlo a un objetivo
- * @param {String} objectiveId - ID del objetivo
- * @param {Object} req - Datos del goal
- * @returns {Object} - Mensaje de éxito o error
- * @throws {Object} - Mensaje de error
+ * Function to create a goal and associate it with an objective
+ * @param {String} objectiveId - Objective ID
+ * @param {Object} req - Goal data
+ * @returns {Object} - Success or error message
+ * @throws {Object} - Error message
  */
 router.post("/create/:objectiveId", async (req, res) => {
   try {
@@ -95,12 +95,12 @@ router.post("/create/:objectiveId", async (req, res) => {
     if (error) {
       return res
         .status(400)
-        .json({ message: error.details[0].message || "Datos inválidos" });
+        .json({ message: error.details[0].message || "Invalid data" });
     }
 
     const { objectiveId } = req.params;
 
-    // Buscar el objetivo
+    // Find the objective
     const objective = await ObjectiveModel.findById(objectiveId);
     if (!objective) {
       return res.status(404).json({
@@ -108,18 +108,18 @@ router.post("/create/:objectiveId", async (req, res) => {
       });
     }
 
-    // Inicializar goal_ListIDS si no está definido
+    // Initialize goals_ListIDS if undefined
     if (!objective.goals_ListIDS) {
       objective.goals_ListIDS = [];
     }
 
-    // Crear un nuevo goal
+    // Create a new goal
     const newGoal = new GoalModel(req.body);
     await newGoal.save();
 
-    // Asociar el goal al objetivo
+    // Associate the goal with the objective
     objective.goals_ListIDS.push(newGoal._id);
-    //aumentar el contador de totalGoals
+    // Increment the totalGoals counter
     objective.totalGoals += 1;
     await objective.save();
 
@@ -135,24 +135,24 @@ router.post("/create/:objectiveId", async (req, res) => {
 });
 
 /**
- * función que actualiza una meta (goal)
- * @param {String} goalId - ID de la meta
- * @returns {Object} - Mensaje de éxito o error
- * @throws {Object} - Mensaje de error
+ * Function to update a goal
+ * @param {String} goalId - Goal ID
+ * @returns {Object} - Success or error message
+ * @throws {Object} - Error message
  */
 router.put("/update/:goalId", async (req, res) => {
   try {
-    // Validar los datos de la meta que se quieren actualizar
+    // Validate goal data to be updated
     const { error } = validateGoal(req.body);
     if (error) {
       return res
         .status(400)
-        .json({ message: error.details[0].message || "Datos inválidos" });
+        .json({ message: error.details[0].message || "Invalid data" });
     }
 
     const { goalId } = req.params;
 
-    // Buscar la meta (goal) por su ID
+    // Find the goal by its ID
     const goal = await GoalModel.findById(goalId);
     if (!goal) {
       return res.status(404).json({
@@ -160,16 +160,16 @@ router.put("/update/:goalId", async (req, res) => {
       });
     }
 
-    // Actualizar la meta con los nuevos datos
+    // Update the goal with new data
     await GoalModel.updateOne({ _id: goalId }, req.body);
 
-    // Si se modifican actividades completadas o totales, también puede ser necesario actualizar el objetivo padre
+    // If total or completed activities are modified, it may also be necessary to update the parent objective
     const { totalActivities, completedActivities } = req.body;
     if (totalActivities !== undefined || completedActivities !== undefined) {
-      // Encontrar el objetivo asociado a la meta
+      // Find the objective associated with the goal
       const objective = await ObjectiveModel.findOne({ goals_ListIDS: goalId });
       if (objective) {
-        // Actualizar el total y las actividades completadas
+        // Update the total and completed activities
         const updatedObjective = {
           totalGoals: objective.goals_ListIDS.length,
           completedGoals: await GoalModel.countDocuments({
@@ -178,7 +178,7 @@ router.put("/update/:goalId", async (req, res) => {
           }),
         };
 
-        // Aplicar la actualización al objetivo
+        // Apply the update to the objective
         await ObjectiveModel.updateOne({ _id: objective._id }, updatedObjective);
       }
     }
@@ -188,6 +188,30 @@ router.put("/update/:goalId", async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating goal:", error);
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+});
+
+/**
+ * Function to delete a goal and update the objective's goal list
+ * @param {String} goalId - Goal ID
+ * @returns {Object} - Success or error message
+ * @throws {Object} - Error message
+ */
+router.delete("/delete/:goalId", async (req, res) => {
+  try {
+    const { goalId } = req.params;
+    
+    // Delete the goal from the system
+    await GoalModel.findByIdAndDelete(goalId);
+
+    res.status(200).json({
+      message: "Goal deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Error deleting goal:", error);
     res.status(500).json({
       message: "Internal Server Error",
     });

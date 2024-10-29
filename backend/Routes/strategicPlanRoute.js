@@ -7,8 +7,8 @@ const {
 } = require("../Models/StrategicPlanModel"); // Imports the StrategicPlanModel
 const { User, validateUser } = require("../Models/UserModel"); // Adjust the path based on your model file location
 
-const SWOT = require("../Models/swot");
-const CAME = require("../Models/came");
+const SWOT = require("../Models/SwotModel");
+const CAME = require("../Models/CameModel");
 
 /**
  * Function that retrieves all strategic plans
@@ -42,6 +42,7 @@ router.get("/ById/:id", async (req, res) => {
     const strategicPlan = await StrategicPlan.findById(id).populate(
       "members_ListIDS"
     );
+
     if (!strategicPlan) {
       return res
         .status(404)
@@ -280,7 +281,7 @@ router.post("/create/:userId", async (req, res) => {
  * @returns {Object} - Confirmation message
  * @throws {Object} - Error message
  */
-router.put("/update/:id", async (req, res) => {
+router.put("/updateObjectives/:id", async (req, res) => {
   try {
     // Extraer el ID de los objetivos desde el cuerpo de la solicitud
     const { objective_ListIDS } = req.body;
@@ -313,6 +314,42 @@ router.put("/update/:id", async (req, res) => {
     res.status(500).json({
       message:
         "Error updating the entry in the StrategicPlan collection in MongoDB",
+    });
+  }
+});
+
+router.put("/update/:id", async (req, res) => {
+  try {
+    const { error } = validateStrategicPlan(req.body);
+    if (error)
+      return res
+        .status(400)
+        .json({ message: error.details[0].message || "Invalid data" });
+
+    const updatedStrategicPlan = await StrategicPlan.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedStrategicPlan) {
+      return res
+        .status(404)
+        .json({ message: "Strategic Plan not found" });
+    }
+
+    res.json({
+      message: "Strategic Plan updated successfully",
+      data: updatedStrategicPlan,
+    });
+  } catch (error) {
+    console.error(
+      "Error updating the entry in the StrategicPlanModel collection in MongoDB:",
+      error
+    );
+    res.status(500).json({
+      message:
+        "Error updating the entry in the StrategicPlanModel collection in MongoDB",
     });
   }
 });

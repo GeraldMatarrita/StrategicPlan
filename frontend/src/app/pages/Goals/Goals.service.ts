@@ -44,11 +44,11 @@ export class GoalsService {
   }
 
   // --------------------------------------------
-  // Métodos para la API
+  // Methods for the API
   // --------------------------------------------
 
   /**
-   * función para obtener los goals de un planId
+   * function to obtain the goals of a planId
    * @param planId
    * @returns goals
    */
@@ -59,10 +59,10 @@ export class GoalsService {
   }
 
   /**
-   * función para crear un goal y asociarlo a un objetivo
-   * @param objectiveId objetivoId a asociar con el goal
-   * @param data del goal
-   * @returns promesa con el mensaje de respuesta
+   * function to create a goal and associate it with an objective
+   * @param objectiveId objectiveId to associate with the goal
+   * @param data of the goal
+   * @returns promise with the response message
    */
   createGoal(data: any, objectiveId: string): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -81,10 +81,10 @@ export class GoalsService {
   }
 
   /**
-   * función para actualizar un goal
-   * @param goalId id del goal a actualizar
-   * @param data datos del goal a actualizar
-   * @returns promesa con el mensaje de respuesta
+   * function to update a goal
+   * @param goalId id of the goal to update
+   * @param data data of the goal to update
+   * @returns promise with the response message
    */
   updateGoal(goalId: string, data: any): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -103,7 +103,7 @@ export class GoalsService {
     });
   }
 
-  deleteGoal(goalId: string, objectiveID: string): Promise<any> {
+  deleteGoal(goalId: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.deleteData(
         `${API_ROUTES.BASE_URL}${API_ROUTES.Delete_Goal}/${goalId}`

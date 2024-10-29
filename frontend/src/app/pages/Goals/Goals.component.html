@@ -30,7 +30,7 @@
         </select>
       </div>
     </div>
-    <div class="form1-group" style="margin-right: 260px;">
+    <div class="form1-group" style="margin-right: 260px">
       <label
         style="margin-right: 80px; color: white; font-size: 1.5em"
         for="objectiveTitle"
@@ -41,14 +41,14 @@
 
     <button class="buttonAdd m-3" (click)="onClickAddGoal()">Add a Goal</button>
   </div>
-  <button (click)="navigateToSelectedPlan()" class="buttonBack m-3">
-    Back to Plan
+  <button (click)="navigateToObjectives()" class="buttonBack m-3">
+    Back to Objectives
   </button>
   <div class="my-custom-container">
     <div *ngIf="goalsData.length > 0">
       <div class="card-container">
         <div *ngFor="let item of goalsData" class="card-Objective-container">
-          <div class="card-Objective" (click)="onClickGoal(item)">
+          <div class="card-Objective">
             <div class="content-wrapper">
               <h6 class="goal-h6">Description:</h6>
               <div class="value-container">
@@ -57,7 +57,19 @@
             </div>
           </div>
           <div class="right-section">
-            <h6>Progress</h6>
+            <div class="btn-container">
+              <h6 id="progressTitle">Progress</h6>
+              <button
+                class="btn-edit" style="position: absolute; margin-right: 35px;"
+                title="Edit"
+                (click)="editGoal(item)"
+              ></button>
+              <button
+                class="btn-delete" style="margin-left: 100px;"
+                title="Delete"
+                (click)="deleteGoal(item._id, currentObjective._id)"
+              ></button>
+            </div>
 
             <!-- Primera barra de progreso con progreso actual y meta -->
             <label for="progress">Activity 1:</label>

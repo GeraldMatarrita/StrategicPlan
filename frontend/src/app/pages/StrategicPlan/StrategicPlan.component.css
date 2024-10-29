@@ -111,6 +111,16 @@
   margin-left: 6%;
 }
 
+.a {
+  color: white;
+  align-self: center;
+}
+
+.a:hover {
+  color: var(--color1_blue);
+  cursor: pointer;
+}
+
 #section2Value {
   padding: 0 10%;
 }
@@ -220,7 +230,6 @@
 /* ------------------------------ */
 .members {
   min-height: 400px;
-
   display: flex;
   flex-direction: column; /* Asegura que los elementos estén en una columna */
   justify-content: center;
@@ -243,10 +252,26 @@
   font-size: 2rem;
   font-weight: bold;
   margin: 25px 0;
+  transition: transform 0.3s ease;
+}
+
+#memberTitle:hover {
+  color: rgb(187, 178, 178);
+  cursor: pointer;
+  border: 2px solid #b301b3;
+  transform: scale(1.05);
 }
 
 #sectionButtons {
   align-items: center;
   margin: 20px 0;
   padding: 0 10%;
+}
+
+#section2Value, #section3Value, #section4Value, #objectiveValue {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  white-space: pre-wrap; /* Respeta los espacios en blanco y saltos de línea */
+  overflow-wrap: break-word; /* Permite que las palabras largas se dividan y pasen a la siguiente línea */
+  word-break: normal;
 }

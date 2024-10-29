@@ -144,7 +144,8 @@ td {
   color: var(--text_color); /* Color de texto */
   border-radius: 25px;
   padding: 10px 15px;
-  border: 1px solid var(--color2_purple);
+  margin-bottom: 20px;
+  border: 1px solid var(--text_color);
 }
 
 /* Estilo para el contenedor del ng-select */
@@ -180,7 +181,7 @@ td {
 .ng-select.custom ::ng-deep .ng-option {
   background-color: var(--gray_middle_dark);
   padding: 10px 15px;
-  border: 1px solid var(--color2_purple);
+  border: 1px solid var(--text_color);
   border-radius: 10px;
 }
 
@@ -199,7 +200,7 @@ td {
 /* Estilo para el texto del usuario seleccionado con borde */
 .ng-select.custom ::ng-deep .ng-value {
   background-color: var(--gray_middle_dark); /* Fondo del usuario seleccionado */
-  border: 1px solid var(--color2_purple); /* Borde alrededor del usuario seleccionado */
+  border: 1px solid var(--text_color); /* Borde alrededor del usuario seleccionado */
   border-radius: 15px; /* Redondea los bordes */
   padding: 5px 10px; /* Espaciado interno */
   color: white; /* Color del texto del usuario */
@@ -235,7 +236,7 @@ td {
 .ng-select.custom ::ng-deep .ng-value-icon {
   margin-right: 5px; /* Añade espacio entre el texto del usuario y la "X" */
   cursor: pointer; /* Cambia el cursor al pasar sobre la "X" */
-  background-color: var(--color2_purple); /* Fondo morado para el círculo de la "X" */
+  background-color: var(--color1_blue); /* Fondo morado para el círculo de la "X" */
   color: white; /* Color de la "X" */
   border-radius: 50%; /* Convierte el fondo en un círculo */
   padding: 10px; /* Añade espacio interno */
@@ -247,15 +248,74 @@ td {
 }
 
 .invitation-container {
+  margin-top: 20px;
+  padding-top: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0 auto;
-  padding: 30px;
   list-style: none;
 }
 
 #toInvite {
   margin: 15px 0 0 0; /* top right bottom left */
+}
+
+.buttonGoToPlan {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start; /* Justificado a la izquierda para el texto */
+  min-width: 50px;
+  height: 40px;
+  border: none;
+  padding: 0px 10px;
+  background-color: var(--color1_blue);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 5px 5px 0px var(--color1_blue);
+  transition-duration: 0.3s;
+  padding-right: 35px; /* Asegura espacio para el ícono en el lado derecho */
+}
+
+.buttonGoToPlan::after {
+  content: "";
+  display: inline-flex;
+  width: 21px; /* Ajusta el tamaño del ícono */
+  height: 21px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="-0.5 -0.5 16 16" stroke-linecap="round" stroke-linejoin="round" stroke="%23ffffff" height="16" width="16"><desc>Arrow Right Streamline Icon: https://streamlinehq.com</desc><path d="M2.8125 7.5h9.375m0 0 -3.515625 -3.75m3.515625 3.75 -3.515625 3.75" stroke-width="1"></path></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  right: 10px; /* Ajusta la posición del ícono a la derecha */
+  top: 50%; /* Centrar verticalmente */
+  transform: translateY(-50%) translateX(0); /* Inicialmente sin movimiento */
+  transition-duration: 0.3s;
+}
+
+.buttonGoToPlan:hover {
+  color: transparent; /* Hacer el texto transparente al hacer hover */
+}
+
+.buttonGoToPlan:hover::after {
+  transform: translateY(-50%) translateX(-50px); /* Mueve el ícono hacia la izquierda al hacer hover */
+}
+
+.buttonGoToPlan:active {
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 0px #3200e7;
+}
+
+#inviteUsers {
+  margin: 60px auto 0 auto; /* Center horizontally */
+  align-self: center;
+  border-bottom: 1px solid white;
+  overflow: visible;
+  min-width: 200px; /* Set a minimum width */
+  width: auto; /* Allow the width to adapt to the content */
+  text-align: center; /* Optional: Center text inside the element */
+  display: inline-block; /* Shrink to fit content */
+  padding: 0 20px; /* Add horizontal padding to extend the border */
 }

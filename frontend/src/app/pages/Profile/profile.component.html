@@ -1,0 +1,54 @@
+<div class="profile-card" style="margin-top: 52px;">
+  <h2>User Profile</h2>
+
+  <form [formGroup]="profileForm" (ngSubmit)="updateUserProfile()">
+
+    <div class="form1-group">
+      <label for="realName" style="font-weight: bold;">Username:</label>
+      <p> {{ activeUser.name }} </p>
+    </div>
+
+    
+    <div class="form1-group">
+      <label for="realName" style="font-weight: bold;">Name:</label>
+      <p *ngIf="!isEditing"> {{ userProfile?.realName }} </p>
+      <input *ngIf="isEditing" id="realName" type="text" formControlName="realName" placeholder="Enter your name" />
+      <div *ngIf="profileForm.get('realName')?.invalid && profileForm.get('realName')?.touched" class="error">
+        <p *ngIf="profileForm.get('realName')?.errors?.['required']">Name is required</p>
+        <p *ngIf="profileForm.get('realName')?.errors?.['minlength']">Name must be at least 3 characters</p>
+      </div>
+    </div>
+
+    <div class="form1-group">
+      <label for="email" style="font-weight: bold;">Email:</label>
+      <p *ngIf="!isEditing"> {{ userProfile?.email }} </p>
+      <input *ngIf="isEditing" id="email" type="email" formControlName="email" placeholder="Enter your email" />
+      <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="error">
+        <p *ngIf="profileForm.get('email')?.errors?.['required']">Email is required</p>
+        <p *ngIf="profileForm.get('email')?.errors?.['email']">Email is invalid</p>
+      </div>
+    </div>
+
+    <div *ngIf="isEditing">
+      <!-- Quitar el click aquí, solo usamos ngSubmit en el form -->
+      <button class="buttonCreate" [disabled]="profileForm.invalid" type="submit">Save Changes</button>
+      <button type="button" class="buttonDelete m-4" (click)="cancelEdit()">Cancel</button>
+    </div>
+  </form>
+
+  <div *ngIf="!isEditing">
+    <button class="buttonCreate" (click)="enableEdit()">Edit Profile</button>
+  </div>
+
+  <h3 id="associatedPlans">Associated Strategic Plans</h3>
+  <ul style="width: 100%; align-items: center; display: flex; flex-direction: column;" *ngIf="userProfile && strategicPlans.length > 0">
+    <li style="width: 80%;" *ngFor="let plan of strategicPlans">
+      <p style="font-weight: bold;">{{ plan.name }}</p> ({{ plan.startDate | date:'dd/MM/yyyy' }} - {{ plan.endDate | date:'dd/MM/yyyy' }})
+    </li>
+  </ul>
+  <ng-template #noPlans>
+    <p>You are not assigned to any strategic plans yet.</p>
+  </ng-template>
+
+  <button (click)="navigateStrategicPlans()">Strategic Plans</button>
+</div>

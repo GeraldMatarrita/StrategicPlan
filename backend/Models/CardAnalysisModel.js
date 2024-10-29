@@ -17,5 +17,5 @@ const validateCardAnalysis =(data)=>{
 
 const cardAnalysis= mongoose.model("cardAnalysis", cardsAnalysisSchema);
 
-// Exportación del modelo y la función de validación
+// Export the model and validation function
 module.exports = {cardAnalysis, validateCardAnalysis };

@@ -20,7 +20,6 @@ export class ObjectivesService {
     return this.http.post<any>(url, data);
   }
 
-
   /**
    * @param url to delete data
    * @param data data to delete
@@ -32,13 +31,13 @@ export class ObjectivesService {
   }
 
   // --------------------------------------------
-  // Métodos para la API
+  // Methods for the API
   // --------------------------------------------
 
   /**
-   * función para obtener los objetivos por planId
-   * @param planId del plan a obtener
-   * @returns promesa con los objetivos
+   * function to obtain the objectives by planId
+   * @param planId of the plan to obtain
+   * @returns promise with the objectives
    */
   getObjectivesByPlanId(planId: string): Observable<any> {
     return this.http.get<any>(
@@ -53,10 +52,10 @@ export class ObjectivesService {
   }
 
   /**
-   * función para crear un Objetivo
-   * @param data datos del objetivo a enviar
-   * @param planId id del plan al que pertenece el objetivo
-   * @returns promesa con el mensaje de respuesta
+   * function to create an Objective
+   * @param data data of the objective to send
+   * @param planId id of the plan to which the objective belongs
+   * @returns promise with the response message
    */
   createObjective(data: any, planId: string): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -68,7 +67,7 @@ export class ObjectivesService {
           resolve(response.message);
         },
         (error: any) => {
-          console.error('Error al enviar los datos:', error);
+          console.error('Error sending data:', error);
           reject(error);
         }
       );
@@ -82,7 +81,7 @@ export class ObjectivesService {
           resolve(response.message);
         },
         (error: any) => {
-          console.error('Error al eliminar el objetivo:', error);
+          console.error('Error deleting the objective:', error);
           reject(error);
         }
       );
@@ -97,7 +96,7 @@ export class ObjectivesService {
           resolve(response.message);
         },
         (error: any) => {
-          console.error('Error al actualizar el objetivo:', error);
+          console.error('Error updating the objective:', error);
           reject(error);
         }
       );

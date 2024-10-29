@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const { cardAnalysis, validateCardAnalysis } = require("../Models/cardAnalysis");
-const CAME = require("../Models/came"); // Import the CAME model
+const { cardAnalysis, validateCardAnalysis } = require("../Models/CardAnalysisModel");
+const CAME = require("../Models/CameModel"); // Import the CAME model
 const { StrategicPlan } = require("../Models/StrategicPlanModel"); // Import the StrategicPlanModel
 
 // Add Card Analysis to "Correct" in CAME

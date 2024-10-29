@@ -2,7 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
-const { User: UserModel, validateUser } = require("../Models/UserModel"); // Import the User model
+const { User: UserModel, validateUser, User } = require("../Models/UserModel"); // Import the User model
 
 // Configure nodemailer
 const transporter = nodemailer.createTransport({
@@ -182,6 +182,64 @@ router.post("/create", async (req, res) => {
     });
   }
 });
+/**
+ * Function to update a user
+ * @param req.body - User data to update
+ * @param req.params - ID of user
+ * @returns {Object} - Confirmation message
+ * @throws {Object} - Error message
+ */
+router.put("/update/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { realName, email } = req.body;
+
+    // Check that both name and email are provided
+    if (!realName || !email) {
+      return res.status(400).json({
+        message: "Name and email are required.",
+      });
+    }
+
+    // Find the user by ID
+    const user = await UserModel.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    // Check if the email is being changed
+    if (user.email !== email) {
+      // Check if another user already has this email
+      const otherUser = await UserModel.findOne({ email });
+      if (otherUser) {
+        return res.status(409).json({
+          message: "Another user already has this email",
+        });
+      }
+    }
+
+    // Update the user fields
+    user.realName = realName;
+    user.email = email;
+    
+    // Save the updated user
+    await user.save();
+
+    res.status(200).json({
+      message: "User updated successfully",
+      user, // Return the updated user
+    });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({
+      message: "Failed to update user",
+      error: error.message,
+    });
+  }
+});
+
 
 /**
  * Function to log in to the application

@@ -163,4 +163,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
   navigateToAuth() {
     this.router.navigate([NAVIGATIONS_ROUTES.AUTH]);
   }
+
+  navigateToProfile() {
+    this.router.navigate([NAVIGATIONS_ROUTES.PROFILE]);
+  }
 }

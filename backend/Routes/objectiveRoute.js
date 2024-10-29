@@ -13,7 +13,10 @@ router.get("/getObjective/:objectiveId", async (req, res) => {
   try {
     const { objectiveId } = req.params;
 
-    const objective = await ObjectiveModel.findById(objectiveId);
+    const objective = await ObjectiveModel.findById(objectiveId).populate(
+      "responsible"
+    );
+
     if (!objective) {
       return res.status(404).json({
         message: "Objective not found.",
@@ -30,16 +33,16 @@ router.get("/getObjective/:objectiveId", async (req, res) => {
 });
 
 /**
- * función que trae todos los objetivos de un plan estratégico
- * @param {String} planId - ID del plan estratégico
- * @returns {Object} - Lista de objetivos
- * @throws {Object} - Mensaje de error
+ * Function that retrieves all objectives of a strategic plan
+ * @param {String} planId - ID of the strategic plan
+ * @returns {Object} - List of objectives
+ * @throws {Object} - Error message
  */
 router.get("/getPlanObjectives/:planId", async (req, res) => {
   try {
     const { planId } = req.params;
 
-    // Buscar el plan estratégico
+    // Search for the strategic plan
     const strategicPlan = await StrategicPlan.findById(planId);
     if (!strategicPlan) {
       return res.status(404).json({
@@ -47,10 +50,10 @@ router.get("/getPlanObjectives/:planId", async (req, res) => {
       });
     }
 
-    // Buscar los objetivos del plan estratégico
+    // Search for the objectives of the strategic plan
     const objectives = await ObjectiveModel.find({
       _id: { $in: strategicPlan.objective_ListIDS },
-    });
+    }).populate("responsible");
 
     res.status(200).json(objectives);
   } catch (error) {
@@ -62,11 +65,11 @@ router.get("/getPlanObjectives/:planId", async (req, res) => {
 });
 
 /**
- * función que crea un nuevo objetivo
+ * Function that creates a new objective
  * @param {Object} req - Request object
- * @param {Object} planId - ID del plan estratégico del plan
- * @returns {Object} - Mensaje de éxito o error
- * @throws {Object} - Mensaje de error
+ * @param {Object} planId - ID of the strategic plan
+ * @returns {Object} - Success or error message
+ * @throws {Object} - Error message
  */
 router.post("/create/:planId", async (req, res) => {
   try {
@@ -74,12 +77,12 @@ router.post("/create/:planId", async (req, res) => {
     if (error) {
       return res
         .status(400)
-        .json({ message: error.details[0].message || "Datos inválidos" });
+        .json({ message: error.details[0].message || "Invalid Data" });
     }
 
     const { planId } = req.params;
 
-    // Buscar el plan estratégico
+    // Search for the strategic plan
     const strategicPlan = await StrategicPlan.findById(planId);
     if (!strategicPlan) {
       return res.status(404).json({
@@ -87,11 +90,11 @@ router.post("/create/:planId", async (req, res) => {
       });
     }
 
-    // Crear un nuevo objetivo
+    // Create a new objective
     const newObjective = new ObjectiveModel(req.body);
     await newObjective.save();
 
-    // Agregar el objetivo al plan estratégico
+    // Add the objective to the strategic plan
     await StrategicPlan.updateOne(
       { _id: planId },
       { $push: { objective_ListIDS: newObjective._id } }
@@ -109,24 +112,17 @@ router.post("/create/:planId", async (req, res) => {
 });
 
 /**
- * función que actualiza un objetivo
+ * Function that updates an objective
  * @param {Object} req - Request object
- * @param {String} objectiveId - ID del objetivo
- * @returns {Object} - Mensaje de éxito o error
- * @throws {Object} - Mensaje de error
+ * @param {String} objectiveId - ID of the objective
+ * @returns {Object} - Success or error message
+ * @throws {Object} - Error message
  */
 router.put("/update/:objectiveId", async (req, res) => {
   try {
-    const { error } = validateObjective(req.body);
-    if (error) {
-      return res
-        .status(400)
-        .json({ message: error.details[0].message || "Datos inválidos" });
-    }
-
     const { objectiveId } = req.params;
 
-    // Buscar el objetivo
+    // Search for the objective
     const objective = await ObjectiveModel.findById(objectiveId);
     if (!objective) {
       return res.status(404).json({
@@ -134,7 +130,7 @@ router.put("/update/:objectiveId", async (req, res) => {
       });
     }
 
-    // Actualizar el objetivo
+    // Update the objective
     await ObjectiveModel.updateOne({ _id: objectiveId }, req.body);
 
     res.status(200).json({
@@ -149,16 +145,16 @@ router.put("/update/:objectiveId", async (req, res) => {
 });
 
 /**
- * función que elimina un objetivo
- * @param {String} objectiveId - ID del objetivo
- * @returns {Object} - Mensaje de éxito o error
- * @throws {Object} - Mensaje de error
+ * Function that deletes an objective
+ * @param {String} objectiveId - ID of the objective
+ * @returns {Object} - Success or error message
+ * @throws {Object} - Error message
  */
-router.delete('/delete/:id', async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Busca y elimina el objetivo por su ID
+    // Find and delete the objective by its ID
     const deletedObjective = await ObjectiveModel.findByIdAndDelete(id);
 
     if (!deletedObjective) {

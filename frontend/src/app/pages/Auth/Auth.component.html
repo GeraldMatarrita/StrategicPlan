@@ -1,4 +1,4 @@
-<div class="LoginStyle">
+<div class="LoginStyle" style="margin-top: 52px;">
   <!-- --------------- Para registrarse --------------- -->
   <div *ngIf="regiterActive" class="form1-card">
     <form [formGroup]="registerForm" (ngSubmit)="sendData()" class="form1">
@@ -20,6 +20,25 @@
         >
           <p *ngIf="registerForm?.get('name')?.errors?.['required']">
             Name is required
+          </p>
+        </div>
+      </div><div class="form1-group">
+        <label for="realName">Full Name</label>
+        <input
+          id="realName"
+          type="text"
+          formControlName="realName"
+          placeholder="Write your full name"
+        />
+        <div
+          *ngIf="
+            registerForm?.get('realName')?.invalid &&
+            registerForm?.get('realName')?.touched
+          "
+          class="error"
+        >
+          <p *ngIf="registerForm?.get('realName')?.errors?.['required']">
+            A full name is required
           </p>
         </div>
       </div>

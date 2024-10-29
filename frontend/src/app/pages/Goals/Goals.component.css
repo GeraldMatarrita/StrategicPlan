@@ -126,7 +126,6 @@
   cursor: pointer;
 }
 
-
 .card-container {
   display: flex; /* Organiza los elementos hijos en una fila */
   background-color: var(--gray_middle_dark);
@@ -292,8 +291,6 @@ progress[value^="1"] {
 .value {
   font-size: 0.95em;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Número de líneas antes de truncar */
-  line-clamp: 3; /* Número de líneas antes de truncar */
   -webkit-box-orient: vertical;
   overflow: visible;
 }
@@ -309,4 +306,14 @@ progress[value^="1"] {
   text-overflow: ellipsis;      /* Agregar puntos suspensivos si el texto es demasiado largo (opcional) */
   flex: 15;
   padding-right: 80px;
+}
+
+#progressTitle {
+  color: white;
+  left: 3px;
+  width: 80%;
+}
+
+.btn-container {
+  width: 95%;
 }
