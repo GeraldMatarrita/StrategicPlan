@@ -3,8 +3,8 @@ const nodemailer = require("nodemailer");
 const {
   StrategicPlan,
   validateStrategicPlan,
-} = require("../Models/StrategicPlanModel"); // Importa el modelo StrategicPlanModel
-const { User, validateUser } = require("../Models/UserModel"); // Ajusta la ruta según la ubicación de tu archivo de modelo
+} = require("../Models/StrategicPlanModel"); // Import the StrategicPlanModel
+const { User, validateUser } = require("../Models/UserModel"); // Adjust the path according to your model file location
 
 // Configure nodemailer
 const transporter = nodemailer.createTransport({
@@ -17,10 +17,10 @@ const transporter = nodemailer.createTransport({
 });
 
 /**
- * función que obtiene las invitaciones de un usuario por su ID
- * @param {String} userId - ID del usuario
- * @returns {Object} - Lista de invitaciones
- * @throws {Object} - Mensaje de error
+ * Function that retrieves a user's invitations by their ID
+ * @param {String} userId - User ID
+ * @returns {Object} - List of invitations
+ * @throws {Object} - Error message
  */
 router.get("/UserInvitations/:userId", async (req, res) => {
   const { userId } = req.params;
@@ -31,7 +31,7 @@ router.get("/UserInvitations/:userId", async (req, res) => {
   }
 
   try {
-    // Verificar si el usuario existe
+    // Check if the user exists
     const user = await User.findById(userId).populate("invitations");
 
     if (!user) {
@@ -40,26 +40,26 @@ router.get("/UserInvitations/:userId", async (req, res) => {
       });
     }
 
-    // Crear un nuevo array para almacenar las invitaciones actualizadas
+    // Create a new array to store updated invitations
     const response = [];
 
     for (let i = 0; i < user.invitations.length; i++) {
-      // Encuentra el plan asociado a la invitación
+      // Find the plan associated with the invitation
       const plan = await StrategicPlan.findById(user.invitations[i].planId);
 
-      // Crear una nueva invitación con la propiedad planName agregada
+      // Create a new invitation with the added planName property
       if (plan) {
         const updatedInvitation = {
-          ...user.invitations[i]._doc, // Copia todas las propiedades existentes de la invitación
-          planName: plan.name, // Agrega la nueva propiedad planName
+          ...user.invitations[i]._doc, // Copy all existing properties from the invitation
+          planName: plan.name, // Add the new planName property
         };
 
-        // Agregar la invitación actualizada al array de respuestas
+        // Add the updated invitation to the response array
         response.push(updatedInvitation);
       }
     }
 
-    // Enviar la respuesta con las invitaciones actualizadas
+    // Send the response with updated invitations
     res.status(200).json({
       invitations: response,
     });
@@ -72,10 +72,10 @@ router.get("/UserInvitations/:userId", async (req, res) => {
 });
 
 /**
- * Función que obtiene la cantidad de invitaciones pendientes para un usuario por su ID
- * @param {String} userId - ID del usuario
- * @returns {Object} - Cantidad de invitaciones pendientes
- * @throws {Object} - Mensaje de error
+ * Function that gets the count of pending invitations for a user by their ID
+ * @param {String} userId - User ID
+ * @returns {Object} - Count of pending invitations
+ * @throws {Object} - Error message
  */
 router.get("/pendingCount/:userId", async (req, res) => {
   const { userId } = req.params;
@@ -86,7 +86,7 @@ router.get("/pendingCount/:userId", async (req, res) => {
   }
 
   try {
-    // Verificar si el usuario existe
+    // Check if the user exists
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
@@ -94,12 +94,12 @@ router.get("/pendingCount/:userId", async (req, res) => {
       });
     }
 
-    // Contar las invitaciones pendientes
+    // Count pending invitations
     const pendingCount = user.invitations.filter(
       (invitation) => invitation.status === "pending"
     ).length;
 
-    // Enviar la respuesta con la cantidad de invitaciones pendientes
+    // Send the response with the count of pending invitations
     res.status(200).json({
       pendingCount,
     });
@@ -112,16 +112,14 @@ router.get("/pendingCount/:userId", async (req, res) => {
 });
 
 /**
- * funcion para obtener los usuarios que no esten en la lista de miembros de un plan estratégico
- * @param {String} planId - ID del plan estratégico
- * @returns {Object} - Lista de usuarios que no están en el plan
- * @throws {Object} - Mensaje de error
+ * Function to get users who are not in the member list of a strategic plan
+ * @param {String} planId - Strategic plan ID
+ * @returns {Object} - List of users not in the plan
+ * @throws {Object} - Error message
  */
 router.get("/getUsersNotInPlan/:planId", async (req, res) => {
-  // Extraer planId de los parámetros de la solicitud
   const { planId } = req.params;
 
-  // Verificar que el planId esté presente
   if (!planId) {
     return res.status(400).json({
       message: "Plan ID is required.",
@@ -129,7 +127,7 @@ router.get("/getUsersNotInPlan/:planId", async (req, res) => {
   }
 
   try {
-    // Buscar si el plan estratégico existe
+    // Check if the strategic plan exists
     const plan = await StrategicPlan.findById(planId);
     if (!plan) {
       return res.status(404).json({
@@ -137,11 +135,10 @@ router.get("/getUsersNotInPlan/:planId", async (req, res) => {
       });
     }
 
-    // Obtener todos los usuarios
+    // Get all users
     const users = await User.find();
 
-    // Filtrar los usuarios que no están en la lista de miembros del plan
-    // y que no tienen una invitación pendiente o aceptada para el plan
+    // Filter users who are not in the plan's member list and do not have a pending or accepted invitation
     const response = users.filter((user) => {
       const isMember = plan.members_ListIDS.some(
         (member) => member._id.toString() === user._id.toString()
@@ -156,13 +153,12 @@ router.get("/getUsersNotInPlan/:planId", async (req, res) => {
       return !isMember && !hasInvitation;
     });
 
-    // Devolver la lista de usuarios que no están en el plan
+    // Return the list of users not in the plan
     return res.status(200).json({
       users: response,
       message: "OK.",
     });
   } catch (error) {
-    // Manejo de errores
     console.error("Error getting users:", error);
     return res.status(500).json({
       message: "Internal Server Error",
@@ -171,11 +167,11 @@ router.get("/getUsersNotInPlan/:planId", async (req, res) => {
 });
 
 /**
- * función que crea una nueva invitación a un usuario por su ID la invitación se crea con el estado de pendiente al planId recibido
- * @param {String} userId - ID del usuario al que se invita
- * @param {String} planId - ID del plan estratégico al que se invita al usuario
- * @returns {Object} - Mensaje de confirmación
- * @throws {Object} - Mensaje de error
+ * Function that creates a new invitation for a user by their ID with a pending status to the received planId
+ * @param {String} userId - User ID to be invited
+ * @param {String} planId - Strategic plan ID to which the user is invited
+ * @returns {Object} - Confirmation message
+ * @throws {Object} - Error message
  */
 router.post("/create", async (req, res) => {
   const { userId, planId } = req.body;
@@ -187,7 +183,7 @@ router.post("/create", async (req, res) => {
   }
 
   try {
-    // Verificar si el usuario existe
+    // Check if the user exists
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
@@ -195,7 +191,7 @@ router.post("/create", async (req, res) => {
       });
     }
 
-    // Verificar si el plan existe
+    // Check if the plan exists
     const plan = await StrategicPlan.findById(planId);
     if (!plan) {
       return res.status(404).json({
@@ -203,7 +199,7 @@ router.post("/create", async (req, res) => {
       });
     }
 
-    // Verificar si ya existe una invitación pendiente para este plan
+    // Check if a pending invitation already exists for this plan
     const existingInvitation = user.invitations.find(
       (inv) =>
         inv.planId.toString() === planId &&
@@ -215,7 +211,7 @@ router.post("/create", async (req, res) => {
       });
     }
 
-    // Añadir la invitación
+    // Add the invitation
     user.invitations.push({
       planId,
       status: "pending",
@@ -223,7 +219,7 @@ router.post("/create", async (req, res) => {
 
     await user.save();
 
-    // URL de la invitación (diferente entre DEV y PROD)
+    // Invitation URL (different between DEV and PROD)
     const invitationUrl =
       process.env.TARGET === "DEV"
         ? process.env.INVITATION_DEV_URL
@@ -235,11 +231,11 @@ router.post("/create", async (req, res) => {
           <p>You have been invited to join the strategic plan: <strong>${plan.name}</strong></p>
           <p>Click the button below to view and manage your invitations:</p>
           <a href="${invitationUrl}" style="background-color: #28a745; color: #fff; padding: 10px 15px; text-decoration: none; border-radius: 5px;">View Invitations</a>
-          <p style="margin-top: 20px;">Remember that you must to be logged to see your invitations.</p>
+          <p style="margin-top: 20px;">Remember that you must be logged in to see your invitations.</p>
         </div>
       `;
 
-    // Opciones del correo
+    // Mail options
     const mailOptions = {
       from: process.env.SMTP_USER,
       to: user.email,
@@ -247,7 +243,7 @@ router.post("/create", async (req, res) => {
       html: emailContent,
     };
 
-    // Enviar el correo
+    // Send the email
     await transporter.sendMail(mailOptions);
 
     res.status(200).json({
@@ -262,24 +258,24 @@ router.post("/create", async (req, res) => {
 });
 
 /**
- * función que responde a una invitación con el estado de aceptado o rechazado tomando el userId, planId y decision
- * @param {String} userId - ID del usuario que responde a la invitación
- * @param {String} planId - ID del plan estratégico al que se responde la invitación
- * @param {Boolean} decision - Decisión del usuario, true para aceptar, false para rechazar
- * @returns {Object} - Mensaje de confirmación
- * @throws {Object} - Mensaje de error
+ * Function that responds to an invitation with an accepted or declined status, using userId, planId, and decision
+ * @param {String} userId - ID of the user responding to the invitation
+ * @param {String} planId - ID of the strategic plan the invitation responds to
+ * @param {Boolean} decision - User's decision, true to accept, false to decline
+ * @returns {Object} - Confirmation message
+ * @throws {Object} - Error message
  */
 router.post("/response", async (req, res) => {
   const { userId, planId, decision } = req.body;
 
   if (!userId || !planId || decision === undefined) {
     return res.status(400).json({
-      message: "User ID, desicion and Plan ID are required.",
+      message: "User ID, decision, and Plan ID are required.",
     });
   }
 
   try {
-    // Verificar si el usuario existe
+    // Verify if the user exists
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
@@ -287,7 +283,7 @@ router.post("/response", async (req, res) => {
       });
     }
 
-    // Verificar si el plan existe
+    // Verify if the plan exists
     const plan = await StrategicPlan.findById(planId);
     if (!plan) {
       return res.status(404).json({
@@ -295,7 +291,7 @@ router.post("/response", async (req, res) => {
       });
     }
 
-    // Verificar si existe una invitación pendiente para este plan
+    // Check if there is a pending invitation for this plan
     const invitationIndex = user.invitations.findIndex(
       (inv) => inv.planId.toString() === planId && inv.status === "pending"
     );
@@ -305,20 +301,20 @@ router.post("/response", async (req, res) => {
       });
     }
 
-    // Actualizar el estado de la invitación
+    // Update the invitation status
     user.invitations[invitationIndex].status = decision
       ? "accepted"
       : "declined";
 
     if (decision) {
-      // Solo agregamos el plan si la decisión es aceptada
+      // Only add the plan if the decision is accepted
       if (!user.strategicPlans_ListIDS.includes(planId)) {
         user.strategicPlans_ListIDS.push(planId);
       }
       if (!plan.members_ListIDS.includes(userId)) {
         plan.members_ListIDS.push(userId);
       }
-      // Guardar los cambios en el plan
+      // Save the changes in the plan
       await plan.save();
     }
     const messageStatus = decision
@@ -343,7 +339,7 @@ router.post("/response", async (req, res) => {
       const user = await User.findById(userId);
       if (!user) return res.status(404).send("User not found");
 
-      // Filtrar las invitaciones del usuario y eliminar la del plan
+      // Filter the user's invitations and delete the one for the plan
       user.invitations = user.invitations.filter(
         (inv) => inv.planId.toString() !== planId.toString()
       );

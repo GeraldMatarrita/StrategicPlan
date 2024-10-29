@@ -16,17 +16,17 @@ const strategicPlanSchema = new mongoose.Schema(
     CAME : {type:mongoose.Schema.Types.ObjectId,ref: "CAME"},
     members_ListIDS:[{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     objective_ListIDS: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Objective" }, // Referencia directa
+      { type: mongoose.Schema.Types.ObjectId, ref: "Objective" },
     ],
     operationPlan_ListIDS: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "OperationPlan" }, // Referencia directa
+      { type: mongoose.Schema.Types.ObjectId, ref: "OperationPlan" },
     ],
   },
   { strict: "throw" }
 );
 
 
-// Función de validación de datos de planes estratégicos
+// Function to validate strategic plan data
 const validateStrategicPlan = (data) => {
   const schema = Joi.object({
     mission: Joi.string().min(10).max(1000).optional().label("Mission"),
@@ -53,8 +53,8 @@ const validateStrategicPlan = (data) => {
   return schema.validate(data);
 };
 
-// Definición del modelo de planes estratégicos
+// Definition of the StrategicPlan model
 const StrategicPlan = mongoose.model("StrategicPlan", strategicPlanSchema);
 
-// Exportación del modelo y la función de validación
+// Exporting the model and the validation function
 module.exports = { StrategicPlan, validateStrategicPlan };

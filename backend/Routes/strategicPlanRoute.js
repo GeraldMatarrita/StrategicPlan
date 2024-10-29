@@ -7,8 +7,8 @@ const {
 } = require("../Models/StrategicPlanModel"); // Imports the StrategicPlanModel
 const { User, validateUser } = require("../Models/UserModel"); // Adjust the path based on your model file location
 
-const SWOT = require("../Models/swot");
-const CAME = require("../Models/came");
+const SWOT = require("../Models/SwotModel");
+const CAME = require("../Models/CameModel");
 
 /**
  * Function that retrieves all strategic plans
