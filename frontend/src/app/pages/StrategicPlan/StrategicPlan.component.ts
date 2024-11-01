@@ -56,14 +56,19 @@ export class StrategicPlanComponent implements OnInit {
   async loadData(): Promise<void> {
     try {
       this.activeUserID = await this.authService.getActiveUserID();
-  
+
       // Get the list of user's plans
-      const userPlans = await this.strategicPlanService.getActivePlans(this.activeUserID).toPromise();
-  
+      const userPlans = await this.strategicPlanService
+        .getActivePlans(this.activeUserID)
+        .toPromise();
+
       if (userPlans && userPlans.length > 0) {
         // Check if a PlanID is stored in localStorage
         const storedPlanId = localStorage.getItem('PlanID');
-        if (storedPlanId && userPlans.some(plan => plan._id === storedPlanId)) {
+        if (
+          storedPlanId &&
+          userPlans.some((plan) => plan._id === storedPlanId)
+        ) {
           // If there's a valid stored PlanID, load the corresponding plan
           this.currentPlanId = storedPlanId;
           this.loadObjectives();
@@ -81,7 +86,7 @@ export class StrategicPlanComponent implements OnInit {
       console.error('Error loading data:', error);
     }
   }
-  
+
   /**
    * Method to send the form data
    */
@@ -115,6 +120,11 @@ export class StrategicPlanComponent implements OnInit {
   loadPlanById(planId: string): void {
     this.strategicPlanService.getPlanByID(planId).subscribe(
       (data: any) => {
+        if (data.endDate) {
+          const endDate = new Date(data.endDate);
+          data.endDate = endDate.toISOString().split('T')[0];
+        }
+
         this.strategicPlanData = [
           {
             id: data._id,
@@ -127,9 +137,11 @@ export class StrategicPlanComponent implements OnInit {
           },
         ];
 
+        // Asigna los datos al formulario
+        this.formStrategicPlan.patchValue(data);
+
         // Assign members_ListIDS data to members as an array of objects
         if (Array.isArray(data.members_ListIDS)) {
-          console.log(data.members_ListIDS);
           this.members = data.members_ListIDS.map((member: any) => ({
             id: member._id,
             name: member.name,
@@ -171,8 +183,7 @@ export class StrategicPlanComponent implements OnInit {
       this.loadPlanById(this.currentPlanId);
       this.setFormVisibility();
     } catch (error) {
-      this.responseMessage =
-        (error as any).error?.message || 'Unknown error';
+      this.responseMessage = (error as any).error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -187,14 +198,13 @@ export class StrategicPlanComponent implements OnInit {
    * @returns promise with the response message
    */
   async outPlan(planID: string): Promise<void> {
-
     try {
       const result = await Swal.fire({
         title: 'Are you sure?',
         text: 'You are about to leave this plan, this action cannot be undone.',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes, I\'m sure',
+        confirmButtonText: "Yes, I'm sure",
         cancelButtonColor: '#f52d0a',
       });
       if (result.isConfirmed) {
@@ -212,8 +222,7 @@ export class StrategicPlanComponent implements OnInit {
         this.navigateToSelectPlan();
       }
     } catch (error) {
-      this.responseMessage =
-        (error as any).error?.message || 'Unknown error';
+      this.responseMessage = (error as any).error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -260,8 +269,8 @@ export class StrategicPlanComponent implements OnInit {
   navigateToInvitations(): void {
     // Check if there is a PlanID in localStorage
     const selectedPlanId = localStorage.getItem('PlanID') || '';
-    localStorage.setItem("planToInvite", selectedPlanId);
-    
+    localStorage.setItem('planToInvite', selectedPlanId);
+
     if (selectedPlanId) {
       // Redirect to the invitations page
       this.router.navigate([NAVIGATIONS_ROUTES.INVITATIONS]);

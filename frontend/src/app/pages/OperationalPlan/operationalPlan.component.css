@@ -2,7 +2,7 @@
   display: block;
 }
 
-.ObjectiveStyle {
+.OperationalPlanStyle {
   padding: 0px 0px 50px 0px; /* top right bottom left */
   color: var(--text_color);
   margin-top: 52px;
@@ -14,7 +14,7 @@
   overflow: visible;
 }
 
-.objectiveMenu {
+.operationalPlanMenu {
   display: flex;
   justify-content: space-between; /* Centrar planTitle horizontalmente */
   align-items: center; /* Alinear verticalmente */
@@ -28,35 +28,36 @@
     var(--color1_blue) 100%
   );
 }
-.objectiveMenu p {
+
+#form1-group-title {
+    margin-right: 140px;
+}
+
+#strategicPlan {
+  width: 180px;
+}
+
+#selectGroup {
+  display: flex;
+  align-items: center;
+}
+
+.operationalPlanMenu p {
   margin: 0;
   padding: 0;
   color: white;
 }
 
-#planTitle, #selectPlan {
+#planTitle2,
+#selectPlan {
   font-size: 1.5em;
   font-weight: bold;
   text-align: center;
   flex: 15;
 }
 
-#planTitle {
-  padding-right: 62px;
-}
-
 #selectPlan {
   margin-right: 560px;
-}
-
-.selectGroup {
-  margin-left: 10px;
-  width: 200px;
-  align-items: center;
-}
-
-.selectgroup label{
-  padding-left: 0px;
 }
 
 .buttonAdd {
@@ -64,8 +65,9 @@
 }
 
 /* ----------------------------------------------------- */
-/* botones  */
+/* botones */
 /* ----------------------------------------------------- */
+
 .btnCancel {
   max-width: 200px;
   padding: 10px;
@@ -79,23 +81,39 @@
   background-color: black;
   color: white;
 }
+
 /* ----------------------------------------------------- */
-/* card perzonalizada para objetivos */
+/* card personalizada para planes operacionales */
 /* ----------------------------------------------------- */
 
-/* Contenedor que organiza las tarjetas en fila */
 .card-container {
   display: flex; /* Organiza los elementos hijos en una fila */
   background-color: var(--gray_middle_dark);
   flex-wrap: wrap; /* Permite que los elementos salten a la siguiente línea si no caben en una fila */
-  gap: 25px; /* Espacio entre las tarjetas */
+  gap: 40px; /* Espacio entre las tarjetas */
 }
 
-/* Estilo para cada tarjeta */
-.card-Objective-container {
+.titleContainer {
+  justify-content: space-between; 
+  align-items: center; 
+  display: flex;
+  padding: 8px 0;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--color2_purple);
+}
+
+#my-custom-container {
+  width: 70%;
+}
+
+.card-OperationalPlan-container {
   margin: 5px; /* Espacio entre las tarjetas */
-  flex-basis: calc(50% - 25px); /* Ajuste para que ocupen la mitad del ancho menos el espacio del gap */
-  max-width: calc(50% - 25px); /* Limita el ancho máximo para evitar desbordes */
+  flex-basis: calc(
+    40% - 25px
+  ); /* Ajuste para que ocupen la mitad del ancho menos el espacio del gap */
+  max-width: calc(
+    40% - 25px
+  ); /* Limita el ancho máximo para evitar desbordes */
   height: auto; /* Deja que la altura se ajuste automáticamente */
   background-image: linear-gradient(
     163deg,
@@ -106,15 +124,14 @@
   display: flex;
 }
 
-.card-Objective-container:hover {
+.card-OperationalPlan-container:hover {
   transform: scale(1.05);
   transition: transform 0.5s;
 }
 
-/* Estilo para el contenido dentro de la tarjeta */
-.card-Objective {
-  width: 100%; /* Asegúrate de que ocupe todo el ancho del contenedor padre */
-  height: auto; /* Ajusta la altura según el contenido */
+.card-OperationalPlan {
+  width: 100%;
+  height: auto;
   padding: 1em 2em 2em 2em;
   background-color: var(--gray_middle_dark);
   border-radius: 30px;
@@ -131,8 +148,7 @@
 
 .title {
   font-size: 1.2em;
-  padding: 10px;
-  border-bottom: 1px solid var(--color2_purple);
+  padding: 5px auto 5px 0px;
   font-weight: bold;
 }
 
@@ -161,8 +177,8 @@
   -webkit-box-orient: vertical;
 
   overflow: hidden;
-  text-overflow: ellipsis; /* Muestra puntos suspensivos */
-  word-break: break-word; /* Evita que palabras largas se desborden */
+  text-overflow: ellipsis;
+  word-break: break-word;
 }
 
 .startDate {
@@ -207,15 +223,9 @@
   align-items: center;
 }
 
-
-.info-objective {
+.info-operationalPlan {
   position: absolute;
   left: 10%;
-}
-
-#btn-container {
-  gap: 10px; /* Espacio entre los botones */
-  margin: 0; /* Ajusta los márgenes si es necesario */
 }
 
 #p-description {
@@ -230,7 +240,7 @@
   -webkit-box-orient: vertical;
 
   overflow: visible;
-  word-break: break-word; /* Evita que palabras largas se desborden */
+  word-break: break-word;
 }
 
 #see-title {
@@ -244,6 +254,10 @@
 
 #form1-see {
   padding: 0 3em 3em 3em;
+}
+
+#btn-container {
+  margin: 0;
 }
 
 .btn-exit {
@@ -266,4 +280,3 @@
   cursor: pointer;
   color: var(--text_color);
 }
-

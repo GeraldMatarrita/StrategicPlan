@@ -19,7 +19,7 @@ const strategicPlanSchema = new mongoose.Schema(
       { type: mongoose.Schema.Types.ObjectId, ref: "Objective" },
     ],
     operationPlan_ListIDS: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "OperationPlan" },
+      { type: mongoose.Schema.Types.ObjectId, ref: "OperationalPlan" },
     ],
   },
   { strict: "throw" }

@@ -10,4 +10,5 @@ export const NAVIGATIONS_ROUTES = {
   OBJECTIVE: '/Objectives',
   GOALS: '/Goals',
   PROFILE:'/Profile',
+  OPERATIONAL: '/OperationalPlan',
 };

@@ -142,14 +142,6 @@ router.post("/create/:objectiveId", async (req, res) => {
  */
 router.put("/update/:goalId", async (req, res) => {
   try {
-    // Validate goal data to be updated
-    const { error } = validateGoal(req.body);
-    if (error) {
-      return res
-        .status(400)
-        .json({ message: error.details[0].message || "Invalid data" });
-    }
-
     const { goalId } = req.params;
 
     // Find the goal by its ID

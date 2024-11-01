@@ -21,15 +21,6 @@
   font-weight: bold;
 }
 
-.buttonDelete {
-  background-color: #e74c3c;
-}
-
-.buttonDelete:hover {
-  background-color: black;
-  color: white;
-}
-
 .form-group input {
   width: 100%;
   padding: 10px;
@@ -43,15 +34,6 @@
   font-size: 12px;
 }
 
-button {
-  background-color: #9900ff;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
-}
 .input {
   background-color: #fff;
   color: #000000;

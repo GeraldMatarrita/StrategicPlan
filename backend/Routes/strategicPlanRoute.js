@@ -41,7 +41,7 @@ router.get("/ById/:id", async (req, res) => {
     const { id } = req.params; // Get the ID from the URL parameter
     const strategicPlan = await StrategicPlan.findById(id).populate(
       "members_ListIDS"
-    );
+    ).populate("operationPlan_ListIDS");
 
     if (!strategicPlan) {
       return res

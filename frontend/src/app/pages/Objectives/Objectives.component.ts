@@ -104,12 +104,14 @@ export class ObjectivesComponent implements OnInit {
     }
   }
 
-  onPlanChange(): void {
+  async onPlanChange(): Promise<void> {
     this.loadObjectives(); // Load the objectives of the selected plan
     localStorage.setItem('PlanID', this.currentPlanId); // Update the PlanID in localStorage
     this.currentPlan = this.plansData.find(
       (plan) => plan._id === this.currentPlanId
     );
+    await this.loadStrategicPlan();
+    console.log('Current Plan:', this.currentPlan);
   }
 
   async loadStrategicPlan(): Promise<void> {

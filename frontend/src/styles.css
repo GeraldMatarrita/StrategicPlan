@@ -15,6 +15,11 @@ button:active {
   --color1_blue: #3700ff;
   --color2_purple: #9900ff;
   --color3_pink: #ff00ff;
+  --color4_red: #f44336;
+
+  --color1_blue_hover: rgb(62, 0, 207);
+  --color2_purple_hover: #8900e4;
+  --color4_red_hover: #c42c2a;
 
   --gray_low_dark: #171717;
   --gray_middle_dark: #121212;
@@ -96,7 +101,7 @@ button:active {
 }
 
 .buttonCreate:hover, #inviteButton:hover {
-  background-color: black;
+  background-color: var(--color1_blue_hover);
   color: white;
   cursor: pointer;
 }
@@ -113,11 +118,11 @@ button:active {
   border-radius: 10px;
   width: auto;
   color: white;
-  background-color: rgb(245, 45, 10);
+  background-color: var(--color4_red);
 }
 
 .buttonDelete:hover {
-  background-color: black;
+  background-color: var(--color4_red_hover);
   color: white;
 }
 
@@ -126,7 +131,7 @@ button:active {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: rgb(245, 45, 10);
+  background-color: var(--color4_red);
   border: none;
   font-weight: 600;
   display: inline-flex;
@@ -152,7 +157,7 @@ button:active {
   width: 90px;
   border-radius: 50px;
   transition-duration: 0.3s;
-  background-color: rgb(245, 45, 10);
+  background-color: var(--color4_red_hover);
   align-items: center;
 }
 
@@ -427,7 +432,7 @@ button:active {
 }
 
 .buttonCancelReset {
-  background-color: #e74c3c !important;
+  background-color: var(--color4_red) !important;
   color: #fff !important;
   border: none !important;
   padding: 8px 20px !important;
@@ -752,7 +757,6 @@ button:active {
 .selectGroup label {
   color: white;
   font-size: 0.8em;
-  margin-left: 25px; /* Espaciado entre el label y el select */
   margin-bottom: 0; /* Alinear con el select */
   white-space: nowrap; /* Evita que el texto del label se divida en varias líneas */
 }
@@ -813,6 +817,45 @@ button:active {
   overflow: visible; /* Control de overflow si es necesario */
 }
 
+/* ----------------------------------------------------- */
+/* editing*/
+/* ----------------------------------------------------- */
+
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* pointer-events: none; Permitir clics a través del fondo */
+  z-index: 1000; /*No Permitir clics a través del fondo */
+}
+
+.modal-content {
+  padding: 2rem;
+  border-radius: 10px;
+  position: relative;
+  width: 90%;
+  max-width: 500px;
+  pointer-events: auto;
+}
+
+.modal-content h2 {
+  margin: 20px 0 8px 0;
+  font-size: 2em;
+}
+
+.modal-content h3 {
+  color: white;
+  font-size: 1.1em;
+  font-weight: bolder;
+  margin-bottom: 0;
+}
+
 .btn-container {
   display: flex;
   justify-content: center;
@@ -845,11 +888,11 @@ button:active {
 }
 
 .btn-delete {
-  background-color: #f44336; /* Rojo */
+  background-color: var(--color4_red); /* Rojo */
 }
 
 .btn-delete:hover {
-  background-color: #d43230; /* Rojo más oscuro al pasar el mouse */
+  background-color: var(--color4_red_hover); /* Rojo más oscuro al pasar el mouse */
 }
 
 /* Ícono de editar */
@@ -888,11 +931,11 @@ button:active {
 }
 
 .btn-delete {
-  background-color: #f44336; /* Rojo */
+  background-color: var(--color4_red); /* Rojo */
 }
 
 .btn-delete:hover {
-  background-color: #d43230; /* Rojo más oscuro al pasar el mouse */
+  background-color: var(--color4_red_hover); /* Rojo más oscuro al pasar el mouse */
 }
 
 .btn-goals {
@@ -904,11 +947,11 @@ button:active {
 }
 
 .btn-exit {
-  background-color: #f44336;
+  background-color: var(--color4_red);
 }
 
 .btn-exit:hover {
-  background-color: #d43230;
+  background-color: var(--color4_red_hover);
 }
 
 .btn-edit::before,

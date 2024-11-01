@@ -12,7 +12,14 @@
         </option>
       </select>
     </div>
-    <p *ngIf="currentPlan" id="planTitle">{{ currentPlan?.name }}</p>
+    <div class="form1-group">
+      <label
+        style="margin-right: 80px; color: white; font-size: 1.5em"
+        for="objectiveTitle"
+        >Objectives for Plan:</label
+      >
+      <p *ngIf="currentPlan" id="planTitle">{{ currentPlan?.name }}</p>
+    </div>
     <p *ngIf="!currentPlan.name" id="selectPlan">Select a Strategic Plan</p>
     <button class="buttonAdd m-3" (click)="onClickAddObjective()">
       Add an Objective
@@ -29,7 +36,7 @@
           class="card-Objective-container"
         >
           <div class="card-Objective">
-            <div class="btn-container">
+            <div id="btn-container" class="btn-container">
               <button
                 class="btn-edit"
                 title="Edit"
@@ -164,7 +171,7 @@
               <h2>Objective</h2>
 
               <div class="form1-group">
-                <label for="title">Title:</label>
+                <h3 for="title">Title:</h3>
                 <input
                   type="text"
                   id="title"
@@ -190,7 +197,7 @@
               </div>
 
               <div class="form1-group">
-                <label for="description">Description:</label>
+                <h3 for="description">Description:</h3>
                 <textarea
                   placeholder="Description"
                   type="text"

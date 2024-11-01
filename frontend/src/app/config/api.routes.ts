@@ -80,6 +80,17 @@ export const API_ROUTES = {
   Update_Goal: '/goals/update', // PUT
   Delete_Goal: '/goals/delete', // DELETE + "/GoalId"
 
+
+  // -------------------------------------------------------------
+  // Para los Planes Operativos - Operational Plan
+  // -------------------------------------------------------------
+
+  Get_Active_OperationalPlan: '/operationalPlan/active', // GET 
+  Get_OperationalPlans: '/operationalPlan/getOperationalPlans', // GET 
+  Create_OperationalPlan: '/operationalPlan/create', // POST + /StrategicPlanId
+  Inactivate_OperationalPlan: '/operationalPlan/inactivate', // PUT
+  Update_OperationalPlan: '/operationalPlan/update', // PUT
+
   // --------------------------------------------------------------------------------
   // --------------------------------------------------------------------------------
   // al finalizar borrar esta ya que es solo de pruebas

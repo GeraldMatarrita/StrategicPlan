@@ -61,4 +61,8 @@ export class SideNavComponent {
     this.toggleSidenav();
     this.router.navigate([NAVIGATIONS_ROUTES.NOT_FOUND]);
   }
+  navigateToOperational() {
+    this.toggleSidenav();
+    this.router.navigate([NAVIGATIONS_ROUTES.OPERATIONAL]);
+  }
 }

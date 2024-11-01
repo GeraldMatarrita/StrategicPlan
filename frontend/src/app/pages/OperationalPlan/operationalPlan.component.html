@@ -1,0 +1,184 @@
+<div class="OperationalPlanStyle">
+  <div class="operationalPlanMenu">
+    <div id="selectGroup" class="selectGroup">
+      <label id="selectLabel" for="strategicPlan"
+        >Select a Strategic Plan:</label
+      >
+      <select
+        id="strategicPlan"
+        [(ngModel)]="selectedStrategicPlanId"
+        (change)="loadOperationalPlans(selectedStrategicPlanId)"
+      >
+        <option *ngFor="let plan of strategicPlans" [value]="plan._id">
+          {{ plan.name }}
+        </option>
+      </select>
+    </div>
+    <div id="form1-group-title" class="form1-group">
+      <label
+        *ngIf="selectedStrategicPlanId"
+        [ngStyle]="{
+          'margin-left': activePlanExists ? '0px' : '125px',
+          'margin-right': activePlanExists ? '80px' : '0px',
+          color: 'white',
+          'font-size': '1.5em'
+        }"
+        for="objectiveTitle"
+      >
+        Operational Plans for Strategic Plan:
+      </label>
+      <p
+        *ngIf="selectedStrategicPlanId"
+        id="planTitle2"
+        [ngStyle]="{
+          'margin-left': activePlanExists ? '0px' : '125px',
+          'margin-right': activePlanExists ? '80px' : '0px',
+        }"
+      >
+        {{ selectedStrategicPlan?.name }}
+      </p>
+      <p style="margin-left: 125px" *ngIf="!selectedStrategicPlanId" id="planTitle2">
+        Select a Strategic Plan
+      </p>
+    </div>
+    <div style="min-width: 40px; height: 40px">
+      <button
+        *ngIf="!activePlanExists"
+        class="buttonAdd m-3"
+        (click)="openCreateForm()"
+      >
+        Add Operational Plan
+      </button>
+    </div>
+  </div>
+
+  <div id="my-custom-container" class="my-custom-container">
+    <div *ngIf="operationalPlans.length > 0">
+      <div class="card-container">
+        <div
+          *ngFor="let plan of operationalPlans.slice().reverse()"
+          class="card-OperationalPlan-container"
+        >
+          <div class="card-OperationalPlan">
+            <div class="titleContainer">
+              <span class="title">{{ plan.title }}</span>
+              <div id="btn-container" class="btn-container">
+                <button
+                  class="btn-edit"
+                  title="Edit"
+                  (click)="openEditForm(plan)"
+                ></button>
+                <button
+                  class="btn-goals"
+                  title="View Goals"
+                  (click)="redirectToGoals(plan._id)"
+                ></button>
+              </div>
+            </div>
+            <div class="content-wrapper">
+              <div class="value-container">
+                <span
+                  [ngStyle]="{
+                    'font-size': plan.active ? '1.2em' : '1.1em',
+                    color: plan.active ? 'green' : 'red'
+                  }"
+                >
+                  {{ plan.active ? "Active" : "Inactive" }}
+                </span>
+                <span class="startDate"
+                  >Start Date: {{ plan.startDate | date : "dd/MM/yyyy" }}</span
+                >
+                <span class="responsible"
+                  >End Date: {{ plan.endDate | date : "dd/MM/yyyy" }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="showModal" class="modal-background">
+      <div class="modal-content">
+        <div class="form1-card">
+          <div>
+            <form
+              [formGroup]="formOperationalPlan"
+              (submit)="
+                isEditing ? updateOperationalPlan() : createOperationalPlan()
+              "
+              class="form1"
+            >
+              <h2>{{ isEditing ? "Edit" : "Create" }} Operational Plan</h2>
+
+              <div class="form1-group">
+                <h3>Title:</h3>
+                <input
+                  type="text"
+                  id="title"
+                  placeholder="Title"
+                  formControlName="title"
+                />
+                <div
+                  *ngIf="
+                    formOperationalPlan.get('title')?.invalid &&
+                    (formOperationalPlan.get('title')?.dirty ||
+                      formOperationalPlan.get('title')?.touched)
+                  "
+                  class="error"
+                >
+                  <p
+                    *ngIf="formOperationalPlan.get('title')?.errors?.['required']"
+                  >
+                    Title is required.
+                  </p>
+                </div>
+              </div>
+
+              <div class="form1-group">
+                <h3>End Date:</h3>
+                <input
+                  type="date"
+                  id="endDate"
+                  formControlName="endDate"
+                  placeholder="End Date"
+                />
+                <div
+                  *ngIf="
+                    formOperationalPlan.get('endDate')?.invalid &&
+                    (formOperationalPlan.get('endDate')?.dirty ||
+                      formOperationalPlan.get('endDate')?.touched)
+                  "
+                  class="error"
+                >
+                  <p
+                    *ngIf="formOperationalPlan.get('endDate')?.errors?.['required']"
+                  >
+                    End Date is required.
+                  </p>
+                </div>
+              </div>
+
+              <div class="badInfo" *ngIf="!formOperationalPlan.valid">
+                <p>Not ready to send</p>
+              </div>
+
+              <div>
+                <button type="submit" class="buttonCreate m-3">
+                  {{ isEditing ? "Update" : "Create" }}
+                </button>
+                <button
+                  type="button"
+                  class="buttonDelete m-3"
+                  (click)="toogleShowModal()"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

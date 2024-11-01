@@ -30,7 +30,7 @@ if (process.env.TARGET === "DEV") {
       }
     },
     optionsSuccessStatus: 204, // Devolver un código de éxito 204
-    methods: "GET, POST, PUT, DELETE", // Permitir estos métodos HTTP
+    methods: "GET, POST, PUT, DELETE, PATCH", // Permitir estos métodos HTTP
     credentials: true, // Permite enviar cookies de forma segura
   };
 
@@ -71,6 +71,15 @@ app.use("/api/swotAnalysis",SwotAnalysis)
 
 const CardAnalysis = require("./Routes/cardAnalysisRoute")
 app.use("/api/cardAnalysis",CardAnalysis)
+
+const Activities = require("./Routes/activityRoute");
+app.use("/api/activities", Activities); 
+
+const Indicators = require("./Routes/indicatorRoute");
+app.use("/api/indicators", Indicators);
+
+const OperationalPlan = require("./Routes/operationalRoute");
+app.use("/api/operationalPlan", OperationalPlan);
 
 // ---------------------------------------------------------------------
 // Servir archivos estáticos del frontend solo después de las rutas del backend
@@ -145,6 +154,16 @@ app.listen(port, () => console.log(`Listening on port ${port}...`));
 
 // const CardAnalysis = require("./Routes/cardAnalysisRoute")
 // app.use("/api/cardAnalysis",CardAnalysis)
+
+// const Activities = require("./Routes/activityRoute");
+// app.use("/api/activities", Activities); 
+
+// const Indicators = require("./Routes/indicatorRoute");
+// app.use("/api/indicators", Indicators);
+
+// const OperationalPlan = require("./Routes/operationalRoute");
+// app.use("/api/operationalPlan", OperationalPlan);
+
 // // --------------------------------------------------------------------------------
 // // --------------------------------------------------------------------------------
 // // al finalizar borrar esta ya que es solo de pruebas

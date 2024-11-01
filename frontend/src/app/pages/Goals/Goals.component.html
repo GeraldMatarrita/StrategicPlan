@@ -1,7 +1,7 @@
 <div class="goalsStyle">
   <div class="goalsMenu">
     <div class="bothSelects">
-      <div class="selectGroup">
+      <div class="selectGroup" id="selectGroup">
         <label for="strategicPlan">Select a Strategic Plan:</label>
         <select
           id="strategicPlan"
@@ -57,7 +57,7 @@
             </div>
           </div>
           <div class="right-section">
-            <div class="btn-container">
+            <div id="btn-container" class="btn-container">
               <h6 id="progressTitle">Progress</h6>
               <button
                 class="btn-edit" style="position: absolute; margin-right: 35px;"
@@ -128,7 +128,7 @@
             <div>
               <h2>Goal</h2>
               <div class="form1-group">
-                <label for="objectiveIdSelectedForm">Objective</label>
+                <h3 for="objectiveIdSelectedForm">Objective</h3>
                 <!-- <select
                     formControlName="objectiveIdSelectedForm"
                     id="objectiveIdSelectedForm"
@@ -140,11 +140,11 @@
                       {{ objective.title }}
                     </option>
                   </select> -->
-                <label style="margin: 5px"> {{ currentObjective.title }}</label>
+                <label> {{ currentObjective.title }}</label>
               </div>
 
               <div class="form1-group">
-                <label for="description">Description</label>
+                <h3 for="description">Description</h3>
                 <textarea
                   placeholder="Description"
                   type="text"
