@@ -23,10 +23,10 @@ const transporter = nodemailer.createTransport({
  * @throws {Object} - Error message
  */
 router.get("/UserInvitations/:userId", async (req, res) => {
-  const { userId } = req.params;
+  const { userId } = req.params; // Get the user ID from the request parameters
   if (!userId) {
     return res.status(400).json({
-      message: "User ID is required.",
+      message: "User ID is required.", // Return an error if the user ID is missing
     });
   }
 
@@ -36,7 +36,7 @@ router.get("/UserInvitations/:userId", async (req, res) => {
 
     if (!user) {
       return res.status(404).json({
-        message: "User not found.",
+        message: "User not found.", // Return an error if the user is not found
       });
     }
 
@@ -66,7 +66,7 @@ router.get("/UserInvitations/:userId", async (req, res) => {
   } catch (error) {
     console.error("Error getting invitations:", error);
     res.status(500).json({
-      message: "Internal Server Error",
+      message: "Internal Server Error", // Handle server error
     });
   }
 });
@@ -78,10 +78,10 @@ router.get("/UserInvitations/:userId", async (req, res) => {
  * @throws {Object} - Error message
  */
 router.get("/pendingCount/:userId", async (req, res) => {
-  const { userId } = req.params;
+  const { userId } = req.params; // Get the user ID from the request parameters
   if (!userId) {
     return res.status(400).json({
-      message: "User ID is required.",
+      message: "User ID is required.", // Return an error if the user ID is missing
     });
   }
 
@@ -90,7 +90,7 @@ router.get("/pendingCount/:userId", async (req, res) => {
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
-        message: "User not found.",
+        message: "User not found.", // Return an error if the user is not found
       });
     }
 
@@ -104,9 +104,9 @@ router.get("/pendingCount/:userId", async (req, res) => {
       pendingCount,
     });
   } catch (error) {
-    console.error("Error getting pending invitations count:", error);
+    console.error("Error getting pending invitations count:", error); 
     res.status(500).json({
-      message: "Internal Server Error",
+      message: "Internal Server Error", // Handle server error
     });
   }
 });
@@ -118,11 +118,12 @@ router.get("/pendingCount/:userId", async (req, res) => {
  * @throws {Object} - Error message
  */
 router.get("/getUsersNotInPlan/:planId", async (req, res) => {
-  const { planId } = req.params;
+
+  const { planId } = req.params; // Get the plan ID from the request parameters
 
   if (!planId) {
     return res.status(400).json({
-      message: "Plan ID is required.",
+      message: "Plan ID is required.", // Return an error if the plan ID is missing
     });
   }
 
@@ -144,13 +145,14 @@ router.get("/getUsersNotInPlan/:planId", async (req, res) => {
         (member) => member._id.toString() === user._id.toString()
       );
 
+      // Check if the user has a pending or accepted invitation for the plan
       const hasInvitation = user.invitations.some(
         (invitation) =>
           invitation.planId.toString() === planId &&
           (invitation.status === "pending" || invitation.status === "accepted")
       );
 
-      return !isMember && !hasInvitation;
+      return !isMember && !hasInvitation; // Return users who are not in the plan and do not have an invitation
     });
 
     // Return the list of users not in the plan
@@ -161,7 +163,7 @@ router.get("/getUsersNotInPlan/:planId", async (req, res) => {
   } catch (error) {
     console.error("Error getting users:", error);
     return res.status(500).json({
-      message: "Internal Server Error",
+      message: "Internal Server Error", // Handle server error
     });
   }
 });
@@ -174,11 +176,12 @@ router.get("/getUsersNotInPlan/:planId", async (req, res) => {
  * @throws {Object} - Error message
  */
 router.post("/create", async (req, res) => {
-  const { userId, planId } = req.body;
+
+  const { userId, planId } = req.body; // Get the user ID and plan ID from the request body
 
   if (!userId || !planId) {
     return res.status(400).json({
-      message: "User ID and Plan ID are required.",
+      message: "User ID and Plan ID are required.", // Return an error if the user ID or plan ID is missing
     });
   }
 
@@ -187,7 +190,7 @@ router.post("/create", async (req, res) => {
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
-        message: "User not found.",
+        message: "User not found.", // Return an error if the user is not found
       });
     }
 
@@ -195,7 +198,7 @@ router.post("/create", async (req, res) => {
     const plan = await StrategicPlan.findById(planId);
     if (!plan) {
       return res.status(404).json({
-        message: "Strategic plan not found.",
+        message: "Strategic plan not found.", // Return an error if the plan is not found
       });
     }
 
@@ -205,6 +208,8 @@ router.post("/create", async (req, res) => {
         inv.planId.toString() === planId &&
         (inv.status === "pending" || inv.status === "accepted")
     );
+
+    // If an invitation already exists, return an error
     if (existingInvitation) {
       return res.status(400).json({
         message: "Invitation already exists.",
@@ -217,7 +222,7 @@ router.post("/create", async (req, res) => {
       status: "pending",
     });
 
-    await user.save();
+    await user.save(); // Save the user with the new invitation
 
     // Invitation URL (different between DEV and PROD)
     const invitationUrl =
@@ -225,6 +230,7 @@ router.post("/create", async (req, res) => {
         ? process.env.INVITATION_DEV_URL
         : process.env.INVITATION_PROD_URL;
 
+    // Email content with invitation details
     const emailContent = `
         <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; border-radius: 5px;">
           <h2 style="color: #333;">New Strategic Plan Invitation</h2>
@@ -247,10 +253,10 @@ router.post("/create", async (req, res) => {
     await transporter.sendMail(mailOptions);
 
     res.status(200).json({
-      message: "Invitation added successfully.",
+      message: "Invitation added successfully.", // Return a success message
     });
   } catch (error) {
-    console.error("Error adding invitation:", error);
+    console.error("Error adding invitation:", error); // Log the error to the console
     res.status(500).json({
       message: "Internal Server Error",
     });
@@ -266,11 +272,11 @@ router.post("/create", async (req, res) => {
  * @throws {Object} - Error message
  */
 router.post("/response", async (req, res) => {
-  const { userId, planId, decision } = req.body;
+  const { userId, planId, decision } = req.body; // Get the user ID, plan ID, and decision from the request body
 
   if (!userId || !planId || decision === undefined) {
     return res.status(400).json({
-      message: "User ID, decision, and Plan ID are required.",
+      message: "User ID, decision, and Plan ID are required.", // Return an error if the user ID, plan ID, or decision is missing
     });
   }
 
@@ -279,7 +285,7 @@ router.post("/response", async (req, res) => {
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
-        message: "User not found.",
+        message: "User not found.", // Return an error if the user is not found
       });
     }
 
@@ -287,7 +293,7 @@ router.post("/response", async (req, res) => {
     const plan = await StrategicPlan.findById(planId);
     if (!plan) {
       return res.status(404).json({
-        message: "Strategic plan not found.",
+        message: "Strategic plan not found.", // Return an error if the plan is not
       });
     }
 
@@ -295,6 +301,8 @@ router.post("/response", async (req, res) => {
     const invitationIndex = user.invitations.findIndex(
       (inv) => inv.planId.toString() === planId && inv.status === "pending"
     );
+
+    // If the invitation is not found or is not pending, return an error
     if (invitationIndex === -1) {
       return res.status(400).json({
         message: "Invitation not found or not pending.",
@@ -311,6 +319,7 @@ router.post("/response", async (req, res) => {
       if (!user.strategicPlans_ListIDS.includes(planId)) {
         user.strategicPlans_ListIDS.push(planId);
       }
+      // Only add the user if the decision is accepted
       if (!plan.members_ListIDS.includes(userId)) {
         plan.members_ListIDS.push(userId);
       }
@@ -319,37 +328,46 @@ router.post("/response", async (req, res) => {
     }
     const messageStatus = decision
       ? "Invitation accepted successfully."
-      : "Invitation declined successfully.";
+      : "Invitation declined successfully."; // Return a success message
 
-    await user.save();
+    await user.save(); // Save the user with the updated invitation status
 
     res.status(200).json({
-      message: messageStatus,
+      message: messageStatus, // Return a success message
     });
   } catch (error) {
     console.error("Error accepting invitation:", error);
     res.status(500).json({
-      message: "Internal Server Error",
+      message: "Internal Server Error", // Handle server error
     });
   }
 
+  /**
+   * Function to delete an invitation for a user by their ID and plan ID
+   * @param {String} userId - User ID
+   * @param {String} planId - Plan ID
+   * @returns {Object} - Confirmation message
+   * @throws {Object} - Error message
+   */
   router.delete("/deleteInvitation/:userId/:planId", async (req, res) => {
-    const { userId, planId } = req.params;
+
+    const { userId, planId } = req.params; // Get the user ID and plan ID from the request parameters
     try {
-      const user = await User.findById(userId);
-      if (!user) return res.status(404).send("User not found");
+      const user = await User.findById(userId); // Find the user by ID
+      if (!user) return res.status(404).send("User not found"); // If no user is found, return an error
 
       // Filter the user's invitations and delete the one for the plan
       user.invitations = user.invitations.filter(
         (inv) => inv.planId.toString() !== planId.toString()
       );
 
-      await user.save();
-      res.status(200).json({ message: "Invitation deleted successfully" });
+      await user.save(); // Save the user with the updated invitations
+      res.status(200).json({ message: "Invitation deleted successfully" }); // Send a success message
     } catch (err) {
-      res.status(500).send("Error deleting invitation");
+      res.status(500).send("Error deleting invitation"); // Handle server error
     }
   });
 });
 
+// Export the router
 module.exports = router;

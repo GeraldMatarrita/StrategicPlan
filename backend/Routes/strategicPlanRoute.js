@@ -17,15 +17,16 @@ const CAME = require("../Models/CameModel");
  */
 router.get("/AllStrategicPlans", async (req, res) => {
   try {
+    // Find all strategic plans
     const strategicPlans = await StrategicPlan.find();
-    res.json(strategicPlans);
+    res.json(strategicPlans); // Return the list of strategic plans
   } catch (error) {
     console.error(
       "Error querying the StrategicPlanModel collection in MongoDB:",
       error
     );
     res.status(500).json({
-      error: "Error querying the StrategicPlanModel collection in MongoDB",
+      error: "Error querying the StrategicPlanModel collection in MongoDB", // Handle server error
     });
   }
 });
@@ -39,14 +40,14 @@ router.get("/AllStrategicPlans", async (req, res) => {
 router.get("/ById/:id", async (req, res) => {
   try {
     const { id } = req.params; // Get the ID from the URL parameter
-    const strategicPlan = await StrategicPlan.findById(id).populate(
+    const strategicPlan = await StrategicPlan.findById(id).populate( // Find the strategic plan by ID and populate the members and operationPlan_ListIDS fields
       "members_ListIDS"
     ).populate("operationPlan_ListIDS");
 
     if (!strategicPlan) {
       return res
         .status(404)
-        .json({ message: "StrategicPlanModel not found" });
+        .json({ message: "StrategicPlanModel not found" }); // If no strategic plan is found, return an error
     }
     res.json(strategicPlan);
   } catch (error) {
@@ -55,7 +56,7 @@ router.get("/ById/:id", async (req, res) => {
       error
     );
     res.status(500).json({
-      message: "Error querying the StrategicPlanModel collection in MongoDB",
+      message: "Error querying the StrategicPlanModel collection in MongoDB", // Handle server error
     });
   }
 });
@@ -68,17 +69,17 @@ router.get("/ById/:id", async (req, res) => {
  */
 router.get("/ByUserID/:userId", async (req, res) => {
   try {
-    const { userId } = req.params;
-    const user = await User.findById(userId).populate("strategicPlans_ListIDS");
+    const { userId } = req.params; // Get the user ID from the URL parameter
+    const user = await User.findById(userId).populate("strategicPlans_ListIDS"); // Find the user by ID and populate the strategicPlans_ListIDS field
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" }); // If no user is found, return an error
     }
     res.json(user.strategicPlans_ListIDS);
   } catch (error) {
-    console.error("Error querying the user's plans:", error);
+    console.error("Error querying the user's plans:", error); 
     res
       .status(500)
-      .json({ message: "Error querying the user's plans" });
+      .json({ message: "Error querying the user's plans" }); // Handle server error
   }
 });
 
@@ -90,23 +91,23 @@ router.get("/ByUserID/:userId", async (req, res) => {
  */
 router.get("/active/:userId", async (req, res) => {
   try {
-    const { userId } = req.params;
-    const currentDate = new Date();
+    const { userId } = req.params; // Get the user ID from the URL parameter
+    const currentDate = new Date(); // Get the current date
 
     // Find the user and get the IDs of their strategic plans
     const user = await User.findById(userId).populate("strategicPlans_ListIDS");
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" }); // If no user is found, return an error
     }
 
     // Filter active plans based on the current date
-    const activePlans = await StrategicPlan.find({
+    const activePlans = await StrategicPlan.find({ // Find the active plans based on the user's strategicPlans_ListIDS, start date, and end date
       _id: { $in: user.strategicPlans_ListIDS },
       startDate: { $lte: currentDate },
       endDate: { $gte: currentDate },
     });
 
-    res.json(activePlans);
+    res.json(activePlans); // Return the list of active plans
   } catch (error) {
     console.error("Error querying the user's active plans:", error);
     res.status(500).json({
@@ -123,22 +124,22 @@ router.get("/active/:userId", async (req, res) => {
  */
 router.get("/finished/:userId", async (req, res) => {
   try {
-    const { userId } = req.params;
-    const currentDate = new Date();
+    const { userId } = req.params; // Get the user ID from the URL parameter
+    const currentDate = new Date(); // Get the current date
 
     // Find the user and get the IDs of their strategic plans
-    const user = await User.findById(userId).populate("strategicPlans_ListIDS");
+    const user = await User.findById(userId).populate("strategicPlans_ListIDS"); // Find the user by ID and populate the strategicPlans_ListIDS field
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" }); // If no user is found, return an error
     }
 
-    // Filter completed plans based on the current date
-    const finishedPlans = await StrategicPlan.find({
+    // Filter completed plans based on the current date 
+    const finishedPlans = await StrategicPlan.find({ // Find the completed plans based on the user's strategicPlans_ListIDS and end date
       _id: { $in: user.strategicPlans_ListIDS },
       endDate: { $lt: currentDate },
     });
 
-    res.json(finishedPlans);
+    res.json(finishedPlans); // Return the list of completed plans
   } catch (error) {
     console.error(
       "Error querying the user's completed plans:",
@@ -231,6 +232,7 @@ router.post("/create/:userId", async (req, res) => {
     // Create a new strategic plan with empty SWOT and CAME
     const newStrategicPlan = new StrategicPlan(req.body);
     
+    // Create a new SWOT and CAME
     const newSWOT = new SWOT({
         strengths: [],
         weaknesses: [],
@@ -244,11 +246,11 @@ router.post("/create/:userId", async (req, res) => {
         explore: []
     });
     
-    await newSWOT.save();
-    await newCAME.save();
-    newStrategicPlan.SWOT = newSWOT._id;
-    newStrategicPlan.CAME = newCAME._id;
-    await newStrategicPlan.save();
+    await newSWOT.save(); // Save the SWOT
+    await newCAME.save(); // Save the CAME
+    newStrategicPlan.SWOT = newSWOT._id; // Associate the SWOT and CAME with the strategic plan
+    newStrategicPlan.CAME = newCAME._id; // Associate the SWOT and CAME with the strategic plan
+    await newStrategicPlan.save(); // Save the strategic plan
 
     // Associate the plan with the user
     await User.updateOne(
@@ -283,27 +285,25 @@ router.post("/create/:userId", async (req, res) => {
  */
 router.put("/updateObjectives/:id", async (req, res) => {
   try {
-    // Extraer el ID de los objetivos desde el cuerpo de la solicitud
-    const { objective_ListIDS } = req.body;
+    const { objective_ListIDS } = req.body; // Get the objective list IDs from the request body
 
-    // Verificar que se pasen los IDs correctos
-    if (!Array.isArray(objective_ListIDS) || objective_ListIDS.length === 0) {
-      return res.status(400).json({ message: "Objective List IDs must be provided" });
+    if (!Array.isArray(objective_ListIDS) || objective_ListIDS.length === 0) { // Check if the objective list IDs are provided
+      return res.status(400).json({ message: "Objective List IDs must be provided" }); // If not, return an error
     }
 
-    // Actualizar solo el campo objective_ListIDS
-    const updatedStrategicPlan = await StrategicPlan.findByIdAndUpdate(
+    
+    const updatedStrategicPlan = await StrategicPlan.findByIdAndUpdate( // Find the strategic plan by ID and update the objective list IDs
       req.params.id,
-      { objective_ListIDS }, // Solo actualizar objective_ListIDS
+      { objective_ListIDS }, 
       { new: true, runValidators: true }
     );
 
     if (!updatedStrategicPlan) {
-      return res.status(404).json({ message: "StrategicPlanModel not found" });
+      return res.status(404).json({ message: "StrategicPlanModel not found" }); // If no strategic plan is found, return an error
     }
 
     res.json({
-      message: "Strategic Plan successfully updated",
+      message: "Strategic Plan successfully updated", // Return a success message
       data: updatedStrategicPlan,
     });
   } catch (error) {
@@ -313,33 +313,40 @@ router.put("/updateObjectives/:id", async (req, res) => {
     );
     res.status(500).json({
       message:
-        "Error updating the entry in the StrategicPlan collection in MongoDB",
+        "Error updating the entry in the StrategicPlan collection in MongoDB", // Handle server error
     });
   }
 });
 
+/**
+ * Function that updates a strategic plan by its ID
+ * @param {String} id - ID of the strategic plan
+ * @param req.body) data to update the strategic plan
+ * @returns {Object} - Confirmation message
+ * @throws {Object} - Error message
+ */
 router.put("/update/:id", async (req, res) => {
   try {
-    const { error } = validateStrategicPlan(req.body);
+    const { error } = validateStrategicPlan(req.body); // Validate the request body
     if (error)
       return res
         .status(400)
-        .json({ message: error.details[0].message || "Invalid data" });
+        .json({ message: error.details[0].message || "Invalid data" }); // If validation fails, return an error
 
-    const updatedStrategicPlan = await StrategicPlan.findByIdAndUpdate(
+    const updatedStrategicPlan = await StrategicPlan.findByIdAndUpdate( // Find the strategic plan by ID and update it with the new data
       req.params.id,
       req.body,
       { new: true, runValidators: true }
     );
 
-    if (!updatedStrategicPlan) {
+    if (!updatedStrategicPlan) { // If no strategic plan is found, return an error
       return res
         .status(404)
         .json({ message: "Strategic Plan not found" });
     }
 
     res.json({
-      message: "Strategic Plan updated successfully",
+      message: "Strategic Plan updated successfully", // Return a success message
       data: updatedStrategicPlan,
     });
   } catch (error) {
@@ -349,9 +356,11 @@ router.put("/update/:id", async (req, res) => {
     );
     res.status(500).json({
       message:
-        "Error updating the entry in the StrategicPlanModel collection in MongoDB",
+        "Error updating the entry in the StrategicPlanModel collection in MongoDB", // Handle server error
     });
   }
 });
 
+
+// Export the router
 module.exports = router;

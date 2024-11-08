@@ -184,7 +184,7 @@ export class ActivityComponent implements OnInit {
               })
               .then(() => {
                 Swal.fire(
-                  'Éxito',
+                  'Success',
                   'Activity and Indicator created successfully',
                   'success'
                 );

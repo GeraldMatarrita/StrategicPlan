@@ -32,11 +32,11 @@ router.get("/getObjectiveGoals/:objectiveId", async (req, res) => {
       _id: { $in: objective.goals_ListIDS },
     }).populate("Activity_ListIDS");
 
-    res.status(200).json(goals);
+    res.status(200).json(goals); // Return the list of goals
   } catch (error) {
-    console.error("Error getting objective goals:", error);
+    console.error("Error getting objective goals:", error); 
     res.status(500).json({
-      message: "Internal Server Error",
+      message: "Internal Server Error", // Handle server error
     });
   }
 });
@@ -72,11 +72,11 @@ router.get("/getPlanGoals/:planId", async (req, res) => {
       _id: { $in: goalIds },
     });
 
-    res.status(200).json(goals);
+    res.status(200).json(goals); // Return the list of goals
   } catch (error) {
     console.error("Error getting plan goals:", error);
     res.status(500).json({
-      message: "Internal Server Error",
+      message: "Internal Server Error", // Handle server error
     });
   }
 });
@@ -90,20 +90,20 @@ router.get("/getPlanGoals/:planId", async (req, res) => {
  */
 router.post("/create/:objectiveId", async (req, res) => {
   try {
-    const { error } = validateGoal(req.body);
+    const { error } = validateGoal(req.body); // Validate the goal data
     if (error) {
       return res
         .status(400)
-        .json({ message: error.details[0].message || "Invalid data" });
+        .json({ message: error.details[0].message || "Invalid data" }); // If validation fails, return an error
     }
 
-    const { objectiveId } = req.params;
+    const { objectiveId } = req.params; // Get the objective ID from the request parameters
 
     // Find the objective
-    const objective = await ObjectiveModel.findById(objectiveId);
+    const objective = await ObjectiveModel.findById(objectiveId); // Find the objective by ID
     if (!objective) {
       return res.status(404).json({
-        message: "Objective not found.",
+        message: "Objective not found.", // If no objective is found, return an error
       });
     }
 
@@ -123,12 +123,12 @@ router.post("/create/:objectiveId", async (req, res) => {
     await objective.save();
 
     res.status(201).json({
-      message: "Goal created successfully.",
+      message: "Goal created successfully.", // Return a success message
     });
   } catch (error) {
     console.error("Error creating goal:", error);
     res.status(500).json({
-      message: "Internal Server Error",
+      message: "Internal Server Error", // Handle server
     });
   }
 });
@@ -141,7 +141,7 @@ router.post("/create/:objectiveId", async (req, res) => {
  */
 router.put("/update/:goalId", async (req, res) => {
   try {
-    const { goalId } = req.params;
+    const { goalId } = req.params; // Get the goal ID from the request parameters
 
     // Find the goal by its ID
     const goal = await Goal.findById(goalId);
@@ -178,12 +178,12 @@ router.put("/update/:goalId", async (req, res) => {
     }
 
     res.status(200).json({
-      message: "Goal updated successfully.",
+      message: "Goal updated successfully.", // Return a success message
     });
   } catch (error) {
     console.error("Error updating goal:", error);
     res.status(500).json({
-      message: "Internal Server Error",
+      message: "Internal Server Error", // Handle server error
     });
   }
 });
@@ -196,20 +196,21 @@ router.put("/update/:goalId", async (req, res) => {
  */
 router.delete("/delete/:goalId", async (req, res) => {
   try {
-    const { goalId } = req.params;
+    const { goalId } = req.params; // Get the goal ID from the request parameters
 
     // Delete the goal from the system
     await Goal.findByIdAndDelete(goalId);
 
     res.status(200).json({
-      message: "Goal deleted successfully.",
+      message: "Goal deleted successfully.", // Return a success message
     });
   } catch (error) {
     console.error("Error deleting goal:", error);
     res.status(500).json({
-      message: "Internal Server Error",
+      message: "Internal Server Error", // Handle server error
     });
   }
 });
 
+// Export the router
 module.exports = router;
