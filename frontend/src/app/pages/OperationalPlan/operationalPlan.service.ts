@@ -41,7 +41,13 @@ export class OperationalPlanService {
    */
   getActiveOperationalPlan(): Observable<any> {
     return this.http.get<any>(
-      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_Active_StrategicPlan}`
+      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_Active_OperationalPlan}`
+    );
+  }
+
+  getOperationalPlansByStrategicPlanId(strategicPlanId: string): Observable<any> {
+    return this.http.get<any>(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_OperationalPlans_By_StrategicPlanId}/${strategicPlanId}`
     );
   }
 

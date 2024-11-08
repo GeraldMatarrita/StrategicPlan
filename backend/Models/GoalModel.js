@@ -9,9 +9,9 @@ const goalSchema = new mongoose.Schema(
     startDate: { type: Date, default: Date.now }, // Default to current date
     description: { type: String, required: true }, // Only description is required
     totalActivities: { type: Number, required: true, default: 1 }, // totalActivities must be required and have a default value
-    completedActivities: { type: Number, default: 0 }, // Starts at 0, not required
+    completed: { type: Boolean, default: false }, // Default value is false
     Activity_ListIDS: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Activities" }, // Reference to Activity documents
+      { type: mongoose.Schema.Types.ObjectId, ref: "Activity" }, // Reference to Activity documents
     ], // List of IDs referencing Activities
   },
   { strict: "throw" }
@@ -26,7 +26,7 @@ const validateGoal = (data) => {
   const schema = Joi.object({
     startDate: Joi.date().optional().label("Start Date"), // Not required
     description: Joi.string().min(3).max(255).required().label("Description"), // Required
-    totalActivities: Joi.number().integer().min(1).default(1).label("Total Activities"), // Not required, default value 1
+    completed: Joi.boolean().optional().label("Completed"), // Not required
     completedActivities: Joi.number()
       .integer()
       .min(0)
@@ -42,7 +42,7 @@ const validateGoal = (data) => {
 };
 
 // Definition of the Goal model
-const GoalModel = mongoose.model("Goal", goalSchema);
+const Goal = mongoose.model("Goal", goalSchema);
 
 // Exporting the model and the validation function
-module.exports = { GoalModel, validateGoal };
+module.exports = { Goal, validateGoal };

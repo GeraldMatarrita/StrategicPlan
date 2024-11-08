@@ -61,10 +61,15 @@
                 <span class="value">{{ item.description }}</span>
               </div>
               <div style="margin-left: 5px">
-                <span class="remainingGoals"
-                  >Completed Goals: {{ item.completedGoals }} /
-                  {{ item.totalGoals }}</span
+                <span
+                  class="remainingGoals"
+                  [ngClass]="{
+                    'green-text': (item.completedGoals === item.totalGoals) && item.totalGoals > 0,
+                  }"
                 >
+                  Completed Goals: {{ item.completedGoals }} /
+                  {{ item.totalGoals }}
+                </span>
                 <span class="startDate"
                   >Start Date: {{ item.startDate | date : "dd/MM/yyyy" }}</span
                 >
@@ -141,7 +146,7 @@
               id="see-goals"
               (click)="handleRedirectToGoals(selectedObjective._id)"
             >
-              Metas Asociadas:
+              Asociated Goals:
             </h2>
             <div *ngIf="objectiveGoals.length > 0">
               <ul>
@@ -151,7 +156,7 @@
               </ul>
             </div>
             <div *ngIf="objectiveGoals.length === 0">
-              <p>No hay metas asociadas a este objetivo.</p>
+              <p>There's no goals asociated to this objective</p>
             </div>
           </div>
           <!-- Lista de metas asociadas -->

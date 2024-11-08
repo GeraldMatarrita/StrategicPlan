@@ -11,6 +11,7 @@ import { ResetPasswordComponent } from './pages/ResetPassword/ResetPassword.comp
 import { GoalsComponent } from './pages/Goals/Goals.component';
 import { ProfileComponent } from './pages/Profile/profile.component';
 import { OperationalPlanComponent } from './pages/OperationalPlan/operationalPlan.component';
+import { ActivityComponent } from './pages/Activity/activity.component';
 
 export const routes: Routes = [
   { path: 'Basico', component: BasicoComponent },
@@ -25,6 +26,7 @@ export const routes: Routes = [
   { path: 'Goals', component: GoalsComponent },
   { path: 'Profile', component: ProfileComponent},
   { path: 'OperationalPlan', component: OperationalPlanComponent},
+  { path: 'Activity', component: ActivityComponent},
   { path: '', component: StrategicPlanToSelect }, // Redirige la ruta si no hay nada
   { path: '**', component: NotFoundComponent }, // Redirige cualquier otra ruta a /notfound
 ];

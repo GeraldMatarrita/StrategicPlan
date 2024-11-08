@@ -1,11 +1,11 @@
 const express = require("express");
 const { Indicator, validateIndicator } = require("../Models/IndicatorModel"); // Adjust the path as necessary
-const Activity = require("../Models/ActivityModel"); // Assuming Activity model is exported from Models
+const { Activity } = require("../Models/ActivityModel"); // Assuming Activity model is exported from Models
 
 const router = express.Router();
 
 // Get an indicator by ID
-router.get("/:id", async (req, res) => {
+router.get("/getIndicator/:id", async (req, res) => {
   try {
     const indicator = await Indicator.findById(req.params.id);
     if (!indicator) return res.status(404).send("Indicator not found.");
@@ -16,9 +16,9 @@ router.get("/:id", async (req, res) => {
 });
 
 // Get indicators by OperationalPlanId
-router.get("/operationalPlan/:operationalPlanId", async (req, res) => {
+router.get("/getIndicatorsByPlan/:operationalPlanId", async (req, res) => {
   try {
-    const indicators = await Indicator.find({ OperationalPlanId: req.params.operationalPlanId });
+    const indicators = await Indicator.find({ operationalPlanId: req.params.operationalPlanId });
     res.send(indicators);
   } catch (error) {
     res.status(500).send("Error retrieving indicators: " + error.message);
@@ -26,7 +26,7 @@ router.get("/operationalPlan/:operationalPlanId", async (req, res) => {
 });
 
 // Create a new indicator
-router.post("/", async (req, res) => {
+router.post("/create", async (req, res) => {
   const { error } = validateIndicator(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
 });
 
 // Update an indicator by ID
-router.put("/:id", async (req, res) => {
+router.put("/update/:id", async (req, res) => {
   try {
     const indicator = await Indicator.findByIdAndUpdate(req.params.id, req.body, {
       new: true, // Return the updated document
@@ -55,7 +55,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete an indicator by ID
-router.delete("/:id", async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   try {
     const indicator = await Indicator.findByIdAndDelete(req.params.id);
     if (!indicator) return res.status(404).send("Indicator not found.");

@@ -48,17 +48,6 @@ export class GoalsService {
   // --------------------------------------------
 
   /**
-   * function to obtain the goals of a planId
-   * @param planId
-   * @returns goals
-   */
-  getGoalsByPlanId(planId: string): Observable<any> {
-    return this.http.get<any>(
-      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_ByPlanID_Goals}/${planId}`
-    );
-  }
-
-  /**
    * function to create a goal and associate it with an objective
    * @param objectiveId objectiveId to associate with the goal
    * @param data of the goal

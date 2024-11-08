@@ -13,19 +13,12 @@ const activitySchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    currentIndicatorId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Indicator",
-      required: true,
-    },
-    passedIndicatorsIds: [
+    indicators_ListIDS: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Indicator",
       },
     ],
-    completed: { type: Boolean, default: false },
-    completedDate: { type: Date, required: false },
   },
   { strict: "throw" }
 );
@@ -40,10 +33,7 @@ const validateActivity = (data) => {
     title: Joi.string().max(50).required().label("Title"),
     description: Joi.string().required().label("Description"),
     responsible: Joi.string().length(24).required().label("Responsible User ID"),
-    currentIndicatorId: Joi.string().length(24).required().label("Current Indicator ID"),
-    passedIndicatorsIds: Joi.array().items(Joi.string().length(24)).optional().label("Passed Indicators IDs"),
-    completed: Joi.boolean().optional().default(false).label("Completed"),
-    completedDate: Joi.date().optional().label("Completed Date"),
+    indicators_ListIDS: Joi.array().items(Joi.string().length(24)).optional().label("Indicators IDs")
   });
   return schema.validate(data);
 };

@@ -2,6 +2,32 @@ const express = require("express");
 const router = express.Router();
 const { OperationalPlan, validateOperationalPlan } = require("../Models/OperationalModel");
 const { StrategicPlan } = require("../Models/StrategicPlanModel");
+const { Indicator } = require("../Models/IndicatorModel");
+const { Activity } = require("../Models/ActivityModel");
+
+// Get an Operational Plan by ID
+router.get("/getOperationalPlan/:id", async (req, res) => {
+  try {
+    const plan = await OperationalPlan.findById(req.params.id);
+    if (!plan) return res.status(404).send("Operational plan not found.");
+    res.send(plan);
+  } catch (error) {
+    res.status(500).send("Server error while fetching operational plan.");
+  }
+});
+
+router.get("/getOperationalPlansByStrategicPlanId/:id", async (req, res) => {
+  try {
+    console.log("Entra a getOperationalPlanByStrategicPlanId");
+    const strategicPlan = await StrategicPlan.findById(req.params.id).populate("operationPlan_ListIDS");
+    const plans = strategicPlan.operationPlan_ListIDS;
+    console.log("plans", plans);
+    if (!plans) return res.status(404).send("Operational plan not found.");
+    res.send(plans);
+  } catch (error) {
+    res.status(500).send("Server error while fetching operational plan.");
+  }
+});
 
 // Get the active Operational Plan (active: true)
 router.get("/active", async (req, res) => {
@@ -30,31 +56,57 @@ router.post("/create/:strategicPlanId", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   try {
-    // Set any existing active Operational Plan to inactive
-    await OperationalPlan.updateMany({ active: true }, { active: false });
+    const strategicPlanId = req.params.strategicPlanId;
+    const newPlanData = req.body;
 
-    // Create and save the new Operational Plan
-    const newPlan = new OperationalPlan(req.body);
-    await newPlan.save();
+    // Crear el nuevo Operational Plan
+    const newOperationalPlan = new OperationalPlan(newPlanData);
+    await newOperationalPlan.save();
 
-    // Update the Strategic Plan by adding the new Operational Plan ID to operationPlan_ListIDS
-    const { strategicPlanId } = req.params;
-    const strategicPlan = await StrategicPlan.findByIdAndUpdate(
-      strategicPlanId,
-      { $push: { operationPlan_ListIDS: newPlan._id } },
-      { new: true }
-    );
+    // Obtener el Strategic Plan
+    const strategicPlan = await StrategicPlan.findById(strategicPlanId).populate("operationPlan_ListIDS");
 
-    if (!strategicPlan) {
-      // If the strategic plan does not exist, delete the new operational plan and return an error
-      await OperationalPlan.findByIdAndDelete(newPlan._id);
-      return res.status(404).send("Strategic Plan not found.");
+    if (!strategicPlan) return res.status(404).send("Strategic Plan not found");
+
+    // Obtener el último Operational Plan en el Strategic Plan (si existe)
+    const lastOperationalPlan = strategicPlan.operationPlan_ListIDS.slice(-1)[0];
+
+    if (lastOperationalPlan) {
+      // Copiar el último indicador de cada actividad en el último Operational Plan
+      const indicatorsToCopy = await Indicator.find({ operationalPlanId: lastOperationalPlan._id });
+      
+      for (const indicator of indicatorsToCopy) {
+        const indicatorData = indicator.toObject();
+        delete indicatorData._id; // Eliminar _id para evitar duplicados
+        delete indicatorData.evidence; // Eliminar evidencia para evitar duplicados
+
+        // Crear el nuevo indicador con los datos del último indicador
+        const newIndicator = new Indicator({
+          ...indicatorData,
+          actual: 0, // Reiniciar el valor de 'actual'
+          operationalPlanId: newOperationalPlan._id, // Asociar al nuevo Operational Plan
+        });
+        
+        await newIndicator.save(); // Guardar el nuevo indicador
+
+        // Actualizar la Activity correspondiente para añadir el nuevo indicator ID
+        await Activity.findByIdAndUpdate(
+          indicator.activityId,
+          { $push: { indicators_ListIDS: newIndicator._id } },
+          { new: true }
+        );
+      }
     }
 
-    res.send(newPlan);
-  } catch (error) {
-    console.error("Error while creating operational plan:", error);
-    res.status(500).send("Server error while creating operational plan.");
+    // Guardar el nuevo Operational Plan en el Strategic Plan
+    strategicPlan.operationPlan_ListIDS.push(newOperationalPlan._id);
+
+    await strategicPlan.save();
+
+    res.send({ message: "Operational Plan created successfully", id: newOperationalPlan._id });
+  } catch (err) {
+    console.error("Error creating Operational Plan:", err);
+    res.status(500).send("Error creating Operational Plan");
   }
 });
 

@@ -2,6 +2,7 @@
   display: grid;
   place-items: center; /* Centra tanto horizontal como verticalmente */
   min-height: calc(100vh - 52px);
+  margin-top: 52px;
 }
 
 .svg-frame {

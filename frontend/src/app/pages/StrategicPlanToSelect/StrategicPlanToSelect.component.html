@@ -55,7 +55,10 @@
       </div>
     </div>
     <ng-template #noData>
-      <p>You don't belong to any strategic plan yet. Create one or ask to be invited to one.</p>
+      <p>
+        You don't belong to any strategic plan yet. Create one or ask to be
+        invited to one.
+      </p>
     </ng-template>
   </div>
 
@@ -68,7 +71,10 @@
       <form [formGroup]="formStrategicPlan" (submit)="sendData()" class="form1">
         <div>
           <h2>Strategic Plan Form</h2>
-          <div>
+          <div class="form1-group">
+            <div>
+              <label for="name"> Name: </label>
+            </div>
             <input
               placeholder="Name"
               type="text"
@@ -89,7 +95,10 @@
             </div>
           </div>
 
-          <div>
+          <div class="form1-group">
+            <div>
+              <label for="mission"> Mission: </label>
+            </div>
             <textarea
               placeholder="Mission"
               type="text"
@@ -98,7 +107,10 @@
             ></textarea>
           </div>
 
-          <div>
+          <div class="form1-group">
+            <div>
+              <label for="vision"> Vision: </label>
+            </div>
             <textarea
               placeholder="Vision"
               type="text"
@@ -107,7 +119,10 @@
             ></textarea>
           </div>
 
-          <div>
+          <div class="form1-group">
+            <div>
+              <label for="values"> Values: </label>
+            </div>
             <textarea
               placeholder="Values"
               type="text"
@@ -116,10 +131,8 @@
             ></textarea>
           </div>
 
-          <div>
-            <div>
-              <label for="endDate"> End Date: </label>
-            </div>
+          <div class="form1-group">
+            <label for="endDate"> End Date: </label>
             <input
               placeholder="EndDate"
               type="date"

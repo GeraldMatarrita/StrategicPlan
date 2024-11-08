@@ -1,0 +1,354 @@
+<div class="activityStyle">
+  <!-- Botón de regreso -->
+  <button
+    *ngIf="isCreatingActivity || isViewMode"
+    (click)="navigateBack()"
+    class="buttonBack m-3"
+  >
+    Back to Goals View
+  </button>
+  <button *ngIf="isEditing" (click)="toggleEditMode()" class="buttonBack m-3">
+    Back to Goals View
+  </button>
+
+  <!-- Formulario de creación de actividades -->
+  <div class="form1-card">
+    <form
+      [formGroup]="activityIndicatorForm"
+      (ngSubmit)="createActivityAndIndicator()"
+      class="form1"
+    >
+      <div class="btn-container">
+        <button
+          title="Edit"
+          id="btn-edit"
+          *ngIf="isViewMode && isActiveOperationalPlan"
+          (click)="toggleEditMode()"
+          class="btn-edit"
+          type="button"
+        ></button>
+      </div>
+      <h2>
+        {{
+          isCreatingActivity
+            ? "Create Activity"
+            : isEditing
+            ? "Editing Activity"
+            : "Viewing Activity"
+        }}
+      </h2>
+
+      <!-- Campo de título -->
+      <div class="form1-group">
+        <h3 for="title">Title:</h3>
+        <input
+          *ngIf="!isViewMode"
+          type="text"
+          id="title"
+          formControlName="title"
+          placeholder="Enter title"
+        />
+        <label *ngIf="isViewMode" for="title">{{
+          activityIndicatorForm.get("title")?.value
+        }}</label>
+        <div
+          *ngIf="
+            activityIndicatorForm.get('title')?.invalid &&
+            activityIndicatorForm.get('title')?.touched
+          "
+          class="error"
+        >
+          <p *ngIf="activityIndicatorForm.get('title')?.errors?.['required']">
+            Title is required.
+          </p>
+        </div>
+      </div>
+
+      <!-- Campo de descripción -->
+      <div class="form1-group">
+        <h3 for="description">Description:</h3>
+        <textarea
+          *ngIf="!isViewMode"
+          id="description"
+          formControlName="description"
+          placeholder="Enter description"
+        ></textarea>
+        <p *ngIf="isViewMode" for="description" class="description">
+          {{ activityIndicatorForm.get("description")?.value }}
+        </p>
+        <div
+          *ngIf="
+            activityIndicatorForm.get('description')?.invalid &&
+            activityIndicatorForm.get('description')?.touched
+          "
+          class="error"
+        >
+          <p
+            *ngIf="activityIndicatorForm.get('description')?.errors?.['required']"
+          >
+            Description is required.
+          </p>
+        </div>
+      </div>
+      <!-- Campo de descripción del indicador -->
+      <div class="form1-group">
+        <h3 for="indicatorDescription">Indicator Description:</h3>
+        <textarea
+          *ngIf="!isViewMode"
+          id="indicatorDescription"
+          formControlName="indicatorDescription"
+          placeholder="Enter indicator description"
+        ></textarea>
+        <p *ngIf="isViewMode" for="indicatorDescription" class="description">
+          {{ activityIndicatorForm.get("indicatorDescription")?.value }}
+        </p>
+        <div
+          *ngIf="
+            activityIndicatorForm.get('indicatorDescription')?.invalid &&
+            activityIndicatorForm.get('indicatorDescription')?.touched
+          "
+          class="error"
+        >
+          <p
+            *ngIf="activityIndicatorForm.get('indicatorDescription')?.errors?.['required']"
+          >
+            Description is required.
+          </p>
+        </div>
+      </div>
+      <!-- Select para tipo de indicador -->
+      <div *ngIf="isCreatingActivity" class="form1-group">
+        <h3 for="indicatorType">Indicator Type:</h3>
+        <select
+          id="indicatorType"
+          formControlName="indicatorType"
+          (change)="onIndicatorTypeChange($event)"
+        >
+          <option value="NUMERAL">Numeral</option>
+          <option value="BINARY">Binary</option>
+          <option value="PERCENTAGE">Percentage</option>
+          <option value="" selected disabled hidden>
+            Select an Indicator Type
+          </option>
+        </select>
+        <div
+          *ngIf="
+            activityIndicatorForm.get('indicatorType')?.invalid &&
+            activityIndicatorForm.get('indicatorType')?.touched
+          "
+          class="error"
+        >
+          <p
+            *ngIf="activityIndicatorForm.get('indicatorType')?.errors?.['required']"
+          >
+            Indicator type is required.
+          </p>
+        </div>
+      </div>
+      <!-- Campo de valor actual -->
+
+      <div
+        style="margin-left: 180px"
+        id="formCheckbox"
+        class="form1-group"
+        *ngIf="
+          isEditing &&
+          activityIndicatorForm.get('indicatorType')?.value === 'BINARY'
+        "
+      >
+        <label for="completed" id="completed-label">Completed? </label>
+        <input
+          type="checkbox"
+          id="indicatorActual"
+          (change)="onCheckboxChange($event)"
+          [checked]="activityIndicatorForm.get('indicatorActual')?.value === 1"
+        />
+      </div>
+
+      <div
+        class="form1-group"
+        *ngIf="
+          !isCreatingActivity &&
+          activityIndicatorForm.get('indicatorType')?.value !== 'BINARY'
+        "
+      >
+        <h3 for="actual">
+          {{
+            activityIndicatorForm.get("indicatorType")?.value === "PERCENTAGE"
+              ? "Currently (%)"
+              : "Currently"
+          }}
+        </h3>
+        <input
+          *ngIf="!isViewMode"
+          type="number"
+          id="actual"
+          formControlName="indicatorActual"
+          [max]="isPercentageType ? 100 : null"
+          (input)="adjustTotalValue($event)"
+        />
+        <label *ngIf="isViewMode" for="actual"
+          >{{ activityIndicatorForm.get("indicatorActual")?.value }}
+          {{
+            activityIndicatorForm.get("indicatorType")?.value === "PERCENTAGE"
+              ? "%"
+              : ""
+          }}
+        </label>
+      </div>
+
+      <!-- Campo de total -->
+      <div
+        class="form1-group"
+        *ngIf="
+          showTotalField &&
+          activityIndicatorForm.get('indicatorType')?.value !== 'BINARY'
+        "
+      >
+        <h3 for="total">
+          {{
+            activityIndicatorForm.get("indicatorType")?.value === "PERCENTAGE"
+              ? "Total (%)"
+              : "Total"
+          }}
+        </h3>
+        <input
+          *ngIf="!isViewMode"
+          type="number"
+          id="total"
+          formControlName="indicatorTotal"
+          [max]="isPercentageType ? 100 : null"
+          (input)="adjustTotalValue($event)"
+        />
+        <label *ngIf="isViewMode" for="total"
+          >{{ activityIndicatorForm.get("indicatorTotal")?.value }}
+          {{
+            activityIndicatorForm.get("indicatorType")?.value === "PERCENTAGE"
+              ? "%"
+              : ""
+          }}</label
+        >
+        <div
+          *ngIf="
+            activityIndicatorForm.get('indicatorTotal')?.invalid &&
+            activityIndicatorForm.get('indicatorTotal')?.touched
+          "
+          class="error"
+        >
+          <p
+            *ngIf="activityIndicatorForm.get('indicatorTotal')?.errors?.['required']"
+          >
+            Objective value is required.
+          </p>
+          <p
+            *ngIf="activityIndicatorForm.get('indicatorTotal')?.errors?.['max']"
+          >
+            Objective value must be less than 100.
+          </p>
+          <p
+            *ngIf="activityIndicatorForm.get('indicatorTotal')?.errors?.['min']"
+          >
+            Objective value must be greater than 0.
+          </p>
+        </div>
+      </div>
+      <!-- Campo de evidencia (Evidence Link) -->
+      <div
+        *ngIf="
+          (isViewMode &&
+            activityIndicatorForm.get('indicatorEvidence')?.value) ||
+          isEditing
+        "
+        class="form1-group"
+      >
+        <h3 for="evidence">Evidence Link:</h3>
+        <input
+          type="url"
+          id="evidence"
+          formControlName="indicatorEvidence"
+          placeholder="Enter evidence link"
+          *ngIf="!isViewMode || isEditing"
+        />
+        <a
+          *ngIf="isViewMode"
+          [href]="activityIndicatorForm.get('indicatorEvidence')?.value"
+          target="_blank"
+          >{{ activityIndicatorForm.get("indicatorEvidence")?.value }}</a
+        >
+        <label
+          *ngIf="
+            isViewMode && !activityIndicatorForm.get('indicatorEvidence')?.value
+          "
+          >No evidence provided.</label
+        >
+      </div>
+
+      <!-- Campo de responsable -->
+      <div class="form1-group">
+        <h3 for="responsible">Responsible:</h3>
+        <select
+          *ngIf="!isViewMode"
+          id="responsible"
+          formControlName="responsible"
+        >
+          <option *ngFor="let member of members" [value]="member._id">
+            {{ member.name }} ({{ member.realName }})
+          </option>
+          <option value="" selected disabled hidden>
+            Select a Responsible
+          </option>
+        </select>
+        <label *ngIf="isViewMode" for="responsible"
+          >{{ responsible.name }} ({{ responsible.realName }})</label
+        >
+      </div>
+      <div class="badInfo" *ngIf="!activityIndicatorForm.valid">
+        <p>Not ready to send</p>
+      </div>
+      <div
+        *ngIf="
+          isViewMode &&
+          activityIndicatorForm.value.indicatorActual ===
+            activityIndicatorForm.value.indicatorTotal
+        "
+      >
+        <label id="completedLabel">Completed</label>
+      </div>
+
+      <div id="buttonContainer">
+        <button
+          *ngIf="isCreatingActivity"
+          [disabled]="!activityIndicatorForm.valid"
+          type="submit"
+          class="buttonCreate m-3"
+        >
+          Create Activity
+        </button>
+        <button
+          *ngIf="isEditing"
+          (click)="saveChanges()"
+          class="buttonCreate m-3"
+          type="button"
+        >
+          Save Activity
+        </button>
+        <button
+          *ngIf="isCreatingActivity"
+          type="button"
+          (click)="cancelCreation()"
+          class="buttonCancelReset"
+        >
+          Cancel
+        </button>
+        <button
+          *ngIf="isEditing"
+          type="button"
+          (click)="toggleEditMode()"
+          class="buttonCancelReset"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

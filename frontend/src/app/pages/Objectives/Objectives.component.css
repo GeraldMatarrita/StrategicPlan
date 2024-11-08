@@ -49,6 +49,10 @@
   margin-right: 560px;
 }
 
+.green-text {
+  color: green;
+}
+
 .selectGroup {
   margin-left: 10px;
   width: 200px;

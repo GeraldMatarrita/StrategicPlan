@@ -39,78 +39,150 @@
       <p id="objectiveTitle">{{ currentObjective.title }}</p>
     </div>
 
-    <button class="buttonAdd m-3" (click)="onClickAddGoal()">Add a Goal</button>
+    <button
+      *ngIf="currentOperationalId"
+      class="buttonAdd m-3"
+      (click)="onClickAddGoal()"
+    >
+      Add a Goal
+    </button>
+    <button
+      *ngIf="!currentOperationalId"
+      class="buttonCreate m-3"
+      (click)="navigateToOperationalPlan()"
+    >
+      New Operational Plan
+    </button>
   </div>
-  <button (click)="navigateToObjectives()" class="buttonBack m-3">
-    Back to Objectives
-  </button>
+  <div class="middleMenu">
+    <button
+      id="buttonBack"
+      (click)="navigateToObjectives()"
+      class="buttonBack m-3"
+    >
+      Back to Objectives
+    </button>
+    <div
+      *ngIf="operationalPlansData.length >= 1"
+      id="selectGroup"
+      class="selectGroup"
+    >
+      <label style="margin-left: 18px" for="operationalPlanSelect"
+        >Select an Operational Plan</label
+      >
+      <select
+        id="operationalPlanSelect"
+        [ngModel]="currentOperationalId"
+        (ngModelChange)="onOperationalPlanChange($event)"
+      >
+        <option *ngFor="let plan of operationalPlansData" [value]="plan._id">
+          {{ plan.active ? "(Active)" : "" }} {{ plan.title }}
+        </option>
+      </select>
+      <label
+        *ngIf="activeOperationalPlan._id !== currentOperationalId"
+        id="advertisement"
+        >You need to select the active Operational Plan to add activities</label
+      >
+    </div>
+  </div>
+
+  <div id="noOPlan" *ngIf="objectiveIdSelected && !activeOperationalPlan">
+    <h6>You need to create a new Operational Plan to continue</h6>
+  </div>
   <div class="my-custom-container">
     <div *ngIf="goalsData.length > 0">
       <div class="card-container">
-        <div *ngFor="let item of goalsData" class="card-Objective-container">
+        <div *ngFor="let goal of goalsData" class="card-Objective-container">
           <div class="card-Objective">
             <div class="content-wrapper">
               <h6 class="goal-h6">Description:</h6>
               <div class="value-container">
-                <span class="value">{{ item.description }}</span>
+                <span class="value">{{ goal.description }}</span>
               </div>
             </div>
           </div>
-          <div class="right-section">
+          <div *ngIf="currentOperationalId" class="right-section">
             <div id="btn-container" class="btn-container">
               <h6 id="progressTitle">Progress</h6>
               <button
-                class="btn-edit" style="position: absolute; margin-right: 35px;"
-                title="Edit"
-                (click)="editGoal(item)"
+                *ngIf="activeOperationalPlan._id === currentOperationalId"
+                class="btn-add"
+                style="position: absolute; margin-right: 73px"
+                title="Add Activity"
+                (click)="navigateToAddActivity(goal._id)"
               ></button>
               <button
-                class="btn-delete" style="margin-left: 100px;"
+                id="btn-edit"
+                class="btn-edit"
+                style="position: absolute; margin-right: 35px"
+                title="Edit"
+                (click)="editGoal(goal)"
+              ></button>
+              <button
+                id="btn-delete"
+                class="btn-delete"
+                style="margin-left: 100px"
                 title="Delete"
-                (click)="deleteGoal(item._id, currentObjective._id)"
+                (click)="deleteGoal(goal._id, currentObjective._id)"
               ></button>
             </div>
 
-            <!-- Primera barra de progreso con progreso actual y meta -->
-            <label for="progress">Activity 1:</label>
-            <div class="progress-container">
-              <span class="progress-current">1</span>
-              <!-- Progreso actual -->
-              <progress [value]="25" max="100"></progress>
-              <span class="progress-goal">4</span>
-              <!-- Progreso meta -->
-            </div>
-
-            <!-- Segunda barra de progreso con progreso actual y meta -->
-            <label for="progress">Activity 2:</label>
-            <div class="progress-container">
-              <span class="progress-current">10</span>
-              <progress [value]="50" max="100"></progress>
-              <span class="progress-goal">20</span>
-            </div>
-
-            <!-- Tercera barra de progreso con progreso actual y meta -->
-            <label for="progress">Activity 3:</label>
-            <div class="progress-container">
-              <span class="progress-current">75</span>
-              <progress [value]="75" max="100"></progress>
-              <span class="progress-goal">100</span>
-            </div>
-
-            <!-- Cuarta barra de progreso con progreso actual y meta -->
-            <label for="progress">Activity 4:</label>
-            <div class="progress-container">
-              <span class="progress-current">8</span>
-              <progress [value]="100" max="100"></progress>
-              <span class="progress-goal">8</span>
+            <div
+              *ngFor="let activity of goal.Activity_ListIDS"
+              style="width: 100%"
+            >
+              <label
+                *ngIf="activity.currentIndicatorId"
+                (click)="
+                  navigateToViewActivity(
+                    activity._id,
+                    activity.currentIndicatorId._id
+                  )
+                "
+                id="activityTitle"
+                for="progress"
+              >
+                {{ activity.title }}:
+              </label>
+              <div
+                *ngIf="activity.currentIndicatorId"
+                class="progress-container"
+              >
+                <span class="progress-current">{{
+                  activity.currentIndicatorId.actual
+                }}</span>
+                <!-- Progreso actual -->
+                <progress
+                  [value]="
+                    activity.currentIndicatorId.total > 0
+                      ? (activity.currentIndicatorId.actual /
+                          activity.currentIndicatorId.total) *
+                        100
+                      : 0
+                  "
+                  max="100"
+                ></progress>
+                <span class="progress-goal">{{
+                  activity.currentIndicatorId.total
+                }}</span>
+                <!-- Progreso meta -->
+              </div>
             </div>
 
             <!-- Barra de progreso general -->
-            <label for="progress">General Progress:</label>
+            <label id="generalLabel" for="progress">General Progress:</label>
             <div class="progress-container">
-              <span class="progress-current">1</span>
-              <progress [value]="62" max="100"></progress>
-              <span class="progress-goal">100</span>
+              <span class="progress-current">
+                {{ calculateGeneralProgress(goalsData).actual }}
+              </span>
+              <progress
+                [value]="calculateGeneralProgress(goalsData).actual"
+                max="100"
+              ></progress>
+              <span class="progress-goal">
+                {{ calculateGeneralProgress(goalsData).goal }}
+              </span>
             </div>
           </div>
         </div>
@@ -129,17 +201,6 @@
               <h2>Goal</h2>
               <div class="form1-group">
                 <h3 for="objectiveIdSelectedForm">Objective</h3>
-                <!-- <select
-                    formControlName="objectiveIdSelectedForm"
-                    id="objectiveIdSelectedForm"
-                  >
-                    <option
-                      *ngFor="let objective of objectiveData"
-                      [value]="objective._id"
-                    >
-                      {{ objective.title }}
-                    </option>
-                  </select> -->
                 <label> {{ currentObjective.title }}</label>
               </div>
 
@@ -167,6 +228,16 @@
                     Description is required.
                   </p>
                 </div>
+              </div>       
+              <div id="formCheckbox" class="form1-group" *ngIf="isEditing">
+                <label for="completed" class="completed-label">Completed</label>
+                <input
+                  type="checkbox"
+                  id="completed"
+                  formControlName="completed"
+                  class="completed-checkbox"
+                />
+                
               </div>
               <div class="badInfo" *ngIf="!formGoal.valid">
                 <p>Not ready to send</p>

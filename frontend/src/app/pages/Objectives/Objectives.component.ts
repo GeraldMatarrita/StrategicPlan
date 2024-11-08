@@ -27,7 +27,6 @@ export class ObjectivesComponent implements OnInit {
   activeUserID = '';
   currentPlanId: string = ''; // ID of the current plan to edit
   currentPlan: any = {};
-  planMembers: any[] = []; // List of members for the current plan
   isEditing = false; // Controls whether you are editing or creating
   plansData: any[] = []; // To store strategic plans
 
@@ -133,9 +132,13 @@ export class ObjectivesComponent implements OnInit {
       this.objectivesService
         .getObjectivesByPlanId(this.currentPlanId)
         .subscribe(
-          (data: any[]) => {
-            this.objectivesData = data; // Assign the data to objectivesData
-            console.log('Objectives:', this.objectivesData);
+          async (data: any[]) => {
+            this.objectivesData = data; // Asignar los datos a objectivesData
+  
+            // Para cada objetivo, contar los 'completedGoals'
+            for (let objective of this.objectivesData) {
+              await this.updateCompletedGoals(objective);
+            }
           },
           (error: any) => {
             console.error('Error loading objectives', error);
@@ -145,6 +148,31 @@ export class ObjectivesComponent implements OnInit {
       console.error('Error loading objectives', error);
     }
   }
+
+  /**
+ * Método para actualizar el campo completedGoals de un objetivo
+ */
+async updateCompletedGoals(objective: any): Promise<void> {
+  try {
+    // Cargar los goals del objetivo
+    const goals = await this.objectivesService.getGoalsByObjectiveId(objective._id).toPromise() || [];
+    
+    // Contar cuántos goals están completos
+    const completedGoals = goals.filter((goal: any) => goal.completed).length;
+    
+    // Actualizar el atributo completedGoals del objetivo
+    const updatedObjective = {
+      ...objective,
+      completedGoals: completedGoals,
+    };
+
+    // Llamar a la función de actualización
+    await this.objectivesService.updateObjective(objective._id, updatedObjective);
+    console.log(`Objective ${objective._id} updated with ${completedGoals} completed goals.`);
+  } catch (error) {
+    console.error('Error updating completedGoals for objective', objective._id, error);
+  }
+}
 
   /**
    * Method to create an objective

@@ -131,6 +131,9 @@ export class StrategicPlanService {
    * @returns Observable with active plan data
    */
   getPlanByID(planId: string): Observable<any> {
+    if (!planId) {
+      return new Observable();
+    }
     return this.http.get<any>(
       `${API_ROUTES.BASE_URL}${API_ROUTES.Get_ById_StrategicPlan}/${planId}`
     );

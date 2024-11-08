@@ -94,7 +94,7 @@
 }
 
 .card-Objective-container:hover {
-  transform: scale(1.05);
+  transform: scale(1.01);
   transition: transform 0.5s;
   cursor: pointer;
 }
@@ -153,7 +153,6 @@
 .right-section label {
   font-size: 0.8em;
   color: var(--text_color); /* Ajusta el color según tu preferencia */
-  border-top: 1px solid white;
   width: 100%;
 }
 
@@ -163,6 +162,7 @@
   justify-content: space-between;
   gap: 8px; /* Espacio entre los elementos */
   width: 90%;
+  font-size: 0.8em;
 }
 
 .progress-current, .progress-goal {
@@ -249,6 +249,14 @@ progress[value^="1"] {
   border-bottom: 1px solid white;
 }
 
+.middleMenu {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra verticalmente el contenido */
+  justify-content: center; /* Alinea el contenido en el centro vertical */
+  height: 100%; /* Asegúrate de que middleMenu ocupe toda la altura disponible */
+}
+
 .value {
   font-size: 0.95em;
   display: -webkit-box;
@@ -273,4 +281,89 @@ progress[value^="1"] {
 
 #btn-container {
   width: 95%;
+  border-bottom: 1px solid white;
+}
+
+#btn-container h6 {
+  margin-left: 10px;
+}
+
+#generalLabel, #activityTitle {
+  font-weight: bold;
+  font-size: 0.9em; 
+}
+
+#generalLabel {
+  margin-top: 8px;
+  border-top: 1px solid white;
+  padding: 5px;
+  width: 95%;
+}
+
+#activityTitle {
+  margin: 2px 0 2px 0;
+  padding-bottom: 0;
+  height: auto;
+}
+
+#activityTitle:hover {
+  cursor: pointer;
+  width: auto;
+  color: rgb(97, 146, 253);
+}
+
+#btn-edit {
+  background-color: var(--color3_pink);
+}
+
+#btn-edit:hover {
+  background-color: var(--color3_pink_hover);
+}
+
+#btn-delete {
+  width: 30px;
+}
+
+#noOPlan {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#noOPlan h6 {
+  margin-top: 30px;
+  margin-right: 20px;
+  color: tomato;
+}
+
+#formCheckbox {
+  display: flex; /* Permite que los elementos se alineen en fila */
+  align-items: center; /* Alinea verticalmente en el centro */
+  margin-top: 20px; /* Ajusta el margen superior si es necesario */
+  margin-bottom: 20px;
+}
+
+#selectGroup {
+  margin: auto 0;
+}
+
+#buttonBack {
+  align-self: flex-start;
+}
+
+#advertisement {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 118px;
+  margin-left: 0;
+}
+
+#advertisementOp{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 118px;
+  margin-left: 0;
+  color: tomato;
 }

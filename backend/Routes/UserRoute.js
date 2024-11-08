@@ -14,6 +14,20 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+router.get("/getUserById/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await UserModel.findById(id);
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching User collection in MongoDB:", error);
+    res.status(500).json({
+      error: "Error fetching User collection in MongoDB",
+    });
+  }
+});
+
+
 /**
  * Function to handle "Forgot Password" request
  */

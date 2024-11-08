@@ -20,6 +20,8 @@ export const API_ROUTES = {
   Forgot_Password: '/auth/forgot-password', // POST
   Reset_Password: '/auth/reset-password', // POST
   Update_User: '/auth/update',
+  Get_User_By_Id: '/auth/getUserById', // GET + "/userId"
+  
   // -------------------------------------------------------------
   // Para los planes estratégicos
   // -------------------------------------------------------------
@@ -90,6 +92,27 @@ export const API_ROUTES = {
   Create_OperationalPlan: '/operationalPlan/create', // POST + /StrategicPlanId
   Inactivate_OperationalPlan: '/operationalPlan/inactivate', // PUT
   Update_OperationalPlan: '/operationalPlan/update', // PUT
+  Get_OperationalPlans_By_StrategicPlanId: '/operationalPlan/getOperationalPlansByStrategicPlanId', // GET + /StrategicPlanId
+
+
+  // -------------------------------------------------------------
+  // Para las Actividades - Activity
+  // -------------------------------------------------------------
+
+  Get_Activity: '/activity/getActivity', // GET + /:id
+  Create_Activity: '/activity/create', // POST + /:goalId
+  Update_Activity: '/activity/update', // PUT + /:id
+  Delete_Activity: '/activity/delete', // DELETE + /:id
+
+  // -------------------------------------------------------------
+  // Para los indicadores - Indicator
+  // -------------------------------------------------------------
+
+  Get_Indicator: '/indicator/getIndicator', // GET + /:id
+  Get_Indicators_By_OperationalPlan: '/indicator/getIndicatorsByPlan', // GET + /:operationalPlanId
+  Create_Indicator: '/indicator/create', // POST
+  Update_Indicator: '/indicator/update', // PUT + /:id
+  Delete_Indicator: '/indicator/delete', // DELETE + /:id
 
   // --------------------------------------------------------------------------------
   // --------------------------------------------------------------------------------

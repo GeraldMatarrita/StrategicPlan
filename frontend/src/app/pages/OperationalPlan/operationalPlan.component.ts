@@ -11,7 +11,9 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { OperationalPlanService } from './operationalPlan.service'; // Import the Operational Plan service
 import { StrategicPlanService } from '../StrategicPlan/StrategicPlan.service'; // Import the Strategic Plan service
+import { AuthService } from '../Auth/Auth.service';
 import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
+import { switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-operational-plan',
@@ -34,7 +36,8 @@ export class OperationalPlanComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private operationalPlanService: OperationalPlanService,
-    private strategicPlanService: StrategicPlanService, // Inject Strategic Plan service
+    private strategicPlanService: StrategicPlanService,
+    private authService: AuthService,
     private router: Router
   ) {}
 
@@ -71,26 +74,44 @@ export class OperationalPlanComponent implements OnInit {
   }
 
   loadStrategicPlans(): void {
-    this.strategicPlanService.getStrategicPlans().subscribe((plans: any[]) => {
-      this.strategicPlans = plans;
+    const activeUser = this.authService.getActiveUserID();
+  
+    if (!activeUser) {
+      this.router.navigate([NAVIGATIONS_ROUTES.AUTH]);
+    }
 
-      const storedPlanId = localStorage.getItem('PlanID');
-      if (storedPlanId) {
-        this.selectedStrategicPlanId = storedPlanId;
-        this.selectedStrategicPlan = this.strategicPlans.find(
-          (plan) => plan._id === storedPlanId
-        );
-
-        console.log('Selected Strategic Plan:', this.selectedStrategicPlan);
-
-        if (this.selectedStrategicPlan) {
-          this.operationalPlans =
-            this.selectedStrategicPlan.operationPlan_ListIDS;
+    this.selectedStrategicPlanId = localStorage.getItem('PlanID') || '';
+  
+    this.strategicPlanService.getStrategicPlans().pipe(
+      tap((plans: any[]) => {
+        this.strategicPlans = plans;
+        const storedPlanId = localStorage.getItem('PlanID');
+  
+        if (storedPlanId) {
+          this.selectedStrategicPlanId = storedPlanId;
+          this.selectedStrategicPlan = this.strategicPlans.find(
+            (plan) => plan._id === storedPlanId
+          );
+        }
+      }),
+      switchMap(() => {
+        // Solo carga los planes operacionales si `selectedStrategicPlan` está definido
+        return this.selectedStrategicPlan
+          ? this.strategicPlanService.getPlanByID(this.selectedStrategicPlan._id)
+          : [];
+      })
+    ).subscribe(
+      (plan) => {
+        if (plan) {
+          this.selectedStrategicPlan = plan;
+          this.operationalPlans = this.selectedStrategicPlan.operationPlan_ListIDS || [];
           this.checkActivePlan();
           this.checkAndSetInactivePlans();
         }
-      }
-    });
+      },
+      (error) => console.error('Error loading plans:', error)
+    );
+
   }
 
   loadOperationalPlans(StrategicPlanID: string): void {
@@ -150,12 +171,13 @@ export class OperationalPlanComponent implements OnInit {
             operationalPlanData,
             this.selectedStrategicPlanId
           )
-          .then(() => {
+          .then((OperationalPlan) => {
             Swal.fire(
               'Success',
               'Operational Plan created successfully',
               'success'
             );
+            localStorage.setItem('ActiveOperationalPlanID', OperationalPlan);
             this.loadStrategicPlans(); // Recargar los planes estratégicos después de crear
           })
           .catch((error) => {
@@ -201,6 +223,7 @@ export class OperationalPlanComponent implements OnInit {
         cancelButtonText: 'Cancel',
       }).then((result) => {
         if (result.isConfirmed) {
+          localStorage.removeItem('OperationalPlanID');
           this.proceedWithUpdate(updatedData);
         }
       });

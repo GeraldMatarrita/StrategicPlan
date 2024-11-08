@@ -11,15 +11,21 @@ const indicatorSchema = new mongoose.Schema(
     total: { type: Number, required: true },
     type: {
       type: String,
-      enum: ["NUMERAL", "BINARIO", "PORCENTUAL"],
+      enum: ["NUMERAL", "BINARY", "PERCENTAGE"],
       required: true,
     },
-    OperationalPlanId: {
+    operationalPlanId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "OperationalPlan",
       required: true,
     },
-    completed: { type: Boolean, default: false }, // Removed ActivityId
+    activityId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Activity",
+      required: true,
+    },
+    evidence: { type: String, required: false },
+    completed: { type: Boolean, default: false },
   },
   { strict: "throw" }
 );
@@ -35,10 +41,12 @@ const validateIndicator = (data) => {
     actual: Joi.number().optional().default(0).label("Actual"),
     total: Joi.number().required().label("Total"),
     type: Joi.string()
-      .valid("NUMERAL", "BINARIO", "PORCENTUAL")
+      .valid("NUMERAL", "BINARY", "PERCENTAGE")
       .required()
       .label("Type"),
-    OperationalPlanId: Joi.string().length(24).required().label("Operational Plan ID"),
+    operationalPlanId: Joi.string().length(24).required().label("Operational Plan ID"),
+    activityId: Joi.string().length(24).required().label("Activity ID"),
+    evidence: Joi.string().optional().label("Evidence"),
     completed: Joi.boolean().optional().default(false).label("Completed"),
   });
   return schema.validate(data);

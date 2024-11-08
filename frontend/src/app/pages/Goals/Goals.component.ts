@@ -9,6 +9,8 @@ import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 import { GoalsService } from './Goals.service';
 import { StrategicPlanService } from '../StrategicPlan/StrategicPlan.service';
 import { ObjectivesService } from '../Objectives/Objectives.service';
+import { IndicatorService } from '../Indicators/indicators.service';
+import { OperationalPlanService } from '../OperationalPlan/operationalPlan.service';
 
 import { FormsModule } from '@angular/forms'; // Import FormsModule
 
@@ -31,6 +33,9 @@ export class GoalsComponent implements OnInit {
   objectiveIdSelected: string = '';
 
   currentObjective: any = {}; // ID of the current objective being edited
+  currentOperationalId: string = ''; // ID of the current operational plan
+  activeOperationalPlan: any = {}; // Current active operational plan
+  operationalPlansData: any[] = []; // To store operational plans
 
   // Variable to store the response message
   responseMessage: string = '';
@@ -39,6 +44,7 @@ export class GoalsComponent implements OnInit {
   goalsData: any = [];
   plansData: any[] = []; // To store strategic plans
   goalsIdSelected: string = '';
+  indicatorToView: any = {};
 
   showModal: boolean = false;
 
@@ -48,7 +54,9 @@ export class GoalsComponent implements OnInit {
     private router: Router,
     private strategicPlanService: StrategicPlanService,
     private authService: AuthService,
-    private objectivesService: ObjectivesService
+    private objectivesService: ObjectivesService,
+    private indicatorService: IndicatorService,
+    private operationalPlanService: OperationalPlanService
   ) {}
 
   /**
@@ -56,9 +64,11 @@ export class GoalsComponent implements OnInit {
    * - Initialize the form
    * - Load the data
    */
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    localStorage.removeItem('ActivityID');
+    localStorage.removeItem('IndicatorID');
     this.initializeForm();
-    this.loadData();
+    await this.loadData();
     window.scrollTo(0, 0);
   }
 
@@ -70,8 +80,8 @@ export class GoalsComponent implements OnInit {
       objectiveIdSelectedForm: [''],
       description: ['', [Validators.required]],
       totalActivities: [''],
-      completedActivities: [''],
       responsible: [''],
+      completed: [false],
     });
   }
 
@@ -83,7 +93,7 @@ export class GoalsComponent implements OnInit {
       // Always load the strategic plans
       this.activeUserID = await this.authService.getActiveUserID();
       this.strategicPlanService.getActivePlans(this.activeUserID).subscribe(
-        (data: any[]) => {
+        async (data: any[]) => {
           this.plansData = data;
 
           // Check if there is a stored PlanID in localStorage
@@ -92,7 +102,11 @@ export class GoalsComponent implements OnInit {
 
           if (storedPlanId) {
             this.currentPlanId = storedPlanId;
-            this.loadObjectives(); // Load objectives from the stored plan
+            if (!this.currentPlanId && storedPlanId) {
+              this.currentPlanId = storedPlanId;
+              await this.loadObjectives();
+            }
+            await this.loadObjectives(); // Load objectives from the stored plan
 
             if (storedObjectiveId) {
               this.objectiveIdSelected = storedObjectiveId;
@@ -109,7 +123,7 @@ export class GoalsComponent implements OnInit {
               this.formGoal.patchValue({
                 objectiveIdSelectedForm: storedObjectiveId,
               });
-              this.loadGoalsByObjective(storedObjectiveId); // Load goals from the stored objective
+              await this.loadGoalsByObjective(storedObjectiveId);
             }
           } else {
             this.clearSelections();
@@ -119,6 +133,24 @@ export class GoalsComponent implements OnInit {
           console.error('Error loading the plans:', error);
         }
       );
+
+      const currentStrategicPlanId = localStorage.getItem('PlanID') || '';
+
+      if (currentStrategicPlanId) {
+        this.operationalPlansData = await this.operationalPlanService
+          .getOperationalPlansByStrategicPlanId(currentStrategicPlanId)
+          .toPromise();
+
+        this.activeOperationalPlan = await this.operationalPlansData.find(
+          (plan: any) => plan.active === true
+        );
+
+        this.currentOperationalId =
+          localStorage.getItem('OperationalPlanID') || '';
+      }
+      if (!this.currentOperationalId && this.activeOperationalPlan) {
+        this.currentOperationalId = this.activeOperationalPlan._id;
+      }
     } catch (error) {
       console.error('Error loading data:', error);
     }
@@ -134,14 +166,16 @@ export class GoalsComponent implements OnInit {
    * Method to load the objectives of the current plan
    */
   async loadObjectives(): Promise<void> {
-    this.objectivesService.getObjectivesByPlanId(this.currentPlanId).subscribe(
-      (data: any[]) => {
-        this.objectiveData = data;
-      },
-      (error: any) => {
-        console.error('Error getting the plan:', error);
-      }
-    );
+    await this.objectivesService
+      .getObjectivesByPlanId(this.currentPlanId)
+      .subscribe(
+        (data: any[]) => {
+          this.objectiveData = data;
+        },
+        (error: any) => {
+          console.error('Error getting the plan:', error);
+        }
+      );
   }
 
   /**
@@ -242,10 +276,11 @@ export class GoalsComponent implements OnInit {
       Swal.fire({
         icon: 'success',
         title: 'Deleted',
-        text: "The goal has been deleted successfully",
+        text: 'The goal has been deleted successfully',
       });
 
-      this.loadGoalsByObjective(objectiveId); // Load updated goals
+      this.goalsData = this.goalsData.filter((goal: any) => goal._id !== goalId);
+
     } catch (error) {
       console.error('Error deleting the goal:', error);
       this.responseMessage =
@@ -278,8 +313,7 @@ export class GoalsComponent implements OnInit {
       this.loadGoalsByObjective(this.objectiveIdSelected);
       this.toogleShowModal();
     } catch (error) {
-      this.responseMessage =
-        (error as any).error?.message || 'Unknown error';
+      this.responseMessage = (error as any).error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -342,20 +376,52 @@ export class GoalsComponent implements OnInit {
     this.router.navigate([SELECT_PLAN]);
   }
 
-  async loadGoalsByObjective(objectiveId: string | null): Promise<void> {
-    if (objectiveId) {
-      // Filter Goals by the selected Objective
-      this.objectivesService.getGoalsByObjectiveId(objectiveId).subscribe(
-        (data: any[]) => {
-          this.goalsData = data;
-        },
-        (error: any) => {
-          console.error('Error retrieving Goals:', error);
+  async loadGoalsByObjective(objectiveId: string): Promise<void> {
+    try {
+      let storedOperationalPlanId =
+        localStorage.getItem('OperationalPlanID') || '';
+
+      if (!storedOperationalPlanId) {
+        if (this.activeOperationalPlan) {
+          storedOperationalPlanId = this.activeOperationalPlan._id;
         }
-      );
-    } else {
-      // If no Objective is selected, clear the Goals
-      this.goalsData = [];
+      }
+
+      // Obtener indicadores del plan operativo
+      const indicatorsByOperationalPlan = await this.indicatorService
+        .getIndicatorsByOperationalPlan(storedOperationalPlanId)
+        .toPromise();
+
+      // Ahora obtener los Goals y sus Activities
+      this.objectivesService
+        .getGoalsByObjectiveId(objectiveId)
+        .subscribe((goals: any[]) => {
+          if (goals.length === 0) {
+            console.log('No goals found for the selected objective');
+            return; // Salir si no hay objetivos
+          }
+
+          this.goalsData = goals.map((goal) => {
+            // Para cada Goal, buscamos su lista de Activities
+            goal.Activity_ListIDS = goal.Activity_ListIDS.map(
+              (activity: any) => {
+                // Buscar el indicador actual de la Activity según indicators_ListIDS
+                const matchingIndicator = indicatorsByOperationalPlan.find(
+                  (indicator: any) =>
+                    activity.indicators_ListIDS.includes(indicator._id)
+                );
+                activity.currentIndicatorId = matchingIndicator
+                  ? matchingIndicator
+                  : null;
+                return activity;
+              }
+            );
+            return goal;
+          });
+          console.log('Goals:', this.goalsData);
+        });
+    } catch (error) {
+      console.error('Error loading goals:', error);
     }
   }
 
@@ -385,12 +451,73 @@ export class GoalsComponent implements OnInit {
     this.router.navigate([NAVIGATIONS_ROUTES.OBJECTIVE]);
   }
 
+  navigateToAddActivity(GoalID: string): void {
+    localStorage.setItem('GoalID', GoalID);
+    localStorage.setItem('OperationalPlanID', this.currentOperationalId);
+    console.log('OperationalPlanID:', this.currentOperationalId);
+    this.router.navigate([NAVIGATIONS_ROUTES.ACTIVITY]);
+  }
+
+  navigateToViewActivity(activityId: string, indicatorId: string): void {
+    localStorage.setItem('ActivityID', activityId);
+    localStorage.setItem('IndicatorID', indicatorId);
+    localStorage.setItem(
+      'isActiveOperationalPlan',
+      this.activeOperationalPlan ? 'true' : 'false'
+    );
+    this.router.navigate([NAVIGATIONS_ROUTES.ACTIVITY]);
+  }
+
+  navigateToOperationalPlan(): void {
+    this.router.navigate([NAVIGATIONS_ROUTES.OPERATIONAL]);
+  }
+
+  onOperationalPlanChange(newOperationalPlanId: string): void {
+    this.currentOperationalId = newOperationalPlanId;
+    // Guardar el plan seleccionado en localStorage
+    localStorage.setItem('OperationalPlanID', this.currentOperationalId);
+    this.loadGoalsByObjective(this.objectiveIdSelected);
+  }
+
   onPlanChange(): void {
-    this.goalsData = []; // Clear the goals when changing the plan
-    this.objectiveIdSelected = ''; // Clear the selected objective when changing the plan
-    this.loadObjectives(); // Load the objectives for the selected plan
-    localStorage.setItem('PlanID', this.currentPlanId); // Update PlanID in localStorage
-    localStorage.removeItem('ObjectiveID'); // Clear ObjectiveID when the plan changes
+    this.goalsData = []; // Clear the goals
+    this.objectiveData = [];
+    this.objectiveIdSelected = '';
+    this.currentObjective = {};
+    localStorage.removeItem('ObjectiveID');
+    localStorage.setItem('PlanID', this.currentPlanId);
+    this.loadObjectives();
+  }
+
+  calculateGeneralProgress(goals: any[]): { actual: number; goal: number } {
+    if (!goals.length) return { actual: 0, goal: 100 };
+
+    let totalProgress = 0;
+    let activityCount = 0;
+
+    goals.forEach((goal) => {
+      goal.Activity_ListIDS.forEach((activity: any) => {
+        // Verificamos que el activity tiene currentIndicatorId y que su total es mayor a 0
+        if (
+          activity.currentIndicatorId &&
+          activity.currentIndicatorId.total > 0
+        ) {
+          // Calcular el porcentaje de progreso de cada actividad y sumarlo
+          const activityProgress =
+            (activity.currentIndicatorId.actual /
+              activity.currentIndicatorId.total) *
+            100;
+          totalProgress += activityProgress;
+          activityCount++;
+        }
+      });
+    });
+
+    // Evitar dividir por 0 y calcular el promedio de progreso
+    const averageProgress =
+      activityCount > 0 ? totalProgress / activityCount : 0;
+
+    return { actual: Math.round(averageProgress), goal: 100 };
   }
 
   getProgressColor(value: number): string {

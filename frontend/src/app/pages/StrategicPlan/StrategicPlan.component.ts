@@ -56,6 +56,9 @@ export class StrategicPlanComponent implements OnInit {
   async loadData(): Promise<void> {
     try {
       this.activeUserID = await this.authService.getActiveUserID();
+      if (!this.activeUserID) {
+        this.router.navigate([NAVIGATIONS_ROUTES.AUTH]);
+      }
 
       // Get the list of user's plans
       const userPlans = await this.strategicPlanService
@@ -261,8 +264,6 @@ export class StrategicPlanComponent implements OnInit {
    */
   navigateToSelectPlan(): void {
     const SELECT_PLAN: string = `${NAVIGATIONS_ROUTES.SELECT_STRATEGIC_PLAN}`;
-    localStorage.removeItem('PlanID');
-    localStorage.removeItem('ObjectiveID');
     this.router.navigate([SELECT_PLAN]);
   }
 

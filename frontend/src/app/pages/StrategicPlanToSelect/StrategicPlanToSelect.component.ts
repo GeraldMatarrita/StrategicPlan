@@ -77,6 +77,8 @@ export class StrategicPlanToSelect implements OnInit {
     try {
       localStorage.removeItem('PlanID');
       localStorage.removeItem('ObjectiveID');
+      localStorage.removeItem('OperationalPlanID');
+      localStorage.removeItem('ActivityID');
       this.activeUserID = await this.authService.getActiveUserID();
       this.loadActivePlans();
     } catch (error) {
@@ -209,8 +211,7 @@ export class StrategicPlanToSelect implements OnInit {
       this.loadData();
       this.resetForm();
     } catch (error) {
-      this.responseMessage =
-        (error as any).error?.message || 'Unknown error';
+      this.responseMessage = (error as any).error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',

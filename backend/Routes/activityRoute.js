@@ -1,11 +1,12 @@
 const express = require("express");
-const { Activity, validateActivity } = require("../Models/ActivityModel"); // Adjust the path as necessary
-const { Indicator } = require("../Models/IndicatorModel"); // Assuming Indicator model is exported from Models
+const { Activity, validateActivity } = require("../Models/ActivityModel");
+const { Indicator } = require("../Models/IndicatorModel"); 
+const { Goal } = require("../Models/GoalModel"); 
 
 const router = express.Router();
 
 // Get an activity by ID
-router.get("/:id", async (req, res) => {
+router.get("/getActivity/:id", async (req, res) => {
   try {
     const activity = await Activity.findById(req.params.id);
     if (!activity) return res.status(404).send("Activity not found.");
@@ -15,14 +16,25 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Create a new activity
-router.post("/", async (req, res) => {
+// Create a new activity and associate it with a goal
+router.post("/create/:goalId", async (req, res) => {
+
   const { error } = validateActivity(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const activity = new Activity(req.body);
   try {
     await activity.save();
+
+    // Associate the new activity with the goal
+    const goalId = req.params.goalId;
+    const goal = await Goal.findById(goalId);
+    if (!goal) return res.status(404).send("Goal not found");
+
+    goal.Activity_ListIDS.push(activity);
+    await goal.save();
+    console.log("Goal updated with new activity", goal);
+
     res.status(201).send(activity);
   } catch (error) {
     res.status(500).send("Error creating activity: " + error.message);
@@ -30,7 +42,7 @@ router.post("/", async (req, res) => {
 });
 
 // Update an activity by ID
-router.put("/:id", async (req, res) => {
+router.put("/update/:id", async (req, res) => {
   try {
     const activity = await Activity.findByIdAndUpdate(req.params.id, req.body, {
       new: true, // Return the updated document
@@ -45,7 +57,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete an activity by ID
-router.delete("/:id", async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   try {
     const activity = await Activity.findById(req.params.id);
     if (!activity) return res.status(404).send("Activity not found.");

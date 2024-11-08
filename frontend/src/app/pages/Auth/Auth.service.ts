@@ -126,6 +126,12 @@ export class AuthService {
     );
   }
 
+  getUserById(userId: string): Observable<any> {
+    return this.http.get<any>(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.Get_User_By_Id}/${userId}`
+    );
+  }
+
   /**
    * función para craer un usuario
    * @param data datos del usuario

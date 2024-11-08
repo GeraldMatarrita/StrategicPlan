@@ -1,6 +1,5 @@
 const router = require("express").Router();
-const { GoalModel, validateGoal } = require("../Models/GoalModel");
-const { User, validateUser } = require("../Models/UserModel");
+const { Goal, validateGoal } = require("../Models/GoalModel");
 const {
   StrategicPlan,
   validateStrategicPlan,
@@ -28,10 +27,10 @@ router.get("/getObjectiveGoals/:objectiveId", async (req, res) => {
       });
     }
 
-    // Find the goals of the objective
-    const goals = await GoalModel.find({
+    // Find the goals of the objective and populate the Activity and Indicator fields
+    const goals = await Goal.find({
       _id: { $in: objective.goals_ListIDS },
-    });
+    }).populate("Activity_ListIDS");
 
     res.status(200).json(goals);
   } catch (error) {
@@ -69,7 +68,7 @@ router.get("/getPlanGoals/:planId", async (req, res) => {
     const goalIds = objectives.flatMap((objective) => objective.goals_ListIDS);
 
     // Find the goals of the strategic plan's objectives
-    const goals = await GoalModel.find({
+    const goals = await Goal.find({
       _id: { $in: goalIds },
     });
 
@@ -114,7 +113,7 @@ router.post("/create/:objectiveId", async (req, res) => {
     }
 
     // Create a new goal
-    const newGoal = new GoalModel(req.body);
+    const newGoal = new Goal(req.body);
     await newGoal.save();
 
     // Associate the goal with the objective
@@ -145,7 +144,7 @@ router.put("/update/:goalId", async (req, res) => {
     const { goalId } = req.params;
 
     // Find the goal by its ID
-    const goal = await GoalModel.findById(goalId);
+    const goal = await Goal.findById(goalId);
     if (!goal) {
       return res.status(404).json({
         message: "Goal not found.",
@@ -153,7 +152,7 @@ router.put("/update/:goalId", async (req, res) => {
     }
 
     // Update the goal with new data
-    await GoalModel.updateOne({ _id: goalId }, req.body);
+    await Goal.updateOne({ _id: goalId }, req.body);
 
     // If total or completed activities are modified, it may also be necessary to update the parent objective
     const { totalActivities, completedActivities } = req.body;
@@ -164,14 +163,17 @@ router.put("/update/:goalId", async (req, res) => {
         // Update the total and completed activities
         const updatedObjective = {
           totalGoals: objective.goals_ListIDS.length,
-          completedGoals: await GoalModel.countDocuments({
+          completedGoals: await Goal.countDocuments({
             _id: { $in: objective.goals_ListIDS },
             completedActivities: { $gte: totalActivities },
           }),
         };
 
         // Apply the update to the objective
-        await ObjectiveModel.updateOne({ _id: objective._id }, updatedObjective);
+        await ObjectiveModel.updateOne(
+          { _id: objective._id },
+          updatedObjective
+        );
       }
     }
 
@@ -195,9 +197,9 @@ router.put("/update/:goalId", async (req, res) => {
 router.delete("/delete/:goalId", async (req, res) => {
   try {
     const { goalId } = req.params;
-    
+
     // Delete the goal from the system
-    await GoalModel.findByIdAndDelete(goalId);
+    await Goal.findByIdAndDelete(goalId);
 
     res.status(200).json({
       message: "Goal deleted successfully.",

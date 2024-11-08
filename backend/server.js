@@ -73,10 +73,10 @@ const CardAnalysis = require("./Routes/cardAnalysisRoute")
 app.use("/api/cardAnalysis",CardAnalysis)
 
 const Activities = require("./Routes/activityRoute");
-app.use("/api/activities", Activities); 
+app.use("/api/activity", Activities); 
 
-const Indicators = require("./Routes/indicatorRoute");
-app.use("/api/indicators", Indicators);
+const Indicator = require("./Routes/indicatorRoute");
+app.use("/api/indicator", Indicator);
 
 const OperationalPlan = require("./Routes/operationalRoute");
 app.use("/api/operationalPlan", OperationalPlan);
