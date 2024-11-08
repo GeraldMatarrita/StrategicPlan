@@ -1,8 +1,5 @@
 const router = require("express").Router();
-const {
-  cardAnalysis,
-  validateCardAnalysis,
-} = require("../Models/CardAnalysisModel");
+const { cardAnalysis } = require("../Models/CardAnalysisModel");
 
 /**
  * Get an analysis card by ID.

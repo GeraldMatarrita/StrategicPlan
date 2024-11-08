@@ -1,13 +1,7 @@
 const router = require("express").Router();
 const { Goal, validateGoal } = require("../Models/GoalModel");
-const {
-  StrategicPlan,
-  validateStrategicPlan,
-} = require("../Models/StrategicPlanModel");
-const {
-  ObjectiveModel,
-  validateObjective,
-} = require("../Models/ObjectiveModel");
+const { StrategicPlan } = require("../Models/StrategicPlanModel");
+const { ObjectiveModel } = require("../Models/ObjectiveModel");
 
 /**
  * Function that retrieves all goals of an objective
@@ -34,7 +28,7 @@ router.get("/getObjectiveGoals/:objectiveId", async (req, res) => {
 
     res.status(200).json(goals); // Return the list of goals
   } catch (error) {
-    console.error("Error getting objective goals:", error); 
+    console.error("Error getting objective goals:", error);
     res.status(500).json({
       message: "Internal Server Error", // Handle server error
     });

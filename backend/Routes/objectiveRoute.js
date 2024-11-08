@@ -3,11 +3,7 @@ const {
   ObjectiveModel,
   validateObjective,
 } = require("../Models/ObjectiveModel");
-const { User, validateUser } = require("../Models/UserModel");
-const {
-  StrategicPlan,
-  validateStrategicPlan,
-} = require("../Models/StrategicPlanModel");
+const { StrategicPlan } = require("../Models/StrategicPlanModel");
 
 /**
  * Function that retrieves all objectives of a user
@@ -47,7 +43,7 @@ router.get("/getObjective/:objectiveId", async (req, res) => {
  */
 router.get("/getPlanObjectives/:planId", async (req, res) => {
   try {
-    const { planId } = req.params;  // Get the strategic plan ID from the request parameters
+    const { planId } = req.params; // Get the strategic plan ID from the request parameters
 
     // Search for the strategic plan
     const strategicPlan = await StrategicPlan.findById(planId);
@@ -130,7 +126,7 @@ router.put("/update/:objectiveId", async (req, res) => {
     const { objectiveId } = req.params; // Get the objective ID from the request parameters
 
     // Search for the objective
-    const objective = await ObjectiveModel.findById(objectiveId); 
+    const objective = await ObjectiveModel.findById(objectiveId);
     if (!objective) {
       return res.status(404).json({
         message: "Objective not found.", // If no objective is found, return an error
@@ -144,7 +140,7 @@ router.put("/update/:objectiveId", async (req, res) => {
       message: "Objective updated successfully.", // Send a success message
     });
   } catch (error) {
-    console.error("Error updating objective:", error); 
+    console.error("Error updating objective:", error);
     res.status(500).json({
       message: "Internal Server Error", // Handle server error
     });

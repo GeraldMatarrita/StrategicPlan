@@ -2,7 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
-const { User: UserModel, validateUser, User } = require("../Models/UserModel"); 
+const { User: UserModel, validateUser } = require("../Models/UserModel"); 
 
 // Configure nodemailer to send emails
 const transporter = nodemailer.createTransport({

@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { cardAnalysis, validateCardAnalysis } = require("../Models/CardAnalysisModel");
+const { cardAnalysis } = require("../Models/CardAnalysisModel");
 const SWOT = require("../Models/SwotModel"); // Import the SwotModel
 const { StrategicPlan } = require("../Models/StrategicPlanModel"); // Import the StrategicPlanModel
 

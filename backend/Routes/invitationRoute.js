@@ -1,10 +1,7 @@
 const router = require("express").Router();
 const nodemailer = require("nodemailer");
-const {
-  StrategicPlan,
-  validateStrategicPlan,
-} = require("../Models/StrategicPlanModel"); // Import the StrategicPlanModel
-const { User, validateUser } = require("../Models/UserModel"); // Adjust the path according to your model file location
+const { StrategicPlan } = require("../Models/StrategicPlanModel"); // Import the StrategicPlanModel
+const { User } = require("../Models/UserModel"); // Adjust the path according to your model file location
 
 // Configure nodemailer
 const transporter = nodemailer.createTransport({
@@ -104,7 +101,7 @@ router.get("/pendingCount/:userId", async (req, res) => {
       pendingCount,
     });
   } catch (error) {
-    console.error("Error getting pending invitations count:", error); 
+    console.error("Error getting pending invitations count:", error);
     res.status(500).json({
       message: "Internal Server Error", // Handle server error
     });
@@ -118,7 +115,6 @@ router.get("/pendingCount/:userId", async (req, res) => {
  * @throws {Object} - Error message
  */
 router.get("/getUsersNotInPlan/:planId", async (req, res) => {
-
   const { planId } = req.params; // Get the plan ID from the request parameters
 
   if (!planId) {
@@ -176,7 +172,6 @@ router.get("/getUsersNotInPlan/:planId", async (req, res) => {
  * @throws {Object} - Error message
  */
 router.post("/create", async (req, res) => {
-
   const { userId, planId } = req.body; // Get the user ID and plan ID from the request body
 
   if (!userId || !planId) {
@@ -350,7 +345,6 @@ router.post("/response", async (req, res) => {
    * @throws {Object} - Error message
    */
   router.delete("/deleteInvitation/:userId/:planId", async (req, res) => {
-
     const { userId, planId } = req.params; // Get the user ID and plan ID from the request parameters
     try {
       const user = await User.findById(userId); // Find the user by ID
