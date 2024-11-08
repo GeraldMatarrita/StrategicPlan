@@ -9,11 +9,11 @@ const app = express();
 // Middlewares
 app.use(express.json());
 
-// Configuración de CORS y manejo de rutas según el entorno
+// CORS configuration and route handling based on environment
 if (process.env.TARGET === "DEV") {
   console.log("Target is DEV");
 
-  // Configuración de CORS - Permite solicitudes desde un origen específico
+  // CORS configuration - Allows requests from a specific origin
   const corsOptions = {
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
@@ -29,24 +29,24 @@ if (process.env.TARGET === "DEV") {
         callback(new Error("Not allowed by CORS"));
       }
     },
-    optionsSuccessStatus: 204, // Devolver un código de éxito 204
-    methods: "GET, POST, PUT, DELETE, PATCH", // Permitir estos métodos HTTP
-    credentials: true, // Permite enviar cookies de forma segura
+    optionsSuccessStatus: 204, // Return a 204 success code
+    methods: "GET, POST, PUT, DELETE, PATCH", // Allow these HTTP methods
+    credentials: true, // Allow cookies to be sent securely
   };
 
-  app.use(cors(corsOptions)); // Usar el middleware CORS
+  app.use(cors(corsOptions)); // Use the CORS middleware
 } else if (process.env.TARGET === "PROD") {
   console.log("Target is PROD");
 
-  // Definir el archivo raíz para servir los archivos del frontend
+  // Define the root directory for serving frontend files
   const root = path.join(__dirname, "/dist/frontend/browser");
 
-  // Servir los archivos estáticos del frontend
+  // Serve static files from the frontend
   app.use(express.static(root));
 }
 
 // ---------------------------------------------------------------------
-// Rutas de la API (Declarar rutas del backend antes de servir archivos estáticos)
+// API Routes (Declare backend routes before serving static files)
 // ---------------------------------------------------------------------
 const StrategicPlanRoute = require("./Routes/strategicPlanRoute");
 app.use("/api/strategicPlan", StrategicPlanRoute);
@@ -63,17 +63,17 @@ app.use("/api/objective", Objective);
 const Goals = require("./Routes/goalRoute");
 app.use("/api/goals", Goals);
 
-const CameAnalysis = require("./Routes/cameAnalysisRoute")
-app.use("/api/cameAnalysis",CameAnalysis)
+const CameAnalysis = require("./Routes/cameAnalysisRoute");
+app.use("/api/cameAnalysis", CameAnalysis);
 
-const SwotAnalysis = require("./Routes/swotAnalysisRoute")
-app.use("/api/swotAnalysis",SwotAnalysis)
+const SwotAnalysis = require("./Routes/swotAnalysisRoute");
+app.use("/api/swotAnalysis", SwotAnalysis);
 
-const CardAnalysis = require("./Routes/cardAnalysisRoute")
-app.use("/api/cardAnalysis",CardAnalysis)
+const CardAnalysis = require("./Routes/cardAnalysisRoute");
+app.use("/api/cardAnalysis", CardAnalysis);
 
 const Activities = require("./Routes/activityRoute");
-app.use("/api/activity", Activities); 
+app.use("/api/activity", Activities);
 
 const Indicator = require("./Routes/indicatorRoute");
 app.use("/api/indicator", Indicator);
@@ -82,97 +82,30 @@ const OperationalPlan = require("./Routes/operationalRoute");
 app.use("/api/operationalPlan", OperationalPlan);
 
 // ---------------------------------------------------------------------
-// Servir archivos estáticos del frontend solo después de las rutas del backend
-// Esto asegura que las rutas del backend tengan prioridad
+// Serve frontend static files only after backend routes
+// This ensures backend routes take priority
 // ---------------------------------------------------------------------
 if (process.env.TARGET === "PROD") {
   const root = path.join(__dirname, "/dist/frontend/browser");
 
-  // Manejar todas las rutas que no coincidan con las rutas del backend
+  // Handle all routes that do not match backend routes
   app.get("*", function (req, res) {
     fs.stat(path.join(root, req.path), function (err) {
       if (err) {
-        // Si no encuentra el archivo, servir 'index.html'
+        // If file is not found, serve 'index.html'
         res.sendFile("index.html", { root });
       } else {
-        // Si el archivo existe, enviarlo
+        // If the file exists, send it
         res.sendFile(req.path, { root });
       }
     });
   });
 }
 
-// Conexión a la base de datos
+// Database connection
 const connection = require("./db");
 connection();
 
-// Configuración del puerto
+// Port configuration
 const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
-
-// require("dotenv").config();
-// const express = require("express");
-// const cors = require("cors");
-
-// const app = express();
-
-// // Middlewares
-// app.use(express.json());
-// app.use(cors());
-
-// // Conexión a la base de datos (asumiendo un archivo `db.js` para la conexión)
-// const connection = require("./db");
-// connection();
-
-// // Configuración del puerto
-// const port = process.env.PORT || 8080;
-// app.listen(port, () => console.log(`Listening on port ${port}...`));
-
-// // ---------------------------------------------------------------------
-// // Rutas
-// // ---------------------------------------------------------------------
-// const StrategicPlanRoute = require("./Routes/strategicPlanRoute");
-// app.use("/api/strategicPlan", StrategicPlanRoute);
-
-// const AuthRoute = require("./Routes/UserRoute");
-// app.use("/api/auth", AuthRoute);
-
-// const Invitations = require("./Routes/invitationRoute");
-// app.use("/api/invitations", Invitations);
-
-// const Objective = require("./Routes/objectiveRoute");
-// app.use("/api/objective", Objective);
-
-// const Goals = require("./Routes/goalRoute");
-// app.use("/api/goals", Goals);
-
-// const CameAnalysis = require("./Routes/cameAnalysisRoute")
-// app.use("/api/cameAnalysis",CameAnalysis)
-
-// const SwotAnalysis = require("./Routes/swotAnalysisRoute")
-// app.use("/api/swotAnalysis",SwotAnalysis)
-
-// const CardAnalysis = require("./Routes/cardAnalysisRoute")
-// app.use("/api/cardAnalysis",CardAnalysis)
-
-// const Activities = require("./Routes/activityRoute");
-// app.use("/api/activities", Activities); 
-
-// const Indicators = require("./Routes/indicatorRoute");
-// app.use("/api/indicators", Indicators);
-
-// const OperationalPlan = require("./Routes/operationalRoute");
-// app.use("/api/operationalPlan", OperationalPlan);
-
-// // --------------------------------------------------------------------------------
-// // --------------------------------------------------------------------------------
-// // al finalizar borrar esta ya que es solo de pruebas
-// // --------------------------------------------------------------------------------
-// // --------------------------------------------------------------------------------
-// // Ejemplo de rutas
-// const basicaRoutes = require("./Routes/basicaRoute");
-// // Ruta basica
-// app.use("/api/basica", basicaRoutes);
-// // ---------------------------------------------------------------------
-// // ---------------------------------------------------------------------
-// // ---------------------------------------------------------------------
