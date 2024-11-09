@@ -42,6 +42,7 @@ export class GoalsComponent implements OnInit {
   goalsIdSelected: string = ''; // ID of the selected goal
   indicatorToView: any = {}; // Indicator to view
   currentPlan: any = {}; // Current plan
+  generalProgress = { actual: 0, goal: 100 };
 
   showModal: boolean = false; // Variable to show/hide the modal
 
@@ -441,7 +442,7 @@ export class GoalsComponent implements OnInit {
             console.error('Error retrieving the objective:', error);
           }
         );
-        this.loadGoalsByObjective(this.objectiveIdSelected);
+      this.loadGoalsByObjective(this.objectiveIdSelected);
     } else {
       // If no objective is selected, clear the Goals
       this.goalsData = [];
@@ -520,35 +521,28 @@ export class GoalsComponent implements OnInit {
    * @param goals List of goals
    * @returns Object with the actual and goal progress
    */
-  calculateGeneralProgress(goals: any[]): { actual: number; goal: number } {
-    if (!goals.length) return { actual: 0, goal: 100 };
-
+  calculateGoalProgress(goal: any): { actual: number; goal: number } {
+    if (!goal || !goal.Activity_ListIDS.length) return { actual: 0, goal: 100 };
+  
     let totalProgress = 0;
     let activityCount = 0;
-
-    goals.forEach((goal) => {
-      goal.Activity_ListIDS.forEach((activity: any) => {
-        // Verify that the activity has an indicator and that the total is greater than 0
-        if (
-          activity.currentIndicatorId &&
-          activity.currentIndicatorId.total > 0
-        ) {
-          // Calculate the progress of the activity
-          const activityProgress =
-            (activity.currentIndicatorId.actual /
-              activity.currentIndicatorId.total) *
-            100;
-          totalProgress += activityProgress;
-          activityCount++;
-        }
-      });
+  
+    goal.Activity_ListIDS.forEach((activity: any) => {
+      if (
+        activity.currentIndicatorId &&
+        activity.currentIndicatorId.total > 0
+      ) {
+        const activityProgress =
+          (activity.currentIndicatorId.actual /
+            activity.currentIndicatorId.total) *
+          100;
+        totalProgress += activityProgress;
+        activityCount++;
+      }
     });
-
-    // Avoid division by zero
-    const averageProgress =
-      activityCount > 0 ? totalProgress / activityCount : 0;
-
-    // Return the average progress
+  
+    const averageProgress = activityCount > 0 ? totalProgress / activityCount : 0;
+  
     return { actual: Math.round(averageProgress), goal: 100 };
   }
 

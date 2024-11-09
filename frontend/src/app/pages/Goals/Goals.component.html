@@ -1,25 +1,21 @@
 <div class="goalsStyle">
   <div class="goalsMenu">
-
-      <div *ngIf="currentPlanId" class="selectGroup" id="selectObjective">
-        <label for="objectiveSelect">Select an Objective:</label>
-        <select
-          [(ngModel)]="objectiveIdSelected"
-          id="objectiveSelect"
-          (change)="onObjectiveChange()"
-        >
-          <!-- Agregar esta opción por defecto -->
-          <option
-            *ngFor="let objective of objectiveData"
-            [value]="objective._id"
-          >
-            {{ objective.title }}
-          </option>
-        </select>
+    <div *ngIf="currentPlanId" class="selectGroup" id="selectObjective">
+      <label for="objectiveSelect">Select an Objective:</label>
+      <select
+        [(ngModel)]="objectiveIdSelected"
+        id="objectiveSelect"
+        (change)="onObjectiveChange()"
+      >
+        <!-- Agregar esta opción por defecto -->
+        <option *ngFor="let objective of objectiveData" [value]="objective._id">
+          {{ objective.title }}
+        </option>
+      </select>
     </div>
     <button
       *ngIf="!currentOperationalId"
-      id = "buttonCreate"
+      id="buttonCreate"
       class="buttonCreate m-3"
       (click)="navigateToSelectPlan()"
     >
@@ -29,7 +25,11 @@
       <label
         style="margin-right: 80px; color: white; font-size: 1.5em"
         for="objectiveTitle"
-        >{{currentPlanId? "Goals for Objective:": "First Select a Strategic Plan" }}</label
+        >{{
+          currentPlanId
+            ? "Goals for Objective:"
+            : "First Select a Strategic Plan"
+        }}</label
       >
       <p id="objectiveTitle">{{ currentObjective.title }}</p>
     </div>
@@ -169,14 +169,14 @@
             <label id="generalLabel" for="progress">General Progress:</label>
             <div class="progress-container">
               <span class="progress-current">
-                {{ calculateGeneralProgress(goalsData).actual }}
+                {{ calculateGoalProgress(goal).actual }}
               </span>
               <progress
-                [value]="calculateGeneralProgress(goalsData).actual"
+                [value]="calculateGoalProgress(goal).actual"
                 max="100"
               ></progress>
               <span class="progress-goal">
-                {{ calculateGeneralProgress(goalsData).goal }}
+                {{ calculateGoalProgress(goal).goal }}
               </span>
             </div>
           </div>
@@ -223,7 +223,7 @@
                     Description is required.
                   </p>
                 </div>
-              </div>       
+              </div>
               <div id="formCheckbox" class="form1-group" *ngIf="isEditing">
                 <label for="completed" class="completed-label">Completed</label>
                 <input
@@ -232,7 +232,6 @@
                   formControlName="completed"
                   class="completed-checkbox"
                 />
-                
               </div>
               <div class="badInfo" *ngIf="!formGoal.valid">
                 <p>Not ready to send</p>
