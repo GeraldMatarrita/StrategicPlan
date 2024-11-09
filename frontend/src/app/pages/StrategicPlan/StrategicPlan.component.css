@@ -3,29 +3,28 @@
 }
 
 .StrategicPlanStyle {
-  padding: 10px 0px 50px 0px; /* top right bottom left */
+  padding: 10px 0px 50px 0px;
   color: var(--text_color);
   margin-top: 52px;
 }
-/* ----------------------------------------------------- */
-/* card perzonalizada numero 1 Varation */
-/* ----------------------------------------------------- */
 
 .container-card1-view {
   position: relative;
-  width: 450px; /* 100% */
-  height: 205px; /* 100% */
-  margin: 8%; /* Reducir padding si es necesario */
+  width: 450px;
+  height: 205px;
+  margin: 8%;
   z-index: 1;
 }
+
 .container-card1-preview {
   position: relative;
-  width: 450px; /* 100% */
-  height: 205px; /* 100% */
-  margin: 8%; /* Reducir padding si es necesario */
+  width: 450px;
+  height: 205px;
+  margin: 8%;
   z-index: 1;
   padding: 0;
 }
+
 .container-card1-preview:hover {
   border-radius: 22px;
   box-shadow: 0 0 10px #fff;
@@ -35,19 +34,17 @@
 
 #containerStrateciPlan {
   overflow-wrap: break-word;
-  word-break: break-all; /* Forzará el corte de palabras largas */
-  white-space: normal; /* Asegura que el texto se ajuste en varias líneas */
+  word-break: break-all;
+  white-space: normal;
 }
-/* ------------------------------ */
-/* SECTION 1: General Styling */
-/* ------------------------------ */
+
 #section1 {
   min-height: 400px;
 }
 
 #section1NameTitle {
   padding: 10px;
-  display: inline-block; /* Asegura que se alineen en la misma línea */
+  display: inline-block;
   font-size: 1.4rem;
   font-weight: bold;
   color: rgb(214, 208, 208);
@@ -56,7 +53,7 @@
 #section1StartDateTitle {
   width: 50%;
   padding: 10px;
-  display: inline-block; /* Asegura que se alineen en la misma línea */
+  display: inline-block;
   font-size: 1.3rem;
   font-weight: bold;
   color: var(--text_color);
@@ -65,7 +62,7 @@
 #section1EndDateTitle {
   width: 50%;
   padding: 10px;
-  display: inline-block; /* Asegura que se alineen en la misma línea */
+  display: inline-block;
   font-size: 1.3rem;
   font-weight: bold;
   color: var(--text_color);
@@ -74,7 +71,7 @@
 #section1startDateValue {
   width: 50%;
   padding: 10px;
-  display: inline-block; /* Asegura que se alineen en la misma línea */
+  display: inline-block;
   font-size: 1rem;
   color: var(--text_color);
 }
@@ -82,20 +79,16 @@
 #section1EndDateValue {
   width: 50%;
   padding: 10px;
-  display: inline-block; /* Asegura que se alineen en la misma línea */
+  display: inline-block;
   font-size: 1rem;
   color: var(--text_color);
 }
 
 #section1NameValue {
-  display: inline-block; /* Asegura que se alineen en la misma línea */
+  display: inline-block;
   font-size: 1.2rem;
   color: var(--text_color);
 }
-
-/* ------------------------------ */
-/* SECTION 2: Background and Title */
-/* ------------------------------ */
 
 #section2 {
   min-height: 400px;
@@ -125,10 +118,6 @@
   padding: 0 10%;
 }
 
-/* ------------------------------ */
-/* SECTION 3: Gradient Background and Title */
-/* ------------------------------ */
-
 #section3 {
   min-height: 400px;
   background: linear-gradient(190deg, var(--color1_blue), var(--color2_purple));
@@ -155,13 +144,13 @@
   color: rgb(187, 178, 178);
   cursor: pointer;
   border: 2px solid #c401c4;
-  transform: scale(1.1); 
+  transform: scale(1.1);
 }
 
 #objectiveList {
   display: inline-block;
   transition: transform 0.3s ease;
-  word-wrap: break-word; 
+  word-wrap: break-word;
   white-space: normal;
   word-break: keep-all;
   overflow-wrap: break-word;
@@ -184,10 +173,6 @@
   background: linear-gradient(190deg, var(--color1_blue), var(--color2_purple));
 }
 
-/* ------------------------------ */
-/* SECTION 4: Background and Title */
-/* ------------------------------ */
-
 #section4 {
   min-height: 400px;
   background-color: #111010;
@@ -206,37 +191,27 @@
   padding: 0 10%;
 }
 
-/* ------------------------------ */
-/* Media Query for screens smaller than 992px */
-/* ------------------------------ */
-
 @media (max-width: 992px) {
   #section1 {
     scale: 0.8;
   }
 }
 
-/* ------------------------------ */
-/* Media Query for screens smaller than 576px */
-/* ------------------------------ */
 @media (max-width: 576px) {
   #section1 {
     scale: 0.6;
   }
 }
 
-/* ------------------------------ */
-/* Para los members*/
-/* ------------------------------ */
 .members {
   min-height: 400px;
   display: flex;
-  flex-direction: column; /* Asegura que los elementos estén en una columna */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
   padding: 30px;
-  list-style: none; /* Elimina los marcadores de la lista */
+  list-style: none;
 }
 
 .members li {
@@ -271,7 +246,7 @@
 #section2Value, #section3Value, #section4Value, #objectiveValue {
   padding-top: 20px;
   padding-bottom: 20px;
-  white-space: pre-wrap; /* Respeta los espacios en blanco y saltos de línea */
-  overflow-wrap: break-word; /* Permite que las palabras largas se dividan y pasen a la siguiente línea */
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
   word-break: normal;
 }

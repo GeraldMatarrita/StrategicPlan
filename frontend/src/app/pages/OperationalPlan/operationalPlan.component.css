@@ -3,21 +3,21 @@
 }
 
 .OperationalPlanStyle {
-  padding: 0px 0px 50px 0px; /* top right bottom left */
+  padding: 0px 0px 50px 0px;
   color: var(--text_color);
   margin-top: 52px;
 }
 
 .container {
-  min-height: 100vh; /* Al menos la altura total de la ventana */
-  height: auto; /* Permite que crezca en altura */
+  min-height: 100vh;
+  height: auto;
   overflow: visible;
 }
 
 .operationalPlanMenu {
   display: flex;
-  justify-content: space-between; /* Centrar planTitle horizontalmente */
-  align-items: center; /* Alinear verticalmente */
+  justify-content: space-between;
+  align-items: center;
   padding-bottom: 10px;
   padding-top: 5px;
   margin-bottom: 20px;
@@ -30,7 +30,7 @@
 }
 
 #form1-group-title {
-    margin-right: 140px;
+  margin-right: 140px;
 }
 
 #strategicPlan {
@@ -64,10 +64,6 @@
   border: 2px solid var(--color2_purple);
 }
 
-/* ----------------------------------------------------- */
-/* botones */
-/* ----------------------------------------------------- */
-
 .btnCancel {
   max-width: 200px;
   padding: 10px;
@@ -82,20 +78,16 @@
   color: white;
 }
 
-/* ----------------------------------------------------- */
-/* card personalizada para planes operacionales */
-/* ----------------------------------------------------- */
-
 .card-container {
-  display: flex; /* Organiza los elementos hijos en una fila */
+  display: flex;
   background-color: var(--gray_middle_dark);
-  flex-wrap: wrap; /* Permite que los elementos salten a la siguiente línea si no caben en una fila */
-  gap: 40px; /* Espacio entre las tarjetas */
+  flex-wrap: wrap;
+  gap: 40px;
 }
 
 .titleContainer {
-  justify-content: space-between; 
-  align-items: center; 
+  justify-content: space-between;
+  align-items: center;
   display: flex;
   padding: 8px 0;
   margin-bottom: 15px;
@@ -107,14 +99,10 @@
 }
 
 .card-OperationalPlan-container {
-  margin: 5px; /* Espacio entre las tarjetas */
-  flex-basis: calc(
-    40% - 25px
-  ); /* Ajuste para que ocupen la mitad del ancho menos el espacio del gap */
-  max-width: calc(
-    40% - 25px
-  ); /* Limita el ancho máximo para evitar desbordes */
-  height: auto; /* Deja que la altura se ajuste automáticamente */
+  margin: 5px;
+  flex-basis: calc(40% - 25px);
+  max-width: calc(40% - 25px);
+  height: auto;
   background-image: linear-gradient(
     163deg,
     var(--color3_pink) 0%,
@@ -170,12 +158,10 @@
   border: 1px solid var(--color1_blue);
   border-radius: 10px;
   padding: 10px 15px;
-
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Limita a 3 líneas */
-  line-clamp: 3; /* Limita a 3 líneas */
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
-
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
@@ -235,10 +221,8 @@
   height: auto;
   border-radius: 10px;
   padding: 7px 15px;
-
   display: -webkit-box;
   -webkit-box-orient: vertical;
-
   overflow: visible;
   word-break: break-word;
 }

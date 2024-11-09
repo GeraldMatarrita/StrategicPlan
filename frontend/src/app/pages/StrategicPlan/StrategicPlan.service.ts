@@ -107,6 +107,12 @@ export class StrategicPlanService {
     });
   }
 
+  /**
+   * Function to update StrategicPlan data
+   * @param id ID of the data to update
+   * @param data data to send for update
+   * @returns promise with the response message
+   */
   updateStrategicPlan(id: string, data: any): Promise<string> {
     return new Promise((resolve, reject) => {
       this.updateData(

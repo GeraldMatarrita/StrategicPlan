@@ -2,102 +2,92 @@
   display: block;
 }
 
-/* Contenedor */
-.wrapper {
-  background-color: var(--gray_high_dark); 
-  padding: 0 20px; 
-  min-height: 100vh; 
-  margin-top: 52px;
+.buttonAdd {
+  margin-bottom: 20px;
+  margin-top: 10px;
+  width: 100%;
 }
 
-/* Contenido principal */
-.FodaStyle {
-  background-color: var(--gray_middle_dark); 
-  color: white;
-  min-height: calc(100vh - 52px);
-  max-width: 1200px; 
-  padding: 20px;
-  margin: 0 auto; 
-  border-radius: 10px; 
-}
-
-/* Estilos comunes para tarjetas */
 .card {
-  padding: 1px;
-  border-radius: 3mm;
   border-color: #232323;
-  color: white; /* Asegurar que el texto sea blanco para buen contraste */
+  border-radius: 3mm;
+  color: white;
+  padding: 1px;
 }
 
 .card h6 {
-  font-size: 1.5em;
+  border-bottom: 2px solid var(--text_color);
   color: var(--text_color);
-  border-bottom: 2px solid var(--text_color); /* Línea blanca debajo del título */
-  padding-bottom: 5px; /* Espacio entre el texto y la línea */
+  font-size: 1.5em;
+  padding-bottom: 5px;
 }
 
-/* Diferentes estilos para cada columna y sus cards */
-
-.strengths-column {
-  border-left: 5px solid var(--color1_blue); 
-  background-color: rgba(55, 0, 255, 0.1); /* Fondo azul suave para la columna */
+.FodaStyle {
+  background-color: var(--gray_middle_dark);
+  border-radius: 10px;
+  color: white;
+  margin: 0 auto;
+  max-width: 1200px;
+  min-height: calc(100vh - 52px);
+  padding: 20px;
 }
 
-.strengths-column .card {
-  background-color: #2b2b6f; /* Un tono más oscuro de azul para el card */
-  color: #ffffff; /* Texto blanco para buen contraste */
-}
-
-.weaknesses-column {
-  border-left: 5px solid #ff0000;
-  background-color: rgba(255, 0, 0, 0.1); /* Fondo rojo suave */
-}
-
-.weaknesses-column .card {
-  background-color: #7f2b2b; /* Rojo oscuro para el card */
-  color: #ffffff; /* Texto blanco para buen contraste */
+.h6 {
+  color: #969696;
+  margin-top: 10px;
 }
 
 .opportunities-column {
+  background-color: rgba(0, 21, 255, 0.101);
   border-left: 5px solid #9900ff;
-  background-color: rgba(0, 21, 255, 0.101); /* Fondo verde suave */
 }
 
 .opportunities-column .card {
-  background-color: var(--color2_purple); /* Verde oscuro para el card */
-  color: #ffffff; /* Texto blanco para buen contraste */
+  background-color: var(--color2_purple);
+  color: #ffffff;
+}
+
+.wrapper {
+  background-color: var(--gray_high_dark);
+  margin-top: 52px;
+  min-height: 100vh;
+  padding: 0 20px;
+}
+
+.weaknesses-column {
+  background-color: rgba(255, 0, 0, 0.1);
+  border-left: 5px solid #ff0000;
+}
+
+.weaknesses-column .card {
+  background-color: #7f2b2b;
+  color: #ffffff;
+}
+
+.strengths-column {
+  background-color: rgba(55, 0, 255, 0.1);
+  border-left: 5px solid var(--color1_blue);
+}
+
+.strengths-column .card {
+  background-color: #2b2b6f;
+  color: #ffffff;
 }
 
 .threats-column {
+  background-color: rgba(255, 0, 255, 0.1);
   border-left: 5px solid var(--color3_pink);
-  background-color: rgba(255, 0, 255, 0.1); /* Fondo morado suave */
 }
 
 .threats-column .card {
-  background-color: #7f2b7f; /* Morado oscuro para el card */
-  color: #ffffff; /* Texto blanco para buen contraste */
+  background-color: #7f2b7f;
+  color: #ffffff;
 }
 
-h6{
-  margin-top: 10px;
-  color: #969696;
-}
-
-/* Estilos para los botones de agregar */
-.buttonAdd {
-  width: 100%;
-  margin-top: 10px;
-  margin-bottom: 20px; /* Ocupa todo el ancho de la columna */
-}
-
-#opportunityBtn, #maintainBtn{
+#maintainBtn, #opportunityBtn {
   background-color: var(--color3_pink);
 }
 
-#opportunityBtn:hover, #maintainBtn:hover{
+#maintainBtn:hover, #opportunityBtn:hover {
   background-color: #da13e0;
 }
-
-
-
-

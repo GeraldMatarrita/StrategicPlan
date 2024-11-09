@@ -23,13 +23,13 @@ export class InvitationsService {
   }
 
   // --------------------------------------------
-  // Métodos para la API
+  // Methods for the API
   // --------------------------------------------
 
   /**
-   * función para obtener todas las invitaciones de un usuario
-   * @param userId del usuario
-   * @returns promesa con los datos
+   * Function to get all invitations for a user
+   * @param userId of the user
+   * @returns promise with the data
    */
   getInvitationsForUser(userId: string): Observable<any[]> {
     return this.http.get<any[]>(
@@ -38,9 +38,9 @@ export class InvitationsService {
   }
 
   /**
-   * función para obtener el conteo de invitaciones pendientes para un usuario
-   * @param userId del usuario
-   * @returns promesa con el conteo de invitaciones pendientes
+   * Function to get the count of pending invitations for a user
+   * @param userId of the user
+   * @returns promise with the pending invitations count
    */
   getPendingInvitationsCount(userId: string): Observable<number> {
     return this.http.get<{ pendingCount: number }>(
@@ -48,20 +48,20 @@ export class InvitationsService {
     ).pipe(map(response => response.pendingCount));
   }
 
-  // Método para obtener el observable del conteo
+  // Method to get the observable of the count
   getPendingInvitationsCountObservable(): Observable<number> {
     return this.pendingInvitationsCount.asObservable();
   }
 
-  // Método para actualizar el conteo de invitaciones
+  // Method to update the invitations count
   updatePendingInvitationsCount(count: number) {
     this.pendingInvitationsCount.next(count);
   }
 
   /**
-   * funcion para obtener los planes estrategicos de un usuario por su id
-   * @param userId del usuario
-   * @returns promesa con los datos
+   * Function to get the strategic plans for a user by their id
+   * @param userId of the user
+   * @returns promise with the data
    */
   getStrategicPlansForUser(userId: string): Observable<any[]> {
     return this.http.get<any[]>(
@@ -70,9 +70,9 @@ export class InvitationsService {
   }
 
   /**
-   * función para obtener los usuarios a invitar que no sean el usuario activo ni estén ya invitados
-   * @param planId del plan estratégico
-   * @returns promesa con los datos
+   * Function to get users to invite who are neither the active user nor already invited
+   * @param planId of the strategic plan
+   * @returns promise with the data
    */
   getUserToInvite(planId: String): Observable<any[]> {
     return this.http.get<any[]>(
@@ -81,9 +81,9 @@ export class InvitationsService {
   }
 
   /**
-   * función para craer los datos de invitación
-   * @param data datos a enviar
-   * @returns promesa con el mensaje de respuesta
+   * Function to create invitation data
+   * @param data data to send
+   * @returns promise with the response message
    */
   createInvitation(data: any): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -95,7 +95,7 @@ export class InvitationsService {
           resolve(response.message);
         },
         (error: any) => {
-          console.error('Error al enviar los datos:', error);
+          console.error('Error sending data:', error);
           reject(error);
         }
       );
@@ -103,8 +103,8 @@ export class InvitationsService {
   }
 
   /**
-   * funcion para responder una invitación
-   * @param data aceptar o rechazar la invitación, a cual plan estratégico y el usuario que responde
+   * Function to respond to an invitation
+   * @param data accept or reject the invitation, the strategic plan, and the responding user
    * @returns
    */
   responseInvitation(data: any): Promise<string> {
@@ -117,13 +117,19 @@ export class InvitationsService {
           resolve(response.message);
         },
         (error: any) => {
-          console.error('Error al responder la invitación:', error);
+          console.error('Error responding to the invitation:', error);
           reject(error);
         }
       );
     });
   }
 
+  /**
+   * Function to delete an invitation
+   * @param userId of the user
+   * @param planId of the strategic plan
+   * @returns promise with the response message
+   */
   deleteInvitation(userId: string, planId: string): Promise<string> {
     return new Promise((resolve, reject) => {
       this.http.delete(`${API_ROUTES.BASE_URL}${API_ROUTES.Delete_Invitation}/${userId}/${planId}`
@@ -132,7 +138,7 @@ export class InvitationsService {
           resolve(response.message);
         },
         (error: any) => {
-          console.error('Error al eliminar la invitación:', error);
+          console.error('Error deleting the invitation:', error);
           reject(error);
         }
       );

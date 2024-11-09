@@ -47,6 +47,10 @@ export class OperationalPlanComponent implements OnInit {
     this.loadOperationalPlans(localStorage.getItem('PlanID') || '');
   }
 
+  /**
+   * Initializes the operational plan form with necessary fields and validation.
+   * Sets up a listener to validate the 'endDate' field.
+   */
   initializeForm() {
     this.formOperationalPlan = this.formBuilder.group({
       title: ['', [Validators.required]],
@@ -60,10 +64,15 @@ export class OperationalPlanComponent implements OnInit {
     });
   }
 
+  /**
+   * Validates if the end date is greater than the current date.
+   * @param value - The selected end date value.
+   */
   validateEndDate(value: string): void {
     const today = new Date();
     const selectedEndDate = new Date(value);
 
+    // If the selected end date is less than or equal to today, set an error
     if (selectedEndDate <= today) {
       this.formOperationalPlan.get('endDate')?.setErrors({
         invalidDate: true,
@@ -73,18 +82,26 @@ export class OperationalPlanComponent implements OnInit {
     }
   }
 
-  loadStrategicPlans(): void {
-    const activeUser = this.authService.getActiveUserID();
+  /**
+   * Loads the strategic plans from the service and sets the selected strategic plan.
+   * Updates the list of operational plans based on the selected strategic plan.
+   */
+  async loadStrategicPlans(): Promise<void> {
+    const activeUserId = await this.authService.getActiveUserID();
   
-    if (!activeUser) {
+    if (!activeUserId) {
       this.router.navigate([NAVIGATIONS_ROUTES.AUTH]);
     }
+    console.log('Active User ID:', activeUserId);
 
     this.selectedStrategicPlanId = localStorage.getItem('PlanID') || '';
   
+    // Load strategic plans and set the selected plan
     this.strategicPlanService.getStrategicPlans().pipe(
       tap((plans: any[]) => {
         this.strategicPlans = plans;
+        console.log('Strategic Plans:', this.strategicPlans);
+        this.strategicPlans = this.strategicPlans.filter(plan => plan.members_ListIDS.includes(activeUserId));
         const storedPlanId = localStorage.getItem('PlanID');
   
         if (storedPlanId) {
@@ -95,7 +112,7 @@ export class OperationalPlanComponent implements OnInit {
         }
       }),
       switchMap(() => {
-        // Solo carga los planes operacionales si `selectedStrategicPlan` está definido
+        // Only fetch the plan if it exists
         return this.selectedStrategicPlan
           ? this.strategicPlanService.getPlanByID(this.selectedStrategicPlan._id)
           : [];
@@ -111,9 +128,13 @@ export class OperationalPlanComponent implements OnInit {
       },
       (error) => console.error('Error loading plans:', error)
     );
-
   }
 
+  /**
+   * Loads operational plans based on the selected strategic plan ID.
+   * Updates the list of operational plans and checks for active/inactive plans.
+   * @param StrategicPlanID - ID of the selected strategic plan.
+   */
   loadOperationalPlans(StrategicPlanID: string): void {
     localStorage.setItem('PlanID', StrategicPlanID);
     this.strategicPlanService.getPlanByID(StrategicPlanID).subscribe((plan) => {
@@ -124,10 +145,17 @@ export class OperationalPlanComponent implements OnInit {
     });
   }
 
+  /**
+   * Checks if there is an active operational plan.
+   */
   checkActivePlan(): void {
     this.activePlanExists = this.operationalPlans.some((plan) => plan.active);
   }
 
+  /**
+   * Checks each operational plan's end date. If the plan is active and the end date has passed, 
+   * it sets the plan to inactive.
+   */
   checkAndSetInactivePlans(): void {
     const today = new Date();
     this.operationalPlans.forEach((plan) => {
@@ -143,6 +171,9 @@ export class OperationalPlanComponent implements OnInit {
     });
   }
 
+  /**
+   * Opens the form to create a new operational plan by resetting the form and setting the modal visibility to true.
+   */
   openCreateForm(): void {
     this.showModal = true;
     this.isEditing = false;
@@ -150,6 +181,10 @@ export class OperationalPlanComponent implements OnInit {
     this.initializeForm();
   }
 
+  /**
+   * Handles the creation of a new operational plan.
+   * Confirms the creation action with a Swal prompt and proceeds to create the plan.
+   */
   createOperationalPlan(): void {
     Swal.fire({
       title: 'Create Operational Plan',
@@ -178,7 +213,7 @@ export class OperationalPlanComponent implements OnInit {
               'success'
             );
             localStorage.setItem('ActiveOperationalPlanID', OperationalPlan);
-            this.loadStrategicPlans(); // Recargar los planes estratégicos después de crear
+            this.loadStrategicPlans(); // Reload plans to update the active plan
           })
           .catch((error) => {
             Swal.fire('Error', 'Failed to create Operational Plan', 'error');
@@ -189,6 +224,10 @@ export class OperationalPlanComponent implements OnInit {
     });
   }
 
+  /**
+   * Opens the form to edit an existing operational plan and populates it with the selected plan's data.
+   * @param plan - The operational plan to edit.
+   */
   openEditForm(plan: any): void {
     this.showModal = true;
     this.isEditing = true;
@@ -204,15 +243,21 @@ export class OperationalPlanComponent implements OnInit {
     });
   }
 
+  /**
+   * Handles the update of an existing operational plan.
+   * Prompts for confirmation if the end date is in the past.
+   */
   updateOperationalPlan(): void {
     const updatedData = {
       title: this.formOperationalPlan.value.title,
       endDate: this.formOperationalPlan.value.endDate,
     };
 
+    // Check if the end date is in the past
     const today = new Date();
     const endDate = new Date(updatedData.endDate);
 
+    // If the end date is in the past, prompt the user to confirm the update
     if (endDate < today) {
       Swal.fire({
         title: 'Warning',
@@ -243,6 +288,9 @@ export class OperationalPlanComponent implements OnInit {
     }
   }
 
+  /**
+   * Proceeds with the update of an operational plan.
+   */
   private proceedWithUpdate(updatedData: {
     title: string;
     endDate: string;
@@ -264,11 +312,17 @@ export class OperationalPlanComponent implements OnInit {
       });
   }
 
+  /**
+   * Handles the deletion of an existing operational plan.
+   */
   redirectToGoals(planId: string): void {
     localStorage.setItem('OperationalPlanID', planId);
     this.router.navigate([NAVIGATIONS_ROUTES.GOALS]);
   }
 
+  /**
+   * Handles the deletion of an existing operational plan.
+   */
   toogleShowModal(): void {
     this.showModal = !this.showModal;
   }

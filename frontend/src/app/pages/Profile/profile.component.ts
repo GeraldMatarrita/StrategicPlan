@@ -32,7 +32,7 @@ export class ProfileComponent implements OnInit {
   activeUserID: string = '';
   activeUser: any = {};
   userProfile: UserProfile | null = null;
-  isEditing = false;  // Estado para controlar si estamos editando o no
+  isEditing = false;  // State to control whether we are editing or not
   strategicPlans: StrategicPlan[] = [];
 
   constructor(
@@ -48,12 +48,19 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  /**
+   * ngOnInit lifecycle hook.
+   * Initializes the component and loads user data.
+   */
   ngOnInit(): void {
     this.loadUserProfile();
     this.loadUserProfileId();
   }
 
-  // Cargar el perfil del usuario
+  /**
+   * Loads the active user's profile and updates the form with the profile data.
+   * @returns {Promise<void>} A promise indicating the completion of the operation.
+   */
   async loadUserProfile() {
     await this.authService.getActiveUser().then((profile) => {
       this.userProfile = profile;
@@ -62,44 +69,61 @@ export class ProfileComponent implements OnInit {
         email: profile.email,
         username: profile.name,
       });
-      this.disableForm();  // Asegurarse de que el formulario esté deshabilitado al cargar
-      this.isEditing = false;  // Inicialmente no estamos en modo edición
+      this.disableForm();  // Ensure the form is disabled when loaded
+      this.isEditing = false;  // Initially not in editing mode
     });
   }
 
+  /**
+   * Loads the user profile ID and fetches the strategic plans associated with the user.
+   * @returns {Promise<void>} A promise indicating the completion of the operation.
+   */
   async loadUserProfileId() {
     this.activeUser = await this.authService.getActiveUser();
     this.activeUserID = this.activeUser._id;
     this.loadStrategicPlans();
   }
 
-  // Habilitar los campos del formulario para edición
+  /**
+   * Enables form fields for editing by setting the form to editable state.
+   * @returns {void} This function does not return any value.
+   */
   enableEdit() {
     this.isEditing = true;
     this.profileForm.get('realName')?.enable();
     this.profileForm.get('email')?.enable();
   }
 
-  // Deshabilitar los campos del formulario
+  /**
+   * Disables the form fields, preventing editing.
+   * @returns {void} This function does not return any value.
+   */
   disableForm() {
     this.profileForm.get('realName')?.disable();
     this.profileForm.get('email')?.disable();
   }
 
-  // Cancelar la edición, deshabilitar el formulario y restaurar los valores originales
+  /**
+   * Cancels the editing mode, restores the form to its original state, and disables the form fields.
+   * @returns {void} This function does not return any value.
+   */
   cancelEdit() {
     this.isEditing = false;
     this.profileForm.patchValue({
       name: this.userProfile?.realName,
       email: this.userProfile?.email,
     });
-    this.disableForm();  // Volver a deshabilitar los campos
+    this.disableForm();  // Re-disable the fields
   }
 
-  // Actualizar perfil del usuario
+  /**
+   * Updates the user's profile in the backend if the form is valid.
+   * Displays success or error message upon completion.
+   * @returns {Promise<void>} A promise indicating the completion of the operation.
+   */
   async updateUserProfile() {
     if (this.profileForm.invalid) {
-      return;  // Evitar la actualización si el formulario no es válido
+      return;  // Prevent update if the form is invalid
     }
 
     const updatedProfile = {
@@ -108,7 +132,7 @@ export class ProfileComponent implements OnInit {
     };
 
     try {
-      // Llamar al servicio para actualizar el usuario en el backend
+      // Call the service to update the user on the backend
       await this.authService.updateUserInBackend(this.activeUserID, updatedProfile).then(() => {
         Swal.fire({
           title: 'Success!',
@@ -116,8 +140,8 @@ export class ProfileComponent implements OnInit {
           icon: 'success',
           confirmButtonText: 'OK'
         });
-        this.loadUserProfile();  // Recargar el perfil para reflejar los cambios
-        this.cancelEdit();  // Salir del modo de edición
+        this.loadUserProfile();  // Reload the profile to reflect changes
+        this.cancelEdit();  // Exit edit mode
       });
     } catch (error) {
       Swal.fire({
@@ -129,12 +153,20 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  /**
+   * Loads the strategic plans associated with the active user.
+   * @returns {Promise<void>} A promise indicating the completion of the operation.
+   */
   async loadStrategicPlans() {
     await this.profileService.getActivePlans(this.activeUserID).subscribe((plans) => {
       this.strategicPlans = plans;
     });
   }
 
+  /**
+   * Navigates the user to the strategic plan selection page.
+   * @returns {void} This function does not return any value.
+   */
   navigateStrategicPlans() {
     this.router.navigate([NAVIGATIONS_ROUTES.SELECT_STRATEGIC_PLAN]);
   }

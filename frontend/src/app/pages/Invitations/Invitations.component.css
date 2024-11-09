@@ -1,9 +1,9 @@
 :host {
   display: block;
 }
-/* Estilos generales para ng-select */
+
 .invitationStyle {
-  padding: 10px 10px 50px 10px; /* top right bottom left */
+  padding: 10px 10px 50px 10px;
   color: var(--text_color);
   text-align: center;
   margin-top: 52px;
@@ -37,20 +37,18 @@ td {
   color: var(--text_color);
   font-weight: bold;
   padding: 10px;
-  vertical-align: middle; /* Centrar verticalmente */
+  vertical-align: middle;
 }
-/* ----------------------------------------------------- */
-/* card perzonalizada numero 1 Varation */
-/* ----------------------------------------------------- */
 
 .container-card1-preview {
   position: relative;
-  width: 450px; /* 100% */
-  height: 205px; /* 100% */
-  margin: 8%; /* Reducir padding si es necesario */
+  width: 450px;
+  height: 205px;
+  margin: 8%;
   z-index: 1;
   padding: 0;
 }
+
 .container-card1-preview:hover {
   border-radius: 22px;
   box-shadow: 0 0 10px #fff;
@@ -58,64 +56,36 @@ td {
   scale: 1.1;
 }
 
-/* ------------------------------ */
-/* SECTION 1: General Styling */
-/* ------------------------------ */
 #section1 {
   min-height: 300px;
 }
 
-#section1NameTitle {
+#section1NameTitle,
+#section1StartDateTitle,
+#section1EndDateTitle,
+#section1startDateValue,
+#section1EndDateValue,
+#section1NameValue {
   padding: 10px;
-  display: inline-block; /* Asegura que se alineen en la misma línea */
+  display: inline-block;
   font-size: 1.3rem;
   font-weight: bold;
   color: var(--text_color);
 }
 
-#section1StartDateTitle {
-  width: 50%;
-  padding: 10px;
-  display: inline-block; /* Asegura que se alineen en la misma línea */
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: var(--text_color);
-}
-
+#section1StartDateTitle,
 #section1EndDateTitle {
   width: 50%;
-  padding: 10px;
-  display: inline-block; /* Asegura que se alineen en la misma línea */
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: var(--text_color);
 }
 
-#section1startDateValue {
-  width: 50%;
-  padding: 10px;
-  display: inline-block; /* Asegura que se alineen en la misma línea */
-  font-size: 1rem;
-  color: var(--text_color);
-}
-
+#section1startDateValue,
 #section1EndDateValue {
-  width: 50%;
-  padding: 10px;
-  display: inline-block; /* Asegura que se alineen en la misma línea */
   font-size: 1rem;
-  color: var(--text_color);
 }
 
 #section1NameValue {
-  display: inline-block; /* Asegura que se alineen en la misma línea */
   font-size: 1.2rem;
-  color: var(--text_color);
 }
-
-/* ------------------------------ */
-/* Media Query for screens smaller than 992px */
-/* ------------------------------ */
 
 @media (max-width: 992px) {
   #section1 {
@@ -123,61 +93,47 @@ td {
   }
 }
 
-/* ------------------------------ */
-/* Media Query for screens smaller than 576px */
-/* ------------------------------ */
 @media (max-width: 576px) {
   #section1 {
     scale: 0.9;
   }
 }
 
-/* ----------------------------------------------------- *
-/* Para el select de invitar */
-/* ----------------------------------------------------- *
-
-/* Estilo principal para el ng-select */
-/* Estilo principal para el ng-select */
-/* Estilo principal para el ng-select */
 .ng-select {
   background-color: transparent;
-  color: var(--text_color); /* Color de texto */
+  color: var(--text_color);
   border-radius: 25px;
   padding: 10px 15px;
   margin-bottom: 20px;
   border: 1px solid var(--text_color);
 }
 
-/* Estilo para el contenedor del ng-select */
 .ng-select.custom ::ng-deep .ng-select-container {
-  align-items: center; /* Centra el contenido verticalmente */
+  align-items: center;
 }
 
-/* Centrar el texto del placeholder */
 .ng-select.custom ::ng-deep .ng-placeholder {
-  display: flex; /* Usar flexbox para centrar */
-  align-items: center; /* Centrar verticalmente */
-  height: 100%; /* Ocupa toda la altura del contenedor */
-  color: rgba(255, 255, 255, 0.5); /* Color del placeholder */
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-/* Estilo para el input dentro del ng-select */
 .ng-select.custom ::ng-deep .ng-input {
-  display: flex; /* Usa flexbox para facilitar el alineamiento */
-  align-items: center; /* Alinea el contenido verticalmente */
-  min-height: 36px; /* Establece una altura mínima para el contenedor */
+  display: flex;
+  align-items: center;
+  min-height: 36px;
 }
 
 .ng-select.custom ::ng-deep .ng-input > input {
-  color: white; /* Texto blanco */
-  padding: 8px; /* Consistente padding */
-  height: 36px; /* Altura del input */
-  width: auto; /* Ancho automático */
-  line-height: normal; /* Mejora alineación vertical */
-  box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
+  color: white;
+  padding: 8px;
+  height: 36px;
+  width: auto;
+  line-height: normal;
+  box-sizing: border-box;
 }
 
-/* Estilo para los items del ng-select */
 .ng-select.custom ::ng-deep .ng-option {
   background-color: var(--gray_middle_dark);
   padding: 10px 15px;
@@ -185,66 +141,60 @@ td {
   border-radius: 10px;
 }
 
-/* Estilo para el item seleccionado en ng-select */
 .ng-select.custom ::ng-deep .ng-option-selected {
-  background-color: var(--color2_purple); /* Fondo para el item seleccionado */
-  color: white; /* Texto blanco para el item seleccionado */
+  background-color: var(--color2_purple);
+  color: white;
 }
 
-/* Estilo para limitar la altura de la lista desplegable */
 .ng-select.custom ::ng-deep .ng-dropdown-panel {
-  max-height: 600px; /* Altura máxima */
-  overflow-y: auto; /* Habilita el scroll */
+  max-height: 600px;
+  overflow-y: auto;
 }
 
-/* Estilo para el texto del usuario seleccionado con borde */
 .ng-select.custom ::ng-deep .ng-value {
-  background-color: var(--gray_middle_dark); /* Fondo del usuario seleccionado */
-  border: 1px solid var(--text_color); /* Borde alrededor del usuario seleccionado */
-  border-radius: 15px; /* Redondea los bordes */
-  padding: 5px 10px; /* Espaciado interno */
-  color: white; /* Color del texto del usuario */
-  margin-right: 5px; /* Separación entre usuarios seleccionados */
-  display: inline-flex; /* Para alinear el nombre del usuario y la "X" */
-  align-items: center; /* Alinea el texto y la "X" verticalmente */
+  background-color: var(--gray_middle_dark);
+  border: 1px solid var(--text_color);
+  border-radius: 15px;
+  padding: 5px 10px;
+  color: white;
+  margin-right: 5px;
+  display: inline-flex;
+  align-items: center;
 }
 
-/* Asegurarse de que el wrapper de la "X" tenga suficiente espacio */
 .ng-select.custom ::ng-deep .ng-clear-wrapper {
-  display: flex; /* Asegura que la X esté centrada */
-  align-items: center; /* Centra verticalmente la X */
-  justify-content: center; /* Centra horizontalmente la X */
-  width: 24px; /* Espacio suficiente para el círculo */
-  height: 24px; /* Mantiene proporciones del círculo */
-  margin-left: 8px; /* Espacio para separarla del texto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-left: 8px;
 }
 
-/* Estilo para la "X" de "clear all" */
 .ng-select.custom ::ng-deep .ng-clear {
-  background-color: rgb(218, 59, 59); /* Fondo rojo para la "X" de clear */
-  color: white; /* Color de la "X" */
-  border-radius: 50%; /* Convierte el fondo en un círculo */
-  padding: 10px; /* Añade espacio interno */ /* Espaciado con el texto */
-  display: inline-flex; /* Asegura que sea un círculo perfecto */
-  justify-content: center; /* Centra la "X" horizontalmente */
-  align-items: center; /* Centra la "X" verticalmente */
-  width: 20px; /* Ancho del círculo */
-  height: 20px; /* Alto del círculo */
+  background-color: rgb(218, 59, 59);
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
 }
 
-/* Estilo para la "X" junto al nombre del usuario */
 .ng-select.custom ::ng-deep .ng-value-icon {
-  margin-right: 5px; /* Añade espacio entre el texto del usuario y la "X" */
-  cursor: pointer; /* Cambia el cursor al pasar sobre la "X" */
-  background-color: var(--color1_blue); /* Fondo morado para el círculo de la "X" */
-  color: white; /* Color de la "X" */
-  border-radius: 50%; /* Convierte el fondo en un círculo */
-  padding: 10px; /* Añade espacio interno */
-  display: inline-flex; /* Asegura que sea un círculo perfecto */
-  justify-content: center; /* Centra la "X" horizontalmente */
-  align-items: center; /* Centra la "X" verticalmente */
-  width: 20px; /* Ancho del círculo */
-  height: 20px; /* Alto del círculo */
+  margin-right: 5px;
+  cursor: pointer;
+  background-color: var(--color1_blue);
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
 }
 
 .invitation-container {
@@ -258,14 +208,14 @@ td {
 }
 
 #toInvite {
-  margin: 15px 0 0 0; /* top right bottom left */
+  margin: 15px 0 0 0;
 }
 
 .buttonGoToPlan {
   position: relative;
   display: inline-flex;
   align-items: center;
-  justify-content: flex-start; /* Justificado a la izquierda para el texto */
+  justify-content: flex-start;
   min-width: 50px;
   height: 40px;
   border: none;
@@ -277,30 +227,30 @@ td {
   border-radius: 10px;
   box-shadow: 5px 5px 0px var(--color1_blue);
   transition-duration: 0.3s;
-  padding-right: 35px; /* Asegura espacio para el ícono en el lado derecho */
+  padding-right: 35px;
 }
 
 .buttonGoToPlan::after {
   content: "";
   display: inline-flex;
-  width: 21px; /* Ajusta el tamaño del ícono */
+  width: 21px;
   height: 21px;
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="-0.5 -0.5 16 16" stroke-linecap="round" stroke-linejoin="round" stroke="%23ffffff" height="16" width="16"><desc>Arrow Right Streamline Icon: https://streamlinehq.com</desc><path d="M2.8125 7.5h9.375m0 0 -3.515625 -3.75m3.515625 3.75 -3.515625 3.75" stroke-width="1"></path></svg>');
   background-size: contain;
   background-repeat: no-repeat;
   position: absolute;
-  right: 10px; /* Ajusta la posición del ícono a la derecha */
-  top: 50%; /* Centrar verticalmente */
-  transform: translateY(-50%) translateX(0); /* Inicialmente sin movimiento */
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%) translateX(0);
   transition-duration: 0.3s;
 }
 
 .buttonGoToPlan:hover {
-  color: transparent; /* Hacer el texto transparente al hacer hover */
+  color: transparent;
 }
 
 .buttonGoToPlan:hover::after {
-  transform: translateY(-50%) translateX(-50px); /* Mueve el ícono hacia la izquierda al hacer hover */
+  transform: translateY(-50%) translateX(-50px);
 }
 
 .buttonGoToPlan:active {
@@ -309,13 +259,13 @@ td {
 }
 
 #inviteUsers {
-  margin: 60px auto 0 auto; /* Center horizontally */
+  margin: 60px auto 0 auto;
   align-self: center;
   border-bottom: 1px solid white;
   overflow: visible;
-  min-width: 200px; /* Set a minimum width */
-  width: auto; /* Allow the width to adapt to the content */
-  text-align: center; /* Optional: Center text inside the element */
-  display: inline-block; /* Shrink to fit content */
-  padding: 0 20px; /* Add horizontal padding to extend the border */
+  min-width: 200px;
+  width: auto;
+  text-align: center;
+  display: inline-block;
+  padding: 0 20px;
 }

@@ -92,6 +92,12 @@ export class GoalsService {
     });
   }
 
+  /**
+   * function to delete a goal
+   * @param goalId id of the goal to delete
+   * @returns promise with the response message
+   */
+
   deleteGoal(goalId: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.deleteData(

@@ -22,11 +22,10 @@ import { StrategicPlanService } from '../StrategicPlan/StrategicPlan.service';
   styleUrls: ['./Objectives.component.css'],
 })
 export class ObjectivesComponent implements OnInit {
-  // Variable to store the form
-  formObjective!: FormGroup;
-  activeUserID = '';
+  formObjective!: FormGroup; // Variable to store the form
+  activeUserID = ''; // Variable to store the active user ID
   currentPlanId: string = ''; // ID of the current plan to edit
-  currentPlan: any = {};
+  currentPlan: any = {}; // Object to store the current plan
   isEditing = false; // Controls whether you are editing or creating
   plansData: any[] = []; // To store strategic plans
 
@@ -34,15 +33,11 @@ export class ObjectivesComponent implements OnInit {
   selectedObjective: any = {}; // To store the selected objective
 
   objectiveGoals: any[] = []; // To store the goals of the plan
+  responseMessage: string = ''; // To store the response message
+  objectivesData: any[] = []; // To store the objectives
+  objectiveIdSelected: string = ''; // To store the selected objective ID
 
-  // Variable to store the response message
-  responseMessage: string = '';
-
-  // Variables to store objective data
-  objectivesData: any[] = [];
-  objectiveIdSelected: string = '';
-
-  showModal: boolean = false;
+  showModal: boolean = false; // To control the modal
 
   constructor(
     private formBuilder: FormBuilder,
@@ -103,6 +98,9 @@ export class ObjectivesComponent implements OnInit {
     }
   }
 
+  /**
+   * Method to change the current plan
+   */
   async onPlanChange(): Promise<void> {
     this.loadObjectives(); // Load the objectives of the selected plan
     localStorage.setItem('PlanID', this.currentPlanId); // Update the PlanID in localStorage
@@ -113,6 +111,9 @@ export class ObjectivesComponent implements OnInit {
     console.log('Current Plan:', this.currentPlan);
   }
 
+  /**
+   * Method to load the current plan
+   */
   async loadStrategicPlan(): Promise<void> {
     this.strategicPlanService.getPlanByID(this.currentPlanId).subscribe(
       (data: any) => {
@@ -133,9 +134,9 @@ export class ObjectivesComponent implements OnInit {
         .getObjectivesByPlanId(this.currentPlanId)
         .subscribe(
           async (data: any[]) => {
-            this.objectivesData = data; // Asignar los datos a objectivesData
-  
-            // Para cada objetivo, contar los 'completedGoals'
+            this.objectivesData = data;
+
+            // Update the completed goals for each objective
             for (let objective of this.objectivesData) {
               await this.updateCompletedGoals(objective);
             }
@@ -150,29 +151,41 @@ export class ObjectivesComponent implements OnInit {
   }
 
   /**
- * Método para actualizar el campo completedGoals de un objetivo
- */
-async updateCompletedGoals(objective: any): Promise<void> {
-  try {
-    // Cargar los goals del objetivo
-    const goals = await this.objectivesService.getGoalsByObjectiveId(objective._id).toPromise() || [];
-    
-    // Contar cuántos goals están completos
-    const completedGoals = goals.filter((goal: any) => goal.completed).length;
-    
-    // Actualizar el atributo completedGoals del objetivo
-    const updatedObjective = {
-      ...objective,
-      completedGoals: completedGoals,
-    };
+   * Method to update the completed goals of an objective
+   */
+  async updateCompletedGoals(objective: any): Promise<void> {
+    try {
+      // Load the goals of the objective
+      const goals =
+        (await this.objectivesService
+          .getGoalsByObjectiveId(objective._id)
+          .toPromise()) || [];
 
-    // Llamar a la función de actualización
-    await this.objectivesService.updateObjective(objective._id, updatedObjective);
-    console.log(`Objective ${objective._id} updated with ${completedGoals} completed goals.`);
-  } catch (error) {
-    console.error('Error updating completedGoals for objective', objective._id, error);
+      // Count the completed goals
+      const completedGoals = goals.filter((goal: any) => goal.completed).length;
+
+      // Update the completedGoals field
+      const updatedObjective = {
+        ...objective,
+        completedGoals: completedGoals,
+      };
+
+      // Update the objective
+      await this.objectivesService.updateObjective(
+        objective._id,
+        updatedObjective
+      );
+      console.log(
+        `Objective ${objective._id} updated with ${completedGoals} completed goals.`
+      );
+    } catch (error) {
+      console.error(
+        'Error updating completedGoals for objective',
+        objective._id,
+        error
+      );
+    }
   }
-}
 
   /**
    * Method to create an objective
@@ -206,7 +219,6 @@ async updateCompletedGoals(objective: any): Promise<void> {
   /**
    * Method to delete an objective
    */
-  // Objectives.component.ts
   async deleteObjective(objectiveId: string, planId: string): Promise<void> {
     try {
       const result = await Swal.fire({
@@ -311,11 +323,17 @@ async updateCompletedGoals(objective: any): Promise<void> {
     this.router.navigate([SELECT_PLAN]);
   }
 
+  /**
+   * Function to navigate to the selected plan
+   */
   navigateToSelectedPlan(): void {
     const SELECT_PLAN: string = `${NAVIGATIONS_ROUTES.STRATEGIC_PLAN}`;
     this.router.navigate([SELECT_PLAN]);
   }
 
+  /**
+   * Method to load the goals of an objective
+   */
   async loadObjectiveGoals(objectiveId: string): Promise<void> {
     this.objectivesService.getGoalsByObjectiveId(objectiveId).subscribe(
       (data: any[]) => {
@@ -348,7 +366,7 @@ async updateCompletedGoals(objective: any): Promise<void> {
   }
 
   /**
-   * Método para cuando se hace click en un objetivo
+   * Method to handle the click on the objective
    */
   editObjective(objective: any): void {
     this.formObjective.patchValue(objective);
@@ -358,14 +376,14 @@ async updateCompletedGoals(objective: any): Promise<void> {
 
     console.log('Objective:', objective);
 
-    // Establecer el responsable actual
+    // Set the responsible user
     if (objective.responsible) {
       this.formObjective.patchValue({ responsible: objective.responsible._id });
     }
   }
 
   /**
-   * Método para mostrar el modal de solo lectura
+   * Method to show or hide the read-only modal
    */
   onViewObjective(item: any): void {
     this.objectiveIdSelected = item._id;
@@ -375,12 +393,15 @@ async updateCompletedGoals(objective: any): Promise<void> {
   }
 
   /**
-   * Método para mostrar u ocultar el modal de solo lectura
+   * Method to show or hide the read-only modal
    */
   toogleReadModal(): void {
     this.showReadModal = !this.showReadModal;
   }
 
+  /**
+   * Method to handle the redirection to the goals page
+   */
   handleRedirectToGoals(objectiveId: string): void {
     const ObjectiveTitle = this.objectivesData.find(
       (objective) => objective._id === objectiveId

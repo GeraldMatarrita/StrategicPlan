@@ -34,23 +34,31 @@ export class OperationalPlanService {
   // Methods for the API
   // --------------------------------------------
 
-  /**
-   * function to obtain the objectives by planId
-   * @param planId of the plan to obtain
-   * @returns promise with the objectives
+   /**
+   * Function to get the active operational plan from the API.
+   * @returns An observable containing the active operational plan data.
    */
-  getActiveOperationalPlan(): Observable<any> {
+   getActiveOperationalPlan(): Observable<any> {
     return this.http.get<any>(
       `${API_ROUTES.BASE_URL}${API_ROUTES.Get_Active_OperationalPlan}`
     );
   }
 
+  /**
+   * Function to get all operational plans for a specific strategic plan.
+   * @param strategicPlanId The ID of the strategic plan to get its operational plans.
+   * @returns An observable containing the operational plans associated with the strategic plan.
+   */
   getOperationalPlansByStrategicPlanId(strategicPlanId: string): Observable<any> {
     return this.http.get<any>(
       `${API_ROUTES.BASE_URL}${API_ROUTES.Get_OperationalPlans_By_StrategicPlanId}/${strategicPlanId}`
     );
   }
 
+  /**
+   * Function to get all operational plans.
+   * @returns An observable containing all operational plans.
+   */
   GetOperationalPlans(): Observable<any> {
     return this.http.get<any>(
       `${API_ROUTES.BASE_URL}${API_ROUTES.Get_OperationalPlans}`
@@ -58,10 +66,10 @@ export class OperationalPlanService {
   }
 
   /**
-   * function to create an Objective
-   * @param data data of the objective to send
-   * @param planId id of the plan to which the objective belongs
-   * @returns promise with the response message
+   * Function to create an operational plan associated with a strategic plan.
+   * @param data The operational plan data to send to the API.
+   * @param strategicPlanID The ID of the strategic plan to which the operational plan belongs.
+   * @returns A promise containing a response message from the API.
    */
   createOperationalPlan(data: any, strategicPlanID: string): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -80,6 +88,11 @@ export class OperationalPlanService {
     });
   }
 
+  /**
+   * Function to set an operational plan as inactive.
+   * @param planId The ID of the operational plan to mark as inactive.
+   * @returns A promise containing a response message from the API.
+   */
   setInactiveOperationalPlan(planId: string): Promise<string> {
     return new Promise((resolve, reject) => {
       this.http
@@ -99,6 +112,12 @@ export class OperationalPlanService {
     });
   }
 
+  /**
+   * Function to update an existing operational plan.
+   * @param operationalPlanId The ID of the operational plan to update.
+   * @param data The updated data for the operational plan.
+   * @returns A promise containing a response message from the API.
+   */
   updateOperationalPlan(operationalPlanId: string, data: any): Promise<string> {
     return new Promise((resolve, reject) => {
       this.http
@@ -111,7 +130,7 @@ export class OperationalPlanService {
             resolve(response.message);
           },
           (error: any) => {
-            console.error('Error updating the opeartional pLan:', error);
+            console.error('Error updating the operational plan:', error);
             reject(error);
           }
         );

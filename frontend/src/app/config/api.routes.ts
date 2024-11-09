@@ -1,8 +1,11 @@
 import { environment } from './environments/environment';
 export const API_ROUTES = {
+
+  // Base URL for the API
   BASE_URL: environment.API_BASE_URL,
+
   // -------------------------------------------------------------
-  // Para las invitaciones
+  // Rutes for the invitations
   // -------------------------------------------------------------
   Get_ByUserID_Invitations: '/invitations/UserInvitations', // GET + "/userId"
   Get_UsersToInvite_Invitations: '/invitations/getUsersNotInPlan', // GET + "/StrategicPlanId"
@@ -12,7 +15,7 @@ export const API_ROUTES = {
   Delete_Invitation: '/invitations/deleteInvitation', // DELETE
 
   // -------------------------------------------------------------
-  // Para los usuarios
+  // Rutes for the Users
   // -------------------------------------------------------------
   Get_All_Users: '/auth/AllUsers', // GET
   Create_User: '/auth/create', // POST
@@ -23,7 +26,7 @@ export const API_ROUTES = {
   Get_User_By_Id: '/auth/getUserById', // GET + "/userId"
   
   // -------------------------------------------------------------
-  // Para los planes estratégicos
+  // Rutes for The Strategic Plans
   // -------------------------------------------------------------
   Get_All_StrategicPlans: '/strategicPlan/AllStrategicPlans', // GET
   Get_ById_StrategicPlan: '/strategicPlan/ById', // GET + "/StrategicPlanId"
@@ -34,13 +37,12 @@ export const API_ROUTES = {
   Create_StrategicPlan: '/strategicPlan/create', // POST + "/userId"
   UpdateObjective_StrategicPlan: '/strategicPlan/updateObjectives',
   Update_StrategicPlan: '/strategicPlan/update',
-  // -------------------------------------------------------------
-  // Para los analisis de FODA y MECA de cada plan estratégico
-  // -------------------------------------------------------------
 
-  //FODA
+  // -------------------------------------------------------------
+  // Rutes for the SWOT and CAME Analysis
+  // -------------------------------------------------------------
+  //SWOT
   Get_All_SWOT: '/swotAnalysis/allAnalisis',//Get + "/strategicPlanID"
-  Get_All_CAME: '/cameAnalysis/allAnalisis',//Get + "/strategicPlanID"
   Add_New_Strength_Card: '/swotAnalysis/strengths/addCardAnalysis',//Post + "strategicPlanID"
   Add_New_Weaknes_Card: '/swotAnalysis/weaknesses/addCardAnalysis',//Post + "strategicPlanID"
   Add_New_Opportuniti_Card: '/swotAnalysis/opportunities/addCardAnalysis',//Post + "strategicPlanID"
@@ -51,6 +53,7 @@ export const API_ROUTES = {
   Delete_Threat_Card: '/swotAnalysis/threatsdeleteCard',//Post + "strategicPlanID"
 
   //CAME
+  Get_All_CAME: '/cameAnalysis/allAnalisis',//Get + "/strategicPlanID"
   Add_New_Correct_Card: '/cameAnalysis/correct/addCardAnalysis',//Post + "strategicPlanID"
   Add_New_Afront_Card: '/cameAnalysis/adapt/addCardAnalysis',//Post + "strategicPlanID"
   Add_New_Maintain_Card: '/cameAnalysis/maintain/addCardAnalysis',//Post + "strategicPlanID"
@@ -65,7 +68,7 @@ export const API_ROUTES = {
   Update_CardAnalisis: '/cardAnalysis/updateCard',//Post + "CardAnalysisID"
   
   // -------------------------------------------------------------
-  // Para los Objetivos
+  // Rutes for the Objectives
   // -------------------------------------------------------------
   Get_AllByPlanID_Objective: '/objective/getPlanObjectives', // GET + "/StrategicPlanId"
   Create_Objective: '/objective/create', // POST
@@ -74,7 +77,7 @@ export const API_ROUTES = {
   Get_Objective: '/objective/getObjective', // GET + "/ObjectiveId"
 
   // -------------------------------------------------------------
-  // Para los Goals - Metas
+  // Rutes for the Goals
   // -------------------------------------------------------------
   Get_ByPlanID_Goals: '/goals/getPlanGoals', // GET + "/StrategicPlanId"
   Get_ByObjectiveID_Goals: '/goals/getObjectiveGoals', // GET + "/ObjectiveId"
@@ -82,11 +85,9 @@ export const API_ROUTES = {
   Update_Goal: '/goals/update', // PUT
   Delete_Goal: '/goals/delete', // DELETE + "/GoalId"
 
-
   // -------------------------------------------------------------
-  // Para los Planes Operativos - Operational Plan
+  // Rutes for the Operational Plans
   // -------------------------------------------------------------
-
   Get_Active_OperationalPlan: '/operationalPlan/active', // GET 
   Get_OperationalPlans: '/operationalPlan/getOperationalPlans', // GET 
   Create_OperationalPlan: '/operationalPlan/create', // POST + /StrategicPlanId
@@ -94,31 +95,21 @@ export const API_ROUTES = {
   Update_OperationalPlan: '/operationalPlan/update', // PUT
   Get_OperationalPlans_By_StrategicPlanId: '/operationalPlan/getOperationalPlansByStrategicPlanId', // GET + /StrategicPlanId
 
-
   // -------------------------------------------------------------
-  // Para las Actividades - Activity
+  // Rutes for the Activities
   // -------------------------------------------------------------
-
   Get_Activity: '/activity/getActivity', // GET + /:id
   Create_Activity: '/activity/create', // POST + /:goalId
   Update_Activity: '/activity/update', // PUT + /:id
   Delete_Activity: '/activity/delete', // DELETE + /:id
 
   // -------------------------------------------------------------
-  // Para los indicadores - Indicator
+  // Rutes for the Indicators
   // -------------------------------------------------------------
-
   Get_Indicator: '/indicator/getIndicator', // GET + /:id
   Get_Indicators_By_OperationalPlan: '/indicator/getIndicatorsByPlan', // GET + /:operationalPlanId
   Create_Indicator: '/indicator/create', // POST
   Update_Indicator: '/indicator/update', // PUT + /:id
   Delete_Indicator: '/indicator/delete', // DELETE + /:id
 
-  // --------------------------------------------------------------------------------
-  // --------------------------------------------------------------------------------
-  // al finalizar borrar esta ya que es solo de pruebas
-  // --------------------------------------------------------------------------------
-  // --------------------------------------------------------------------------------
-  
-  BASICA: '/basica',
 };

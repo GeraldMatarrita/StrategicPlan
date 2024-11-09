@@ -4,14 +4,14 @@
 
 .goalsStyle {
   margin-top: 52px;
-  padding: 0px 0px 50px 0px; /* top right bottom left */
+  padding: 0px 0px 50px 0px;
   color: var(--text_color);
 }
 
 .goalsMenu {
   display: flex;
-  justify-content: space-between; /* Distribuye el espacio entre los elementos */
-  align-items: center; /* Alinear verticalmente */
+  justify-content: space-between;
+  align-items: center;
   padding-bottom: 5px;
   padding-top: 10px;
   margin-right: 5px;
@@ -23,12 +23,22 @@
     var(--color1_blue) 100%
   );
 }
+
+#buttonCreate {
+  background-color: var(--color2_purple);
+  border-color: #450076;
+}
+
+#buttonCreate:hover {
+  background-color: var(--color2_purple_hover);
+}
+
 .goalsMenu p {
   margin: 0;
   padding: 0;
   color: var(--text_color);
-  flex: 1; /* Esto permite que el título ocupe el espacio disponible */
-  text-align: center; /* Asegúrate de que el texto esté centrado */
+  flex: 1;
+  text-align: center;
 }
 
 #selectGroup {
@@ -37,22 +47,19 @@
 }
 
 .selectGroup label {
-  width: 200px; /* Ancho del label */
-  margin-left: 28px; /* Margen izquierdo */
+  width: 200px;
+  margin-left: 28px;
 }
 
 .bothSelects {
   display: flex;
-  align-items: center; /* Alinear verticalmente */
+  align-items: center;
 }
 
 .buttonAdd {
   border: 2px solid var(--color2_purple);
 }
 
-/* ----------------------------------------------------- */
-/* butones  */
-/* ----------------------------------------------------- */
 .btnCancel {
   max-width: 200px;
   padding: 10px;
@@ -66,18 +73,14 @@
   background-color: var(--color4_red_hover);
   color: white;
 }
-/* ----------------------------------------------------- */
-/* card perzonalizada para objetivos */
-/* ----------------------------------------------------- */
 
-/* Contenedor que organiza las tarjetas en fila */
 .card-container {
-  display: flex; /* Organiza los elementos hijos en una fila */
-  flex-wrap: wrap; /* Permite que los elementos salten a la siguiente línea si no caben en una fila */
-  gap: 25px; /* Espacio entre las tarjetas */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  background-color: var(--gray_middle_dark);
 }
 
-/* Estilo para cada tarjeta */
 .card-Objective-container {
   height: 150px;
   background-image: linear-gradient(
@@ -88,9 +91,9 @@
   border-radius: 20px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between; /* Distribuye espacio entre la tarjeta y .right-section */
-  align-items: center; /* Alinea verticalmente los elementos */
-  width: 100%; /* Asegura que la tarjeta ocupe todo el espacio disponible */
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .card-Objective-container:hover {
@@ -99,11 +102,18 @@
   cursor: pointer;
 }
 
-.card-container {
-  display: flex; /* Organiza los elementos hijos en una fila */
-  background-color: var(--gray_middle_dark);
-  flex-wrap: wrap; /* Permite que los elementos salten a la siguiente línea si no caben en una fila */
-  gap: 25px; /* Espacio entre las tarjetas */
+.card-Objective-container {
+  margin: 5px;
+  flex-basis: calc(50% - 25px);
+  max-width: calc(48% - 25px);
+  height: auto;
+  background-image: linear-gradient(
+    163deg,
+    var(--color3_pink) 0%,
+    var(--color1_blue) 100%
+  );
+  border-radius: 20px;
+  display: flex;
 }
 
 .content-wrapper {
@@ -112,7 +122,6 @@
   height: 100%;
 }
 
-/* Estilo para el contenido dentro de la tarjeta */
 .card-Objective {
   width: 330px;
   height: 100%;
@@ -124,35 +133,20 @@
   flex-direction: column;
 }
 
-.card-Objective-container {
-  margin: 5px; /* Espacio entre las tarjetas */
-  flex-basis: calc(50% - 25px); /* Ajuste para que ocupen la mitad del ancho menos el espacio del gap */
-  max-width: calc(48% - 25px); /* Limita el ancho máximo para evitar desbordes */
-  height: auto; /* Deja que la altura se ajuste automáticamente */
-  background-image: linear-gradient(
-    163deg,
-    var(--color3_pink) 0%,
-    var(--color1_blue) 100%
-  );
-  border-radius: 20px;
-  display: flex;
-  
-}
-
 .right-section {
-  flex: 1; /* Ocupar el espacio disponible */
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  width: 70%;                 /* Asegura que tome el espacio necesario */
-  height: auto;                /* Permite ajustar la altura según las barras */
+  width: 70%;
+  height: auto;
   padding: 10px;
 }
 
 .right-section label {
   font-size: 0.8em;
-  color: var(--text_color); /* Ajusta el color según tu preferencia */
+  color: var(--text_color);
   width: 100%;
 }
 
@@ -160,26 +154,25 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px; /* Espacio entre los elementos */
+  gap: 8px;
   width: 90%;
   font-size: 0.8em;
 }
 
 .progress-current, .progress-goal {
-  flex-shrink: 0; /* Evita que el texto se encoja */
-  width: 30px; /* Asigna un tamaño fijo para el texto */
-  text-align: center; /* Centra el texto numérico */
+  flex-shrink: 0;
+  width: 30px;
+  text-align: center;
   position: relative;
   top: -5px;
 }
 
 .right-section progress {
-  flex-grow: 1; /* Asegura que la barra de progreso ocupe el espacio disponible */
-  height: 10px; /* Ajusta la altura de la barra de progreso */
+  flex-grow: 1;
+  height: 10px;
   width: auto;
 }
 
-/* Color de la barra de progreso general */
 .right-section progress[value] {
   appearance: none;
   width: 100%;
@@ -189,47 +182,39 @@
   margin-bottom: 10px;
 }
 
-/* Fondo de la barra */
 .right-section progress::-webkit-progress-bar {
   background-color: lightgray;
   border-radius: 10px;
 }
 
-/* Rango del color basado en el valor */
 .right-section progress[value]::-webkit-progress-value {
   border-radius: 10px;
 }
 
 progress[value="100"]::-webkit-progress-value {
-  background-color: #0e6410; /* Verde claro para 100 */
+  background-color: #0e6410;
 }
 
 progress[value][value^="7"]::-webkit-progress-value,
 progress[value][value^="8"],
 progress[value][value^="9"] {
-  background-color: #12b137; /* Verde más claro para 75-99 */
+  background-color: #12b137;
 }
 
 progress[value][value^="5"]::-webkit-progress-value,
 progress[value][value^="6"] {
-  background-color: #c1f561; /* Verde oscuro para 50-74 */
+  background-color: #c1f561;
 }
 
 progress[value][value^="2"]::-webkit-progress-value,
 progress[value][value^="3"]::-webkit-progress-value,
 progress[value="4"] {
-  background-color: #ff9933; /* Naranja para 25-49 */
+  background-color: #ff9933;
 }
 
 progress[value^="0"]::-webkit-progress-value,
 progress[value^="1"] {
-  background-color: #ff3300; /* Rojo para 0-24 */
-}
-
-.content-wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  background-color: #ff3300;
 }
 
 .title {
@@ -244,17 +229,17 @@ progress[value^="1"] {
 }
 
 .goal-h6 {
-  color: white; 
-  width: 100%; 
+  color: white;
+  width: 100%;
   border-bottom: 1px solid white;
 }
 
 .middleMenu {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centra verticalmente el contenido */
-  justify-content: center; /* Alinea el contenido en el centro vertical */
-  height: 100%; /* Asegúrate de que middleMenu ocupe toda la altura disponible */
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .value {
@@ -290,7 +275,7 @@ progress[value^="1"] {
 
 #generalLabel, #activityTitle {
   font-weight: bold;
-  font-size: 0.9em; 
+  font-size: 0.9em;
 }
 
 #generalLabel {
@@ -337,9 +322,9 @@ progress[value^="1"] {
 }
 
 #formCheckbox {
-  display: flex; /* Permite que los elementos se alineen en fila */
-  align-items: center; /* Alinea verticalmente en el centro */
-  margin-top: 20px; /* Ajusta el margen superior si es necesario */
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
@@ -359,7 +344,7 @@ progress[value^="1"] {
   margin-left: 0;
 }
 
-#advertisementOp{
+#advertisementOp {
   display: flex;
   justify-content: center;
   align-items: center;

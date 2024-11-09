@@ -15,33 +15,44 @@ import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
   imports: [CommonModule, ReactiveFormsModule],
 })
 export class FodaMecaComponent implements OnInit {
+  // Variables to hold SWOT and CAME analysis data
   swot: any = { strengths: [], weaknesses: [], opportunities: [], threats: [] };
   came: any = { correct: [], afront: [], maintain: [], explore: [] };
+  
+  // Plan ID fetched from local storage
   planId: any = localStorage.getItem('PlanID');
 
   constructor(private swotService: SwotService, private router: Router) {}
 
+  // Lifecycle hook that runs on component initialization
   ngOnInit(): void {
-    this.loadSwot();
-    this.loadCame();
+    this.loadSwot(); // Load the SWOT analysis data
+    this.loadCame(); // Load the CAME analysis data
   }
+
+  // Navigate to the strategic plan page
   navigateToPlan(): void {
     const PLAN: string = `${NAVIGATIONS_ROUTES.STRATEGIC_PLAN}`;
     this.router.navigate([PLAN]);
   }
+
+  // Load the SWOT analysis data from the service
   loadSwot(): void {
-    // Aquí debes poner el ID del plan estratégico
+    // Get the SWOT analysis data using the plan ID
     this.swotService.getSwotAnalysis(this.planId).subscribe((data) => {
-      this.swot = data;
-    });
-  }
-  loadCame(): void {
-    // Aquí debes poner el ID del plan estratégico
-    this.swotService.getCameAnalysis(this.planId).subscribe((data) => {
-      this.came = data;
+      this.swot = data; // Update the swot object with the received data
     });
   }
 
+  // Load the CAME analysis data from the service
+  loadCame(): void {
+    // Get the CAME analysis data using the plan ID
+    this.swotService.getCameAnalysis(this.planId).subscribe((data) => {
+      this.came = data; // Update the came object with the received data
+    });
+  }
+
+  // Add a new card to a specific column in the SWOT analysis
   addCard(columnType: string) {
     Swal.fire({
       title: `Add New ${this.capitalizeFirstLetter(columnType)}`,
@@ -69,11 +80,8 @@ export class FodaMecaComponent implements OnInit {
       `,
       focusConfirm: false,
       preConfirm: () => {
-        const title = (document.getElementById('title') as HTMLInputElement)
-          .value;
-        const description = (
-          document.getElementById('description') as HTMLTextAreaElement
-        ).value;
+        const title = (document.getElementById('title') as HTMLInputElement).value;
+        const description = (document.getElementById('description') as HTMLTextAreaElement).value;
         if (!title || !description) {
           Swal.showValidationMessage('Please enter both title and description');
         }
@@ -85,16 +93,16 @@ export class FodaMecaComponent implements OnInit {
           title: result.value?.title || 'No Title',
           description: result.value?.description || 'No Description',
         };
-        this.swotService
-          .addSwotCard(columnType, this.planId, newCard)
-          .subscribe(() => {
-            this.swot[columnType].push(newCard);
-            Swal.fire('Added!', 'Card has been added successfully', 'success');
-          });
+        // Call the service to add the new SWOT card
+        this.swotService.addSwotCard(columnType, this.planId, newCard).subscribe(() => {
+          this.swot[columnType].push(newCard); // Add the new card to the respective column
+          Swal.fire('Added!', 'Card has been added successfully', 'success');
+        });
       }
     });
   }
 
+  // Add a new card to a specific column in the CAME analysis
   addCameCard(columnType: string) {
     Swal.fire({
       title: `Add New ${this.capitalizeFirstLetter(columnType)}`,
@@ -122,11 +130,8 @@ export class FodaMecaComponent implements OnInit {
       `,
       focusConfirm: false,
       preConfirm: () => {
-        const title = (document.getElementById('title') as HTMLInputElement)
-          .value;
-        const description = (
-          document.getElementById('description') as HTMLTextAreaElement
-        ).value;
+        const title = (document.getElementById('title') as HTMLInputElement).value;
+        const description = (document.getElementById('description') as HTMLTextAreaElement).value;
         if (!title || !description) {
           Swal.showValidationMessage('Please enter both title and description');
         }
@@ -138,16 +143,16 @@ export class FodaMecaComponent implements OnInit {
           title: result.value?.title || 'No Title',
           description: result.value?.description || 'No Description',
         };
-        this.swotService
-          .addCameCard(columnType, this.planId, newCard)
-          .subscribe(() => {
-            this.came[columnType].push(newCard);
-            Swal.fire('Added!', 'Card has been added successfully', 'success');
-          });
+        // Call the service to add the new CAME card
+        this.swotService.addCameCard(columnType, this.planId, newCard).subscribe(() => {
+          this.came[columnType].push(newCard); // Add the new card to the respective column
+          Swal.fire('Added!', 'Card has been added successfully', 'success');
+        });
       }
     });
   }
 
+  // Update an existing card in the SWOT analysis
   updateCardAnalysis(card: any): void {
     Swal.fire({
       title: `Update Card`,
@@ -175,34 +180,33 @@ export class FodaMecaComponent implements OnInit {
       `,
       focusConfirm: false,
       preConfirm: () => {
-        const title = (
-          document.getElementById('title') as HTMLInputElement
-        ).value;
-        const description = (
-          document.getElementById('description') as HTMLTextAreaElement
-        ).value;
+        const title = (document.getElementById('title') as HTMLInputElement).value;
+        const description = (document.getElementById('description') as HTMLTextAreaElement).value;
         if (!title || !description) {
           Swal.showValidationMessage('Please enter both title and description');
-          return null; // Si no se completa, no se cierra el SweetAlert2
+          return null; // Prevent closing if validation fails
         }
         return { title, description };
       },
     }).then((result) => {
       if (result.isConfirmed) {
         const updatedCard = {
-          ...card,
-          _id: card._id, // Mantenemos las propiedades anteriores
+          ...card, // Keep the original card properties
+          _id: card._id,
           title: result.value?.title || card.title,
           description: result.value?.description || card.description,
         };
+        // Call the service to update the card
         this.swotService.updateCard(updatedCard).subscribe(() => {
-          this.loadSwot();
-          this.loadCame();
-          Swal.fire('Success!', 'Card has been added.', 'success');
+          this.loadSwot(); // Reload SWOT data
+          this.loadCame(); // Reload CAME data
+          Swal.fire('Success!', 'Card has been updated.', 'success');
         });
       }
     });
   }
+
+  // Delete a card from the SWOT analysis
   deleteCard(type: string, card: any): void {
     Swal.fire({
       title: 'Are you sure?',
@@ -215,15 +219,16 @@ export class FodaMecaComponent implements OnInit {
       cancelButtonColor: '#3085d6',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.swotService
-          .deleteSwotCard(type, this.planId, card)
-          .subscribe(() => {
-            this.loadSwot();
-            Swal.fire('Deleted!', 'Card has been deleted.', 'success');
-          });
+        // Call the service to delete the card
+        this.swotService.deleteSwotCard(type, this.planId, card).subscribe(() => {
+          this.loadSwot(); // Reload SWOT data
+          Swal.fire('Deleted!', 'Card has been deleted.', 'success');
+        });
       }
     });
   }
+
+  // Delete a card from the CAME analysis
   deleteCameCard(type: string, card: any): void {
     Swal.fire({
       title: 'Are you sure?',
@@ -246,6 +251,7 @@ export class FodaMecaComponent implements OnInit {
     });
   }
 
+  // Capitalize the first letter of a string
   capitalizeFirstLetter(text: string) {
     return text.charAt(0).toUpperCase() + text.slice(1);
   }

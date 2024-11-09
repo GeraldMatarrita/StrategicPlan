@@ -35,6 +35,7 @@ import { NAVIGATIONS_ROUTES } from './config/navigations.routes';
 export class AppComponent implements OnInit {
   @ViewChild(MatSidenav, { static: true })
   public sidenav!: MatSidenav;
+  title: any;
 
   constructor(private observer: BreakpointObserver, private router: Router) {}
 

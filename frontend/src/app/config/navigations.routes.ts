@@ -5,7 +5,6 @@ export const NAVIGATIONS_ROUTES = {
   INVITATIONS: '/Invitations',
   AUTH: '/Auth',
   FODAMECA: '/FodaMeca',
-  BASICO: '/Basico',
   SELECT_STRATEGIC_PLAN: '/SelectStrategicPlan',
   OBJECTIVE: '/Objectives',
   GOALS: '/Goals',

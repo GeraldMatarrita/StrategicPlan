@@ -3,21 +3,21 @@
 }
 
 .ObjectiveStyle {
-  padding: 0px 0px 50px 0px; /* top right bottom left */
+  padding: 0px 0px 50px 0px;
   color: var(--text_color);
   margin-top: 52px;
 }
 
 .container {
-  min-height: 100vh; /* Al menos la altura total de la ventana */
-  height: auto; /* Permite que crezca en altura */
+  min-height: 100vh;
+  height: auto;
   overflow: visible;
 }
 
 .objectiveMenu {
   display: flex;
-  justify-content: space-between; /* Centrar planTitle horizontalmente */
-  align-items: center; /* Alinear verticalmente */
+  justify-content: space-between;
+  align-items: center;
   padding-bottom: 10px;
   padding-top: 5px;
   margin-bottom: 20px;
@@ -28,6 +28,7 @@
     var(--color1_blue) 100%
   );
 }
+
 .objectiveMenu p {
   margin: 0;
   padding: 0;
@@ -59,7 +60,7 @@
   align-items: center;
 }
 
-.selectgroup label{
+.selectgroup label {
   padding-left: 0px;
 }
 
@@ -67,9 +68,6 @@
   border: 2px solid var(--color2_purple);
 }
 
-/* ----------------------------------------------------- */
-/* botones  */
-/* ----------------------------------------------------- */
 .btnCancel {
   max-width: 200px;
   padding: 10px;
@@ -83,24 +81,19 @@
   background-color: black;
   color: white;
 }
-/* ----------------------------------------------------- */
-/* card perzonalizada para objetivos */
-/* ----------------------------------------------------- */
 
-/* Contenedor que organiza las tarjetas en fila */
 .card-container {
-  display: flex; /* Organiza los elementos hijos en una fila */
+  display: flex;
   background-color: var(--gray_middle_dark);
-  flex-wrap: wrap; /* Permite que los elementos salten a la siguiente línea si no caben en una fila */
-  gap: 25px; /* Espacio entre las tarjetas */
+  flex-wrap: wrap;
+  gap: 25px;
 }
 
-/* Estilo para cada tarjeta */
 .card-Objective-container {
-  margin: 5px; /* Espacio entre las tarjetas */
-  flex-basis: calc(50% - 25px); /* Ajuste para que ocupen la mitad del ancho menos el espacio del gap */
-  max-width: calc(50% - 25px); /* Limita el ancho máximo para evitar desbordes */
-  height: auto; /* Deja que la altura se ajuste automáticamente */
+  margin: 5px;
+  flex-basis: calc(50% - 25px);
+  max-width: calc(50% - 25px);
+  height: auto;
   background-image: linear-gradient(
     163deg,
     var(--color3_pink) 0%,
@@ -115,10 +108,9 @@
   transition: transform 0.5s;
 }
 
-/* Estilo para el contenido dentro de la tarjeta */
 .card-Objective {
-  width: 100%; /* Asegúrate de que ocupe todo el ancho del contenedor padre */
-  height: auto; /* Ajusta la altura según el contenido */
+  width: 100%;
+  height: auto;
   padding: 1em 2em 2em 2em;
   background-color: var(--gray_middle_dark);
   border-radius: 30px;
@@ -158,15 +150,13 @@
   border: 1px solid var(--color1_blue);
   border-radius: 10px;
   padding: 10px 15px;
-
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Limita a 3 líneas */
-  line-clamp: 3; /* Limita a 3 líneas */
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
-
   overflow: hidden;
-  text-overflow: ellipsis; /* Muestra puntos suspensivos */
-  word-break: break-word; /* Evita que palabras largas se desborden */
+  text-overflow: ellipsis;
+  word-break: break-word;
 }
 
 .startDate {
@@ -211,15 +201,14 @@
   align-items: center;
 }
 
-
 .info-objective {
   position: absolute;
   left: 10%;
 }
 
 #btn-container {
-  gap: 10px; /* Espacio entre los botones */
-  margin: 0; /* Ajusta los márgenes si es necesario */
+  gap: 10px;
+  margin: 0;
 }
 
 #p-description {
@@ -229,12 +218,10 @@
   height: auto;
   border-radius: 10px;
   padding: 7px 15px;
-
   display: -webkit-box;
   -webkit-box-orient: vertical;
-
   overflow: visible;
-  word-break: break-word; /* Evita que palabras largas se desborden */
+  word-break: break-word;
 }
 
 #see-title {
@@ -270,4 +257,3 @@
   cursor: pointer;
   color: var(--text_color);
 }
-

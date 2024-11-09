@@ -15,6 +15,9 @@ import { AuthService } from '../Auth/Auth.service';
 import Swal from 'sweetalert2';
 import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 
+/**
+ * Activity component for creating, viewing, and editing activities.
+ */
 @Component({
   standalone: true,
   selector: 'app-activity',
@@ -23,53 +26,63 @@ import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
   imports: [ReactiveFormsModule, CommonModule],
 })
 export class ActivityComponent implements OnInit {
-  activityIndicatorForm!: FormGroup;
-  operationalPlanId: string = '';
-  members: any[] = [];
-  currentIndicatorId: string = '';
-  currentActivityId: string = '';
-  currentActivity: any = {};
-  isPercentageType: boolean = false;
-  showTotalField: boolean = false;
-  isCreatingActivity: boolean = true;
-  isViewMode: boolean = false;
-  isEditing: boolean = false;
-  responsible: any = {};
-  isActiveOperationalPlan: boolean = true;
+  activityIndicatorForm!: FormGroup; // Form group for the activity and indicator
+  operationalPlanId: string = ''; // ID of the operational plan
+  members: any[] = []; // Members of the strategic plan
+  currentIndicatorId: string = ''; // ID of the current indicator
+  currentActivityId: string = ''; // ID of the current activity
+  currentActivity: any = {}; // Current activity data
+  isPercentageType: boolean = false; // Indicator type is percentage
+  showTotalField: boolean = false; // Show the total field
+  isCreatingActivity: boolean = true; // Creating a new activity
+  isViewMode: boolean = false; // Viewing mode
+  isEditing: boolean = false; // Editing mode
+  responsible: any = {}; // Responsible user
+  isActiveOperationalPlan: boolean = true; // Active operational plan
 
+  /**
+   * Initializes the activity component with the required services and form builder
+   */
   constructor(
     private fb: FormBuilder,
     private activityService: ActivityService,
     private indicatorService: IndicatorService,
-    private operationalPlanService: OperationalPlanService,
     private strategicPlan: StrategicPlanService,
     private authService: AuthService,
     private router: Router
   ) {}
 
+  /**
+   * Initializes the component, sets initial state values, loads operational plan data,
+   * and decides whether to enter view mode or create mode.
+   */
   ngOnInit(): void {
-    this.initializeForms();
-    this.operationalPlanId = localStorage.getItem('OperationalPlanID') || '';
+    this.initializeForms(); // Initialize the activity form
+    this.operationalPlanId = localStorage.getItem('OperationalPlanID') || ''; // Get the operational plan ID
     this.isActiveOperationalPlan =
-      localStorage.getItem('isActiveOperationalPlan') === 'true';
-    this.loadMembers();
-    const isViewing = localStorage.getItem('ActivityID') !== null;
+      localStorage.getItem('isActiveOperationalPlan') === 'true'; // Check if the operational plan is active
+    this.loadMembers(); // Load the members of the strategic plan
+    const isViewing = localStorage.getItem('ActivityID') !== null; // Check if viewing an activity
     if (isViewing) {
-      this.isCreatingActivity = false; // Deshabilita la creación y pasa a vista de solo lectura
+      this.isCreatingActivity = false;
       this.isViewMode = true;
-      this.showTotalField = true; // Mostrar campo total
-      this.loadActivityData(); // Método para cargar datos del activity e indicador
+      this.showTotalField = true;
+      this.loadActivityData(); // Load the activity data
     }
   }
 
+  /**
+   * Initializes the activity form with required fields and validators.
+   */
   initializeForms(): void {
     this.activityIndicatorForm = this.fb.group({
+      // Activity fields
       title: ['', Validators.required],
       description: ['', Validators.required],
       responsible: ['', Validators.required],
-      indicators_ListIDS: [[]], // Require indicators
+      indicators_ListIDS: [[]],
 
-      // Campos del indicador
+      // Indicator fields
       indicatorDescription: ['', Validators.required],
       indicatorType: ['', Validators.required],
       indicatorActual: [0, Validators.required],
@@ -83,30 +96,37 @@ export class ActivityComponent implements OnInit {
     });
   }
 
+  /**
+   * Loads the current activity data, if in view mode, and populates the form with the data.
+   */
   loadActivityData(): void {
     this.currentActivityId = localStorage.getItem('ActivityID') || '';
 
+    // Get the activity by ID
     this.activityService
       .getActivityById(this.currentActivityId)
       .subscribe((activity) => {
         this.currentActivity = activity;
         this.activityIndicatorForm.patchValue({
+          // Populate the form with the activity data
           title: activity.title,
           description: activity.description,
           responsible: activity.responsible,
         });
 
+        // Get the responsible user by ID
         const userId = activity.responsible;
         this.authService.getUserById(userId).subscribe((user) => {
           this.responsible = user;
         });
 
-        // Filtrar el indicador correspondiente usando el activeOperationalPlanId
+        // Get the indicator for the current operational plan
         const currentIndicatorId = localStorage.getItem('IndicatorID');
         const matchedIndicator = activity.indicators_ListIDS.find(
           (indicatorId: string) => indicatorId === currentIndicatorId
         );
 
+        // If there is a matched indicator, populate the form with the indicator data
         if (matchedIndicator) {
           this.indicatorService
             .getIndicatorById(matchedIndicator)
@@ -130,6 +150,9 @@ export class ActivityComponent implements OnInit {
       });
   }
 
+  /**
+   * Loads the members of the strategic plan and handles errors if they cannot be retrieved.
+   */
   loadMembers(): void {
     const planID = localStorage.getItem('PlanID') || '';
     this.strategicPlan.getPlanByID(planID).subscribe(
@@ -137,11 +160,14 @@ export class ActivityComponent implements OnInit {
         this.members = plan.members_ListIDS;
       },
       (error) => {
-        Swal.fire('Error', 'No se pudieron cargar los miembros.', 'error');
+        Swal.fire('Error', 'Members could not be loaded.', 'error');
       }
     );
   }
 
+  /**
+   * Creates an activity along with its associated indicator and updates the activity with the indicator ID.
+   */
   createActivityAndIndicator(): void {
     if (this.activityIndicatorForm.invalid) {
       Swal.fire('Error', 'The form is invalid.', 'error');
@@ -149,18 +175,21 @@ export class ActivityComponent implements OnInit {
     }
 
     const goalId = localStorage.getItem('GoalID') || '';
+
+    // Create the activity data
     const activityData = {
       title: this.activityIndicatorForm.value.title,
       description: this.activityIndicatorForm.value.description,
       responsible: this.activityIndicatorForm.value.responsible,
-      indicators_ListIDS: [], // Se agregará después de crear el Indicator
+      indicators_ListIDS: [],
     };
 
-    // Crear la Activity primero
+    // Create the activity and update it with the indicator ID
     this.activityService
       .createActivity(activityData, goalId)
       .then((activityResponse: any) => {
         const indicatorData = {
+          // Create the indicator data
           description: this.activityIndicatorForm.value.indicatorDescription,
           type: this.activityIndicatorForm.value.indicatorType,
           actual: this.activityIndicatorForm.value.indicatorActual,
@@ -169,15 +198,15 @@ export class ActivityComponent implements OnInit {
               ? 1
               : this.activityIndicatorForm.value.indicatorTotal,
           operationalPlanId: this.operationalPlanId,
-          activityId: activityResponse._id, // Asociar el Indicator con la Activity creada
+          activityId: activityResponse._id,
           evidence: this.activityIndicatorForm.value.evidence,
         };
 
-        // Crear el Indicator asociado a la Activity
+        // Create the indicator and update the activity with the indicator ID
         this.indicatorService
           .createIndicator(indicatorData)
           .then((indicatorResponse) => {
-            // Actualizar la Activity con el ID del Indicator
+            // Update the activity with the indicator ID
             this.activityService
               .updateActivity(activityResponse._id, {
                 indicators_ListIDS: [indicatorResponse._id],
@@ -207,15 +236,24 @@ export class ActivityComponent implements OnInit {
       });
   }
 
+  /**
+   * Navigates back to the goals page.
+   */
   navigateBack(): void {
     this.router.navigate([NAVIGATIONS_ROUTES.GOALS]);
   }
 
+  /**
+   * Toggles between edit and view mode.
+   */
   toggleEditMode(): void {
     this.isViewMode = !this.isViewMode;
     this.isEditing = !this.isEditing;
   }
 
+  /**
+   * Saves changes made to the activity and indicator, updating them in the backend.
+   */
   saveChanges(): void {
     if (this.activityIndicatorForm.valid) {
       const activityData = {
@@ -224,7 +262,7 @@ export class ActivityComponent implements OnInit {
         responsible: this.activityIndicatorForm.value.responsible,
       };
 
-      // Actualizar la actividad
+      // Update the activity with the new data
       this.activityService
         .updateActivity(this.currentActivityId, activityData)
         .then(() => {
@@ -236,6 +274,7 @@ export class ActivityComponent implements OnInit {
           Swal.fire('Error', 'The activity could not be updated.', 'error');
         });
 
+        // Update the indicator with the new data
       const updatedIndicatorData = {
         description: this.activityIndicatorForm.value.indicatorDescription,
         type: this.activityIndicatorForm.value.indicatorType,
@@ -247,7 +286,7 @@ export class ActivityComponent implements OnInit {
         evidence: this.activityIndicatorForm.value.indicatorEvidence,
       };
 
-      // Actualizar el indicador
+      // Update the indicator with the new data
       this.indicatorService
         .updateIndicator(this.currentIndicatorId, updatedIndicatorData)
         .then(() => {
@@ -259,53 +298,67 @@ export class ActivityComponent implements OnInit {
           Swal.fire('Error', 'The indicator could not be updated.', 'error');
         });
 
-      // Cambiar de modo de edición
       this.toggleEditMode();
     } else {
       Swal.fire('Error', 'The form is invalid.', 'error');
     }
   }
 
-  // Método agregado para manejar el cambio de tipo de indicador
+  /**
+   * Adjusts form fields based on the selected indicator type.
+   */
   onIndicatorTypeChange(event: Event): void {
     const selectedType = (event.target as HTMLSelectElement).value;
 
-    // Establecer isPercentageType según el tipo seleccionado
+    // Set isPercentageType based on the selected type
     if (selectedType === 'PERCENTAGE') {
-      this.isPercentageType = true; // Habilitar tipo porcentual
-      this.showTotalField = true; // Mostrar campo total
-      this.activityIndicatorForm.patchValue({ indicatorTotal: 0 }); // Reiniciar valor total
+      this.isPercentageType = true; // Enable percentage type
+      this.showTotalField = true; // Show the total field
+      this.activityIndicatorForm.patchValue({ indicatorTotal: 0 }); // Reset total value
     } else if (selectedType === 'BINARY') {
       this.activityIndicatorForm.patchValue({ indicatorTotal: 1 });
-      this.showTotalField = false; // Ocultar campo total si es binario
-      this.isPercentageType = false; // Asegurarse de que no sea porcentaje
+      this.showTotalField = false; // Hide total field if binary
+      this.isPercentageType = false; // Ensure it is not a percentage type
     } else {
-      this.showTotalField = true; // Mostrar campo total para otros tipos
-      this.isPercentageType = false; // No es porcentual
-      this.activityIndicatorForm.patchValue({ indicatorTotal: 0 }); // Reiniciar valor total
+      this.showTotalField = true; // Show total field for other types
+      this.isPercentageType = false; // Not a percentage
+      this.activityIndicatorForm.patchValue({ indicatorTotal: 0 }); // Reset total value
     }
   }
 
+  /**
+   * Adjusts the total value based on the selected indicator type.
+   */
   adjustTotalValue(event: Event): void {
     const input = event.target as HTMLInputElement;
     const value = parseFloat(input.value);
 
-    // Si es porcentual y el valor es mayor que 100, ajusta a 100
+    // If it's a percentage and the value is greater than 100, adjust it to 100
     if (this.isPercentageType && value > 100) {
-      this.activityIndicatorForm.patchValue({ indicatorTotal: 100 }); // Ajusta el valor a 100
+      this.activityIndicatorForm.patchValue({ indicatorTotal: 100 }); // Adjust value to 100
     }
   }
 
+  /**
+   * Navigates back to the goals
+   * page without creating an activity.
+   */
   cancelCreation(): void {
     this.router.navigate([NAVIGATIONS_ROUTES.GOALS]);
   }
 
+  /**
+   * Cancels the current edit and reverts to the previous state.
+   */
   cancelEdit(): void {
     this.isEditing = false;
     this.isViewMode = true;
     this.loadActivityData();
   }
 
+  /**
+   * Formats the indicator type for display purposes.
+   */
   formatType(value: string): string {
     switch (value) {
       case 'NUMERAL':
@@ -319,9 +372,12 @@ export class ActivityComponent implements OnInit {
     }
   }
 
+  /**
+   * Handles the checkbox change event and updates the actual value of the indicator.
+   */
   onCheckboxChange(event: Event): void {
     const checkbox = event.target as HTMLInputElement;
-    const newValue = checkbox.checked ? 1 : 0; // Se establece 1 si está marcado, 0 si está desmarcado
+    const newValue = checkbox.checked ? 1 : 0; // Set to 1 if checked, 0 if unchecked
     this.activityIndicatorForm.patchValue({ indicatorActual: newValue });
   }
 }

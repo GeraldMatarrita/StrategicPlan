@@ -18,22 +18,19 @@ import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 })
 export class StrategicPlanComponent implements OnInit {
   // Variable to store the form
-  formStrategicPlan!: FormGroup;
-  minEndDate: string = '';
-  isFormVisible: boolean = false;
+  formStrategicPlan!: FormGroup; // Form group for handling the strategic plan form
+  minEndDate: string = ''; // Variable to store the minimum end date
+  isFormVisible: boolean = false; // Variable to control the form visibility
 
-  // Variable to store the response message
-  responseMessage: string = '';
-  // Variables to store the strategic plan data
-  strategicPlanData: any[] = [];
-  members: any[] = [];
+  responseMessage: string = ''; // Variable to store the response message
+  strategicPlanData: any[] = []; // Variables to store the strategic plan data
+  members: any[] = []; // Variable to store the members of the plan
 
-  objectivesData: any[] = [];
+  objectivesData: any[] = []; // Variable to store the objectives data
 
   currentPlanId: string = ''; // ID of the current plan to edit
 
-  // Variable to store the ID of the active user
-  activeUserID: string = '';
+  activeUserID: string = ''; // Variable to store the ID of the active user
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,6 +50,16 @@ export class StrategicPlanComponent implements OnInit {
     this.loadData();
   }
 
+  /**
+   * Method to load the data of the active user
+   * - Get the active user ID
+   * - Get the active user's plans
+   * - Load the plan data
+   * - Load the objectives data
+   * - Redirect if there are no plans
+   * - Redirect if there is no valid plan ID
+   * - Redirect if the user is not authenticated
+   */
   async loadData(): Promise<void> {
     try {
       this.activeUserID = await this.authService.getActiveUserID();
@@ -140,7 +147,7 @@ export class StrategicPlanComponent implements OnInit {
           },
         ];
 
-        // Asigna los datos al formulario
+        // Assign the data to the form
         this.formStrategicPlan.patchValue(data);
 
         // Assign members_ListIDS data to members as an array of objects
@@ -303,6 +310,9 @@ export class StrategicPlanComponent implements OnInit {
     this.loadPlanById(this.currentPlanId);
   }
 
+  /**
+   * Method to load objectives data by plan ID
+   */
   async loadObjectives() {
     try {
       this.objectivesService
@@ -320,11 +330,17 @@ export class StrategicPlanComponent implements OnInit {
     }
   }
 
+  /**
+   * Method to navigate to the objectives page
+   */
   navigateToObjective(): void {
     localStorage.setItem('PlanID', this.currentPlanId);
     this.router.navigate([NAVIGATIONS_ROUTES.OBJECTIVE]);
   }
 
+  /**
+   * Method to navigate to the goals page
+   */
   navigateToGoals(ObjectiveID: string): void {
     localStorage.setItem('ObjectiveID', ObjectiveID);
     this.router.navigate([NAVIGATIONS_ROUTES.GOALS]);

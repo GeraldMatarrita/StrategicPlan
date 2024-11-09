@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   FormBuilder,
@@ -8,11 +8,11 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import Swal from 'sweetalert2';
-
 import { AuthService } from './Auth.service';
 import { NAVIGATIONS_ROUTES } from '../../config/navigations.routes';
 import { Router } from '@angular/router';
-// import { ResetPasswordComponent } from '../reset-password/reset.password.component';
+
+
 @Component({
   selector: 'app-auth',
   standalone: true,
@@ -21,17 +21,17 @@ import { Router } from '@angular/router';
   styleUrl: './Auth.component.css',
 })
 export class AuthComponent {
-  // Variables para almacenar los formularios
+  // Variables to store the forms
   public loginForm!: FormGroup;
   public registerForm!: FormGroup;
 
-  // Variable para almacenar el mensaje de respuesta
+  // Variable to store the response message
   responseMessage: string = '';
 
-  // Variables para almacenar el estado de los formularios
+  // Variables to manage form states
   regiterActive: boolean = false;
 
-  // Variable para almacenar el usuario activo
+  // Variable to store the active user
   activeUser: any = {};
 
   showResetPassword = false;
@@ -43,14 +43,16 @@ export class AuthComponent {
   ) {}
 
   /**
-   * Método que se ejecuta al iniciar el componente
+   * Method that is executed when the component initializes
    */
   ngOnInit(): void {
+    // Initialize login form with validation rules
     this.loginForm = this.formBuilder.group({
       usernameOrEmail: ['', Validators.required],
       password: ['', [Validators.required]],
     });
 
+    // Initialize registration form with validation rules
     this.registerForm = this.formBuilder.group(
       {
         name: ['', Validators.required],
@@ -69,14 +71,14 @@ export class AuthComponent {
         confirmPassword: ['', Validators.required],
       },
       {
-        validators: this.passwordsMatchValidator, // Validador de grupo
+        validators: this.passwordsMatchValidator, // Group validator to compare passwords
       }
     );
 
     this.loadData();
   }
 
-  // Validador personalizado que compara las contraseñas
+  // Custom validator that compares the passwords
   passwordsMatchValidator(control: AbstractControl) {
     const password = control.get('password')?.value;
     const confirmPassword = control.get('confirmPassword')?.value;
@@ -91,19 +93,19 @@ export class AuthComponent {
   }
 
   /**
-   * Método para cargar los datos
-   *  - usuario activo
+   * Method to load user data
+   * - Load the active user
    */
   async loadData(): Promise<void> {
     try {
       this.activeUser = await this.authService.getActiveUser();
     } catch (error) {
-      console.error('Error al cargar los datos:', error);
+      console.error('Error loading data:', error);
     }
   }
 
   /**
-   * Método para login o registro según el estado del formulario
+   * Method to handle login or registration based on the form state
    */
   sendData(): void {
     if (this.regiterActive) {
@@ -114,8 +116,8 @@ export class AuthComponent {
   }
 
   /**
-   * Método para hacer login
-   * @returns Promesa y un mensaje de respuesta de SweetAlert
+   * Method to handle login
+   * @returns A promise with the response message from SweetAlert
    */
   async login(): Promise<void> {
     try {
@@ -125,22 +127,22 @@ export class AuthComponent {
         email: userOrEmail,
         password: this.loginForm.value.password,
       };
-      // Llamar al servicio de login y esperar la respuesta
+      // Call the login service and wait for the response
       const response = await this.authService.login(request);
 
-      // Verifica si 'message' y 'userActive' están presentes
+      // Check if 'message' and 'userActive' are present in the response
       const message = response.message;
       const userActive = response.userActive;
 
-      // Manejar la respuesta
+      // Handle the response
       this.responseMessage = message;
-      // Almacenar los datos en localStorage
+      // Store the user data in localStorage
       localStorage.setItem('token', JSON.stringify(userActive));
 
       this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
     } catch (error) {
       this.responseMessage =
-        (error as any).error?.message || 'Error desconocido';
+        (error as any).error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -150,8 +152,8 @@ export class AuthComponent {
   }
 
   /**
-   * Método para registrar un usuario
-   * @returns Promesa con un mensaje de respuesta de SweetAlert
+   * Method to register a new user
+   * @returns A promise with a response message from SweetAlert
    */
   async register(): Promise<void> {
     try {
@@ -166,30 +168,30 @@ export class AuthComponent {
 
       Swal.fire({
         icon: 'success',
-        title: 'Registro',
+        title: 'Registration',
         text: this.responseMessage,
       });
 
-      // Login automático después de un registro exitoso
+      // Automatic login after successful registration
       const loginResponse = await this.authService.login({
         email: registerData.email,
         password: registerData.password,
       });
 
-      // Almacenar los datos en localStorage
+      // Store user data in localStorage
       localStorage.setItem('token', JSON.stringify(loginResponse.userActive));
 
       Swal.fire({
         icon: 'success',
-        title: 'Successfull Registration',
+        title: 'Successful Registration',
         text: `Welcome! You have been successfully registered.`,
       });
 
-      // Redirigir al usuario a la página de inicio
+      // Redirect the user to the home page
       this.router.navigate([NAVIGATIONS_ROUTES.HOME]);
     } catch (error) {
       this.responseMessage =
-        (error as any).error?.message || 'Error desconocido';
+        (error as any).error?.message || 'Unknown error';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -199,14 +201,14 @@ export class AuthComponent {
   }
 
   /**
-   * Método para cambiar el formulario activo
+   * Method to switch the active form (login or registration)
    */
   changeForm(): void {
     this.regiterActive = !this.regiterActive;
   }
 
   /**
-   * Método para mostrar el formulario de restablecimiento de contraseña en un SweetAlert
+   * Method to show the password reset form in a SweetAlert
    */
   toggleResetPassword(): void {
     const resetPasswordForm = this.formBuilder.group({
@@ -224,7 +226,7 @@ export class AuthComponent {
         cancelButton: 'buttonCancelReset',
         input: 'inputReset',
       },
-      html: `
+      html: `  
       <form id="reset-password-form">
         <div>
           <p>We will send you an email with a link to reset your password.</p>
@@ -242,7 +244,7 @@ export class AuthComponent {
           document.getElementById('email') as HTMLInputElement
         ).value;
 
-        // Validar el formulario
+        // Validate the form
         if (!resetPasswordForm.valid) {
           resetPasswordForm.get('email')?.setValue(emailInput);
           if (resetPasswordForm.invalid) {
@@ -259,7 +261,7 @@ export class AuthComponent {
         const email = result.value?.email;
 
         if (email) {
-          // Hacer la solicitud al servicio de restablecimiento de contraseña
+          // Make a request to the password reset service
           this.authService.requestPasswordReset({ email }).subscribe(
             (response) => {
               Swal.fire({

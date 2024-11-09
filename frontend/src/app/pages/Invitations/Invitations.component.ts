@@ -282,6 +282,9 @@ export class InvitationsComponent implements OnInit {
     }
   }
 
+  /**
+   * Method to navigate to the selected strategic plan
+   */
   navigateToSelectedPlan(): void {
     const SELECTED_PLAN: string = `${NAVIGATIONS_ROUTES.STRATEGIC_PLAN}`;
     this.router.navigate([SELECTED_PLAN]);

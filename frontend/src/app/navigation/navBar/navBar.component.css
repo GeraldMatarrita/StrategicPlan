@@ -5,11 +5,11 @@
   width: 100%;
   background-color: #0d1117;
   max-width: 100%;
-  position: fixed; /* Fija la navbar */
-  top: 0; /* Mantiene la navbar en la parte superior */
-  left: 0; /* Alinea la navbar al borde izquierdo */
-  z-index: 1000; /* Asegura que la navbar esté por encima de otros elementos */
-  height: 52px; /* Altura de la navbar */
+  position: fixed;
+  top: 0;
+  left: 0; 
+  z-index: 1000;
+  height: 52px; 
 }
 
 .value {
