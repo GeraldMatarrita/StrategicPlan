@@ -64,8 +64,6 @@ export class GoalsComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     localStorage.removeItem('ActivityID');
     localStorage.removeItem('IndicatorID');
-    const currentPlanId = localStorage.getItem('PlanID');
-    this.currentPlanId = currentPlanId || '';
     this.initializeForm();
     await this.loadData();
     window.scrollTo(0, 0);
@@ -89,35 +87,65 @@ export class GoalsComponent implements OnInit {
    */
   async loadData(): Promise<void> {
     try {
-      if (!this.currentPlanId) {
-        return;
-      }
+      // Always load the strategic plans
+      this.activeUserID = await this.authService.getActiveUserID();
+      this.strategicPlanService.getActivePlans(this.activeUserID).subscribe(
+        async (data: any[]) => {
+          this.plansData = data;
 
-      await this.loadObjectives(); // Load objectives from the stored plan
+          // Check if there is a stored PlanID in localStorage
+          const storedPlanId = localStorage.getItem('PlanID');
+          const storedObjectiveId = localStorage.getItem('ObjectiveID');
 
-      const storedObjectiveId = localStorage.getItem('ObjectiveID');
-      if (storedObjectiveId) {
-        this.objectiveIdSelected = storedObjectiveId;
-        this.loadGoalsByObjective(storedObjectiveId);
-      }
+          if (storedPlanId) {
+            this.currentPlanId = storedPlanId;
+            if (!this.currentPlanId && storedPlanId) {
+              this.currentPlanId = storedPlanId;
+              await this.loadObjectives();
+            }
+            await this.loadObjectives(); // Load objectives from the stored plan
 
-      this.operationalPlansData = await this.operationalPlanService
-        .getOperationalPlansByStrategicPlanId(this.currentPlanId)
-        .toPromise();
-
-      console.log('Operational Plans:', this.operationalPlansData);
-
-      const activePlan = this.operationalPlansData.find(
-        (plan: any) => plan.active === true
+            if (storedObjectiveId) {
+              this.objectiveIdSelected = storedObjectiveId;
+              this.objectivesService
+                .getObjectiveById(storedObjectiveId)
+                .subscribe(
+                  (data: any) => {
+                    this.currentObjective = data;
+                  },
+                  (error: any) => {
+                    console.error('Error getting the objective:', error);
+                  }
+                );
+              this.formGoal.patchValue({
+                objectiveIdSelectedForm: storedObjectiveId,
+              });
+              await this.loadGoalsByObjective(storedObjectiveId);
+            }
+          } else {
+            this.clearSelections();
+          }
+        },
+        (error: any) => {
+          console.error('Error loading the plans:', error);
+        }
       );
 
-      if (activePlan) {
-        this.activeOperationalPlan = activePlan;
-        localStorage.setItem('OperationalPlanID', activePlan._id);
-      }
+      const currentStrategicPlanId = localStorage.getItem('PlanID') || '';
 
+      if (currentStrategicPlanId) {
+        this.operationalPlansData = await this.operationalPlanService
+          .getOperationalPlansByStrategicPlanId(currentStrategicPlanId)
+          .toPromise();
+
+        this.activeOperationalPlan = await this.operationalPlansData.find(
+          (plan: any) => plan.active === true
+        );
+
+        this.currentOperationalId =
+          localStorage.getItem('OperationalPlanID') || '';
+      }
       if (!this.currentOperationalId && this.activeOperationalPlan) {
-        console.log('Setting active operational plan:', this.activeOperationalPlan);
         this.currentOperationalId = this.activeOperationalPlan._id;
       }
     } catch (error) {
